@@ -31,7 +31,6 @@ private:
     pair <int, int> p5_;
     pair <int, int> p6_;
     int id_;
-    static const int width_ = 20; //Width of the square
     QColor color_;
 };
 

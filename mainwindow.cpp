@@ -5,6 +5,9 @@
 #include <QGraphicsView>
 #include <QColor>
 #include <QDebug>
+#include <utility>
+
+using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -15,7 +18,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QGraphicsView * view = ui->graphicsView;
     view->setScene(scene);
     view->setSceneRect(0,0,view->frameSize().width(),view->frameSize().height());
-    Hexagon *h = new Hexagon(QColor(255,255,255), 10, 10, 1);
+    pair <int, int> p1 (50, 0);
+    pair <int, int> p2 (0, 50);
+    pair <int, int> p3 (0, 100);
+    pair <int, int> p4 (50, 150);
+    pair <int, int> p5 (100, 100);
+    pair <int, int> p6 (100, 50);
+    Hexagon *h = new Hexagon(QColor(255,255,255), p1, p2, p3, p4, p5, p6, 1);
     scene->addItem(h);
 }
 
