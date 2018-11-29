@@ -26,10 +26,33 @@ void Hexagon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
 {
     Q_UNUSED(widget);
 
+    //set poly points
+    QPolygon poly;
+    poly << QPoint(25, 0);
+    poly << QPoint(0,25);
+    poly << QPoint(0, 75);
+    poly << QPoint(25, 100);
+    poly << QPoint(75, 100);
+    poly << QPoint(100, 75);
+    poly << QPoint(100, 25);
+    poly << QPoint(75, 0);
 
+    //make pen
+    QPen p;
+    p.setWidth(2);
+    p.setColor(Qt::black);
+    p.setJoinStyle(Qt::RoundJoin);
+    painter->setPen(p);
+
+    //draw in the poly
     QBrush b = painter->brush();
     painter->setBrush(QBrush(color_));
+    QPainterPath path;
+    path.addPolygon(poly);
 
-    painter->drawRect(QRect(this->x_, this->y_, this->width_, this->width_));
+    //draw poly
+    painter->drawPolygon(poly);
+
+    painter->fillPath(path, b);
     painter->setBrush(b);
 }

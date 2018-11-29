@@ -32,10 +32,7 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
     hexagon.h \
-    hexagon.h \
-    game.h \
-    player.h \
-    gameboard.h
+    hexagon.h
 
 FORMS += \
         mainwindow.ui
