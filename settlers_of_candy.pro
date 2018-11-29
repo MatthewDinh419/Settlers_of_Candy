@@ -35,7 +35,8 @@ HEADERS += \
     hexagon.h \
     game.h \
     player.h \
-    gameboard.h
+    gameboard.h \
+    building.h
 
 FORMS += \
         mainwindow.ui
