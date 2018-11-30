@@ -1,6 +1,5 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
 #include "hexagon.h"
 #include <QWidget>
 #include <QMainWindow>
@@ -21,7 +20,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QGraphicsScene *scene;
+    QGraphicsScene *scene; //Scene with all the cells
 };
 
 #endif // MAINWINDOW_H

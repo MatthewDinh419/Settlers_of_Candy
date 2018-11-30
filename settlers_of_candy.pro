@@ -25,14 +25,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
-    hexagon.cpp
+    main.cpp \
+    mainwindow.cpp \
+    hexagon.cpp \
+    building.cpp
 
 HEADERS += \
-        mainwindow.h \
-    hexagon.h \
+    mainwindow.h \
     hexagon.h
+    mainwindow.h \
+    hexagon.h \
+    game.h \
+    player.h \
+    gameboard.h \
+    building.h
 
 FORMS += \
         mainwindow.ui
@@ -41,3 +47,4 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+

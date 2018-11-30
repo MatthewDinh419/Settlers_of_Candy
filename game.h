@@ -2,7 +2,6 @@
 #define GAME_H
 #include "player.h"
 #include <vector>
-#endif // GAME_H
 
 class Game{
 public:
@@ -11,3 +10,4 @@ private:
     Player current_player;
     std::vector<Player> player_list;
 };
+#endif // GAME_H

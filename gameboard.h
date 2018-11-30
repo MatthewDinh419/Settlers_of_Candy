@@ -2,7 +2,6 @@
 #define GAMEBOARD_H
 #include <vector>
 #include "hexagon.h"
-#endif // GAMEBOARD_H
 
 class Gameboard{
 public:
@@ -16,3 +15,4 @@ private:
     std::vector<Hexagon> game_board;
     Gameboard(){};
 };
+#endif // GAMEBOARD_H
