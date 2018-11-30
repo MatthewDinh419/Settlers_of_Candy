@@ -32,6 +32,8 @@ SOURCES += \
 
 HEADERS += \
     mainwindow.h \
+    hexagon.h
+    mainwindow.h \
     hexagon.h \
     game.h \
     player.h \

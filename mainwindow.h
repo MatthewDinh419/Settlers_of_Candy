@@ -1,5 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+#include "hexagon.h"
+#include <QWidget>
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsView>
