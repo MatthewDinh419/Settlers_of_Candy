@@ -6,7 +6,7 @@
 using namespace std;
 
 Hexagon::Hexagon(QColor color, const pair <int, int> p1, const pair <int, int> p2, const pair <int, int> p3,
-                 const pair <int, int> p4, const pair <int, int> p5, const pair <int, int> p6, int id)
+                 const pair <int, int> p4, const pair <int, int> p5, const pair <int, int> p6, int id, resource resource_of_tile)
 {
     color_ = color;
     p1_ = p1;
@@ -16,6 +16,7 @@ Hexagon::Hexagon(QColor color, const pair <int, int> p1, const pair <int, int> p
     p5_ = p5;
     p6_ = p6;
     id_ = id;
+    resource_tile = resource_of_tile;
 }
 
 //hitbox for hex is the rect in middle

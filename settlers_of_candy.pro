@@ -29,15 +29,17 @@ SOURCES += \
     mainwindow.cpp \
     hexagon.cpp \
     building.cpp \
-    gameboard.cpp
+    gameboard.cpp \
+    game.cpp \
+    player.cpp
 
 HEADERS += \
     mainwindow.h \
     hexagon.h \
-    game.h \
     player.h \
     gameboard.h \
-    building.h
+    building.h \
+    game.h
 
 FORMS += \
         mainwindow.ui

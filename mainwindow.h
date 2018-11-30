@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include "game.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -17,8 +19,16 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_houseButton_clicked();
+
+    void on_roadButton_clicked();
+
+    void on_mansionButton_clicked();
+
 private:
     Ui::MainWindow *ui;
+    Game *new_game;
     QGraphicsScene *scene; //Scene with all the cells
 };
 

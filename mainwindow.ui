@@ -1352,6 +1352,19 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
    </widget>
+   <widget class="QLabel" name="status_label">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>10</y>
+      <width>281</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>idk</string>
+    </property>
+   </widget>
    <zorder>p3TextBrowser</zorder>
    <zorder>p2TextBrowser</zorder>
    <zorder>gameBoard</zorder>
@@ -1398,6 +1411,7 @@ p, li { white-space: pre-wrap; }
    <zorder>houseButton</zorder>
    <zorder>infoBrowser</zorder>
    <zorder>statusbar</zorder>
+   <zorder>status_label</zorder>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">

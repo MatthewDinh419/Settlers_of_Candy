@@ -26,11 +26,9 @@ public:
             return instance;
         }
     void operator=(Gameboard const&) = delete;
-    void AddBuilding();
-    void AddCorner(pair<int,int> pair_to_add);
+
 private:
     std::vector<Hexagon> game_board;
-    std::vector<pair<int,int>> all_corners;
     Gameboard(){};
     Building *candy_road;
     Building *chocolate_house;

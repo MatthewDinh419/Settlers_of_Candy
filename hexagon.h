@@ -11,7 +11,7 @@ class Hexagon : public QObject, public QGraphicsItem {
 
 public:
     Hexagon(QColor color, const pair <int, int> p1, const pair <int, int> p2, const pair <int, int> p3,
-                     const pair <int, int> p4, const pair <int, int> p5, const pair <int, int> p6, int id);
+                     const pair <int, int> p4, const pair <int, int> p5, const pair <int, int> p6, int id, resource resource_of_tile);
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
     QPainterPath shape() const override;
@@ -32,6 +32,7 @@ private:
     int x_;
     int y_;
     int id_;
+    resource resource_tile; //Resource of the tile
     static const int width_ = 20; //Width of the square
     QColor color_;
     pair <int, int> p1_;
