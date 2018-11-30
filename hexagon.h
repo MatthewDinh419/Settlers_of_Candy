@@ -3,8 +3,8 @@
 #include <QGraphicsItem>
 #include <QColor>
 #include <utility>
-using namespace std;
 #include <vector>
+using namespace std;
 
 enum class resource {sugar,water,money};
 
@@ -22,20 +22,6 @@ public:
     pair <int, int> get_p4() const {return p4_;}
     pair <int, int> get_p5() const {return p5_;}
     pair <int, int> get_p6() const {return p6_;}
-    int get_id() {return id_;}
-
-private:
-    pair <int, int> p1_;
-    pair <int, int> p2_;
-    pair <int, int> p3_;
-    pair <int, int> p4_;
-    pair <int, int> p5_;
-    pair <int, int> p6_;
-    int id_;
-    Hexagon(QColor color, const int x, const int y, int id);
-    QRectF boundingRect() const override;
-    QPainterPath shape() const override;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
     int get_x() const {return x_;}
     int get_y() const {return y_;}
     int get_id() {return id_;}
@@ -46,6 +32,12 @@ private:
     int id_;
     static const int width_ = 20; //Width of the square
     QColor color_;
+    pair <int, int> p1_;
+    pair <int, int> p2_;
+    pair <int, int> p3_;
+    pair <int, int> p4_;
+    pair <int, int> p5_;
+    pair <int, int> p6_;
 };
 
 #endif // HEXAGON_H
