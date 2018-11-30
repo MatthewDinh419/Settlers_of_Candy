@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     scene = new QGraphicsScene;
-    QGraphicsView * view = ui->graphicsView;
+    QGraphicsView * view = ui->gameBoard;
     view->setScene(scene);
     view->setSceneRect(0,0,view->frameSize().width(),view->frameSize().height());
     pair <int, int> p1 (50, 0);
