@@ -2,8 +2,6 @@
 #define HEXAGON_H
 #include <QGraphicsItem>
 #include <QColor>
-#include <utility>
-#include <vector>
 using namespace std;
 
 enum class resource {sugar,water,money};
@@ -16,6 +14,7 @@ public:
                      const pair <int, int> p4, const pair <int, int> p5, const pair <int, int> p6, int id);
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
+    QPainterPath shape() const override;
     pair <int, int> get_p1() const {return p1_;}
     pair <int, int> get_p2() const {return p2_;}
     pair <int, int> get_p3() const {return p3_;}
@@ -25,6 +24,9 @@ public:
     int get_x() const {return x_;}
     int get_y() const {return y_;}
     int get_id() {return id_;}
+
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
     int x_;

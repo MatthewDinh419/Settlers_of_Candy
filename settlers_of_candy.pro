@@ -28,7 +28,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     hexagon.cpp \
-    building.cpp
+    building.cpp \
+    gameboard.cpp
 
 HEADERS += \
     mainwindow.h \

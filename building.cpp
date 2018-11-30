@@ -6,6 +6,7 @@
 #include <iostream>
 #include <QtWidgets>
 #include "hexagon.h"
+#include <vector>
 
 Building::Building(std::vector<resource> needed_resources, const int points, const int x, const int y, QColor color)
 {
@@ -40,3 +41,5 @@ void Building::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->drawEllipse(QRect(this->x_, this->y_, this->width_, this->width_));
     painter->setBrush(b);
 }
+
+

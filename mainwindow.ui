@@ -497,7 +497,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string>END Turn</string>
+     <string>END TURN</string>
     </property>
    </widget>
    <widget class="QTextBrowser" name="currRecord">
@@ -1321,7 +1321,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string>Add Gingerbread House</string>
+     <string>Add Chocolate House</string>
     </property>
    </widget>
    <widget class="QTextBrowser" name="infoBrowser">
@@ -1340,6 +1340,16 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Info:&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="statusbar">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>0</y>
+      <width>301</width>
+      <height>41</height>
+     </rect>
     </property>
    </widget>
    <zorder>p3TextBrowser</zorder>
@@ -1387,6 +1397,7 @@ p, li { white-space: pre-wrap; }
    <zorder>mansionButton</zorder>
    <zorder>houseButton</zorder>
    <zorder>infoBrowser</zorder>
+   <zorder>statusbar</zorder>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">

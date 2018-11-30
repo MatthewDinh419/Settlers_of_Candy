@@ -2,7 +2,7 @@
 #include <QtWidgets>
 #include <QColor>
 #include <utility>
-
+#include <QDebug>
 using namespace std;
 
 Hexagon::Hexagon(QColor color, const pair <int, int> p1, const pair <int, int> p2, const pair <int, int> p3,
@@ -21,16 +21,23 @@ Hexagon::Hexagon(QColor color, const pair <int, int> p1, const pair <int, int> p
 //hitbox for hex is the rect in middle
 QRectF Hexagon::boundingRect() const
 {
-    return QRectF(p2_.first, p2_.second, p5_.first, p5_.second);
+    QPainterPath path = shape();
+    return path.boundingRect();
 }
 
-//QPainterPath Hexagon::shape() const
-//{
-//    QPainterPath path;
-//    path.addRect(x_, y_, width_, width_);
-//    return path;
-//}
+QPainterPath Hexagon::shape() const{
+    QPainterPath path;
+    QPolygon poly;
+    poly << QPoint(this->p1_.first, this->p1_.second);
+    poly << QPoint(this->p2_.first, this->p2_.second);
+    poly << QPoint(this->p3_.first, this->p3_.second);
+    poly << QPoint(this->p4_.first, this->p4_.second);
+    poly << QPoint(this->p5_.first, this->p5_.second);
+    poly << QPoint(this->p6_.first, this->p6_.second);
+    path.addPolygon(poly);
 
+    return path;
+}
 void Hexagon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
@@ -55,7 +62,6 @@ void Hexagon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
     QBrush b = painter->brush();
     painter->setBrush(QBrush(color_));
     QPainterPath path;
-    path.addPolygon(poly);
 
     //draw poly
     painter->drawPolygon(poly);
@@ -63,3 +69,10 @@ void Hexagon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
     painter->fillPath(path, b);
     painter->setBrush(b);
 }
+
+void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    qDebug() << event->pos();
+    update();
+}
+
