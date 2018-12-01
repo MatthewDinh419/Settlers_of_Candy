@@ -2,9 +2,8 @@
 #define HEXAGON_H
 #include <QGraphicsItem>
 #include <QColor>
+#include "building.h"
 using namespace std;
-
-enum class resource {sugar,water,money};
 
 class Hexagon : public QObject, public QGraphicsItem {
     Q_OBJECT
@@ -27,6 +26,9 @@ public:
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+
+signals:
+    void AddBuilding(Building *building_to_add);
 
 private:
     int x_;

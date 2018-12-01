@@ -1,14 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "hexagon.h"
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QColor>
 #include <QDebug>
-#include <utility>
-using namespace std;
 #include <vector>
-#include "game.h"
 #include <stdio.h>      /* printf, scanf, puts, NULL */
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
@@ -18,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     new_game = new Game();
+    new_game->set_place_mode(false);
     srand (time(NULL));
     ui->setupUi(this);
     QFont font = ui->status_label->font();
@@ -70,6 +67,7 @@ MainWindow::MainWindow(QWidget *parent) :
         new_game->AddCorner(p4);
         new_game->AddCorner(p5);
         new_game->AddCorner(p6);
+        connect(h, &Hexagon::AddBuilding, this, &MainWindow::AddBuildingSlot);
     }
     for(int x = 0; x <= 300; x += 100){ //Middle 4 Hexagons, -50 to x-coord, +75 to y-coord to align hexagons correctly with top 3
         p1 = std::make_pair(view->width() / 2 - 100 + x-50,0+75+20);
@@ -102,6 +100,7 @@ MainWindow::MainWindow(QWidget *parent) :
         new_game->AddCorner(p4);
         new_game->AddCorner(p5);
         new_game->AddCorner(p6);
+        connect(h, &Hexagon::AddBuilding, this, &MainWindow::AddBuildingSlot);
     }
     for(int x = 0; x <= 400; x += 100){ //Middle 5 Hexagons, basically decrement x-coord by 50 and increment y-coord by 75 per level of hexagons
         p1 = std::make_pair(view->width() / 2 - 100 + x-50-50,0+75+75+20);
@@ -134,6 +133,7 @@ MainWindow::MainWindow(QWidget *parent) :
         new_game->AddCorner(p4);
         new_game->AddCorner(p5);
         new_game->AddCorner(p6);
+        connect(h, &Hexagon::AddBuilding, this, &MainWindow::AddBuildingSlot);
     }
     for(int x = 0; x <= 300; x += 100){ //Bottom 4 Hexagons, basically decrement x-coord by 50 and increment y-coord by 75 per level of hexagons
         p1 = std::make_pair(view->width() / 2 - 100 + x-50,0+75+75+75+20);
@@ -166,6 +166,7 @@ MainWindow::MainWindow(QWidget *parent) :
         new_game->AddCorner(p4);
         new_game->AddCorner(p5);
         new_game->AddCorner(p6);
+        connect(h, &Hexagon::AddBuilding, this, &MainWindow::AddBuildingSlot);
     }
 }
 
@@ -180,6 +181,14 @@ void MainWindow::on_houseButton_clicked()
     font.setBold(true);
     ui->status_label->setFont(font);
     ui->status_label->setText(QString("Pick a hexagon corner to place chocolate house"));
+    Game::set_place_mode(!Game::get_place_mode());
+    if(Game::get_place_mode()){
+        Game::set_building_string("choco house");
+        ui->centralWidget->setCursor(Qt::CrossCursor);
+    }
+    else{
+        ui->centralWidget->setCursor(Qt::ArrowCursor);
+    }
 }
 
 void MainWindow::on_roadButton_clicked()
@@ -196,4 +205,17 @@ void MainWindow::on_mansionButton_clicked()
     font.setBold(true);
     ui->status_label->setFont(font);
     ui->status_label->setText(QString("Pick a hexagon corner to place chocolate mansion"));
+    Game::set_place_mode(!Game::get_place_mode());
+    if(Game::get_place_mode()){
+        Game::set_building_string("choco mansion");
+        ui->centralWidget->setCursor(Qt::CrossCursor);
+    }
+    else{
+        ui->centralWidget->setCursor(Qt::ArrowCursor);
+    }
+}
+
+void MainWindow::AddBuildingSlot(Building *building_to_add)
+{
+    scene->addItem(building_to_add);
 }

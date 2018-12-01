@@ -3,6 +3,7 @@
 #include <QColor>
 #include <utility>
 #include <QDebug>
+#include "game.h"
 using namespace std;
 
 Hexagon::Hexagon(QColor color, const pair <int, int> p1, const pair <int, int> p2, const pair <int, int> p3,
@@ -74,6 +75,37 @@ void Hexagon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
 void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     qDebug() << event->pos();
-    update();
+    float mouse_press_x = event->pos().x();
+    float mouse_press_y = event->pos().y();
+    if(Game::get_place_mode()){ //If hexagon is clicked in place mode
+        for(pair<int,int>point_pairs : Game::get_all_corners()){
+            if(mouse_press_x >= point_pairs.first - 10 && mouse_press_x <= point_pairs.first + 10 &&
+                    mouse_press_y >= point_pairs.second - 10 && mouse_press_y <= point_pairs.second + 10){
+                std::vector<resource> temp_resource;
+                QColor color_temp;
+                if(Game::get_building_string() == "choco house"){
+                    color_temp = QColor(215,30,50);
+                    for(int i = 0; i < 2; i++){
+                        temp_resource.push_back(resource::money);
+                        temp_resource.push_back(resource::sugar);
+                        temp_resource.push_back(resource::water);
+                    }
+                }
+                else if(Game::get_building_string() == "choco mansion"){
+                    color_temp = QColor(20,100,50);
+                    for(int i = 0; i <= 3; i++){
+                        temp_resource.push_back(resource::money);
+                        temp_resource.push_back(resource::sugar);
+                        temp_resource.push_back(resource::water);
+                    }
+                }
+                qDebug() << point_pairs.first << point_pairs.second;
+                Building *temp_building = new Building(temp_resource,1,point_pairs.first-10,point_pairs.second-10,color_temp);
+                emit AddBuilding(temp_building);
+                break;
+            }
+        }
+    }
+
 }
 

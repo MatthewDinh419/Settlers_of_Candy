@@ -26,6 +26,7 @@ private slots:
 
     void on_mansionButton_clicked();
 
+    void AddBuildingSlot(Building *building_to_add);
 private:
     Ui::MainWindow *ui;
     Game *new_game;

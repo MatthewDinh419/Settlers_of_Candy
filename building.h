@@ -3,7 +3,8 @@
 #include <QGraphicsItem>
 #include <QColor>
 #include <vector>
-#include "hexagon.h"
+
+enum class resource {sugar,water,money};
 
 class Building : public QObject, public QGraphicsItem {
     Q_OBJECT
