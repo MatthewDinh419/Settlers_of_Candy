@@ -8,8 +8,8 @@ class Player{
 public:
     Player();
 private:
-    std::map<Building,Hexagon> current_buildings;
-    std::vector<resource> current_resources;
+    std::map<Building,Hexagon> current_buildings; //Player's current buildings relative to the hexagon
+    std::vector<resource> current_resources; //Player's current resources
 };
 
 #endif // PLAYER_H

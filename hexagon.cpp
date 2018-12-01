@@ -20,12 +20,15 @@ Hexagon::Hexagon(QColor color, const pair <int, int> p1, const pair <int, int> p
     resource_tile = resource_of_tile;
 }
 
-//hitbox for hex is the rect in middle
 QRectF Hexagon::boundingRect() const
 {
     QPainterPath path = shape();
     return path.boundingRect();
 }
+
+/*
+ * Creates the shape for the hexagon click box
+ */
 
 QPainterPath Hexagon::shape() const{
     QPainterPath path;
@@ -40,6 +43,7 @@ QPainterPath Hexagon::shape() const{
 
     return path;
 }
+
 void Hexagon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
@@ -74,15 +78,14 @@ void Hexagon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
 
 void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << event->pos();
     float mouse_press_x = event->pos().x();
     float mouse_press_y = event->pos().y();
     if(Game::get_place_mode()){ //If hexagon is clicked in place mode
-        for(pair<int,int>point_pairs : Game::get_all_corners()){
+        for(pair<int,int>point_pairs : Game::get_all_corners()){ //Goes through all the corners to see if where clicked is a corner
             if(mouse_press_x >= point_pairs.first - 10 && mouse_press_x <= point_pairs.first + 10 &&
                     mouse_press_y >= point_pairs.second - 10 && mouse_press_y <= point_pairs.second + 10){
-                std::vector<resource> temp_resource;
-                QColor color_temp;
+                std::vector<resource> temp_resource; //Used for required resources for the building
+                QColor color_temp; //Used for color of the building
                 if(Game::get_building_string() == "choco house"){
                     color_temp = QColor(215,30,50);
                     for(int i = 0; i < 2; i++){
@@ -99,7 +102,6 @@ void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
                         temp_resource.push_back(resource::water);
                     }
                 }
-                qDebug() << point_pairs.first << point_pairs.second;
                 Building *temp_building = new Building(temp_resource,1,point_pairs.first-10,point_pairs.second-10,color_temp);
                 emit AddBuilding(temp_building);
                 break;

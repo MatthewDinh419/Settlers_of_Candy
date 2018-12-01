@@ -14,11 +14,11 @@ public:
     static void set_building_string(std::string string_to_set){place_building_string = string_to_set;}
     static std::string get_building_string(){return place_building_string;}
 private:
-    Player current_player;
-    std::vector<Player> player_list;
-    static std::vector<pair<int,int>> all_corners;
-    Gameboard &new_gameboard = Gameboard::GetInstance();
-    static std::string place_building_string;
-    static bool place_mode;
+    Player current_player; //Current player's turn
+    std::vector<Player> player_list; //Vector containing all the players in the game
+    static std::vector<pair<int,int>> all_corners; //Contains all the points of the hexagons
+    Gameboard &new_gameboard = Gameboard::GetInstance(); //Singleton gameboard object
+    static std::string place_building_string; //String of the building to place
+    static bool place_mode; //If a place building button is pressed then it will be in place mode or exit out of it
 };
 #endif // GAME_H

@@ -43,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
         p4 = std::make_pair(view->width() / 2 - 100 + x,100+20);
         p5 = std::make_pair(view->width() / 2 - 50 + x,75+20);
         p6 = std::make_pair(view->width() / 2 - 50 + x,25+20);
-        rand_resource_num = rand() % 3 + 0;
+        rand_resource_num = rand() % 3 + 0; //Generate a random number for what resource
         switch(rand_resource_num){
             case 0:
                 rand_resource = resource::money;

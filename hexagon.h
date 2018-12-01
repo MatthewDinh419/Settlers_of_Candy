@@ -31,12 +31,13 @@ signals:
     void AddBuilding(Building *building_to_add);
 
 private:
-    int x_;
-    int y_;
-    int id_;
-    resource resource_tile; //Resource of the tile
-    static const int width_ = 20; //Width of the square
-    QColor color_;
+    int x_; //x-coordinate of the hexagon
+    int y_; //y-coordinate of the hexagon
+    int id_; //id of the hexagon
+    resource resource_tile; //Resource of the hexagon
+    static const int width_ = 20; //Width of the hexagon
+    QColor color_; //color of the hexagon
+    //The corners of the hexagon:
     pair <int, int> p1_;
     pair <int, int> p2_;
     pair <int, int> p3_;

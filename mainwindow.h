@@ -29,8 +29,8 @@ private slots:
     void AddBuildingSlot(Building *building_to_add);
 private:
     Ui::MainWindow *ui;
-    Game *new_game;
-    QGraphicsScene *scene; //Scene with all the cells
+    Game *new_game; //Game instance
+    QGraphicsScene *scene;
 };
 
 #endif // MAINWINDOW_H
