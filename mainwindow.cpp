@@ -281,6 +281,8 @@ void MainWindow::on_mansionButton_clicked()
 }
 void MainWindow::AddBuildingSlot(Building *building_to_add)
 {
+    Game::set_place_mode(false);
+    ui->centralWidget->setCursor(Qt::ArrowCursor);
     scene->addItem(building_to_add);
     scene->update();
 }
