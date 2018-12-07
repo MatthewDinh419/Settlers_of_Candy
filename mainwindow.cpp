@@ -197,7 +197,7 @@ void MainWindow::on_roadButton_clicked()
     QFont font = ui->status_label->font();
     font.setBold(true);
     ui->status_label->setFont(font);
-    ui->status_label->setText(QString("Pick a hexagon side to place candy road"));
+    ui->status_label->setText(QString("Pick two adjacent hexagon corners to place road"));
     Game::set_place_mode(!Game::get_place_mode());
     if(Game::get_place_mode()){
         Game::set_building_string("candy road");

@@ -8,10 +8,8 @@
 #include "hexagon.h"
 #include <vector>
 
-Building::Building(std::vector<resource> needed_resources,  int points, QColor color, const int x, const int y)
+Building::Building(QColor color, const int x, const int y)
 {
-    needed_resources_ = needed_resources;
-    points_ = points;
     x_ = x;
     y_ = y;
     this->color_ = color;
@@ -42,11 +40,35 @@ void Building::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->setBrush(b);
 }
 
-Road::Road(std::vector<resource> needed_resources, int points,QColor color,int x1, int y1,int x2, int y2)
-    : Building(needed_resources, points, color,x1, y1)
+ChocolateHouse::ChocolateHouse(QColor color,int x, int y) : Building(color,x, y){
+    for(int i = 0; i < 2; i++){
+        needed_resources_.push_back(resource::money);
+        needed_resources_.push_back(resource::sugar);
+        needed_resources_.push_back(resource::water);
+    }
+    this->color_ = color;
+    x_ = x;
+    y_ = y;
+}
+
+ChocolateMansion::ChocolateMansion(QColor color,int x, int y) : Building(color,x, y){
+    for(int i = 0; i < 3; i++){
+        needed_resources_.push_back(resource::money);
+        needed_resources_.push_back(resource::sugar);
+        needed_resources_.push_back(resource::water);
+    }
+    needed_resources_.push_back(resource::money);
+    this->color_ = color;
+    x_ = x;
+    y_ = y;
+}
+
+Road::Road(QColor color,int x1, int y1,int x2, int y2) : Building(color,x1, y1)
 {
-    needed_resources_ = needed_resources;
-    points_ = points;
+    needed_resources_.push_back(resource::money);
+    needed_resources_.push_back(resource::sugar);
+    needed_resources_.push_back(resource::water);
+    points_ = 1;
     x1_ = x1;
     y1_ = y1;
     x2_ = x2;
