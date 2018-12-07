@@ -169,6 +169,12 @@ MainWindow::MainWindow(QWidget *parent) :
         new_game->AddCorner(p6);
         connect(h, &Hexagon::AddBuilding, this, &MainWindow::AddBuildingSlot);
     }
+    new_game->get_current_player()->AddResource(resource::money);
+    new_game->get_current_player()->AddResource(resource::money);
+    new_game->get_current_player()->AddResource(resource::sugar);
+    new_game->get_current_player()->AddResource(resource::sugar);
+    new_game->get_current_player()->AddResource(resource::water);
+    new_game->get_current_player()->AddResource(resource::water);
 }
 
 MainWindow::~MainWindow()
@@ -178,52 +184,101 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_houseButton_clicked()
 {
-    QFont font = ui->status_label->font();
-    font.setBold(true);
-    ui->status_label->setFont(font);
-    ui->status_label->setText(QString("Pick a hexagon corner to place chocolate house"));
-    Game::set_place_mode(!Game::get_place_mode());
-    if(Game::get_place_mode()){
-        Game::set_building_string("choco house");
-        ui->centralWidget->setCursor(Qt::CrossCursor);
+    Game::set_place_mode(!Game::get_place_mode()); //If in delete mode and trying to change to not delete mode
+    if(!Game::get_place_mode()){
+        ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
     }
     else{
-        ui->centralWidget->setCursor(Qt::ArrowCursor);
+        ChocolateHouse temp_house(QColor(0,0,0),0,0);
+        std::vector<resource> needed_resources = temp_house.get_needed_resources(); //Gets the required resources
+        if(!new_game->get_current_player()->get_current_resources().empty()){
+            for(resource current_resources : new_game->get_current_player()->get_current_resources()){
+                //Tries to find the required resource from players resource and then delete it from players resource
+                if(std::find(needed_resources.begin(),needed_resources.end(),current_resources)!=needed_resources.end()){
+                    auto iter = std::find(needed_resources.begin(),needed_resources.end(),current_resources);
+                    needed_resources.erase(iter);
+                    new_game->get_current_player()->RemoveResource(current_resources);
+                }
+            }
+        }
+        QFont font = ui->status_label->font();
+        font.setBold(true);
+        ui->status_label->setFont(font);
+        if(needed_resources.empty() && Game::get_place_mode()){
+            ui->status_label->setText(QString("Pick a hexagon corner to place chocolate house"));
+            Game::set_building_string("choco house");
+            ui->centralWidget->setCursor(Qt::CrossCursor);
+        }
+        else{
+            ui->status_label->setText(QString("Not enough resources!"));
+        }
     }
 }
 
 void MainWindow::on_roadButton_clicked()
 {
-    QFont font = ui->status_label->font();
-    font.setBold(true);
-    ui->status_label->setFont(font);
-    ui->status_label->setText(QString("Pick two adjacent hexagon corners to place road"));
-    Game::set_place_mode(!Game::get_place_mode());
-    if(Game::get_place_mode()){
-        Game::set_building_string("candy road");
-        ui->centralWidget->setCursor(Qt::CrossCursor);
+    Game::set_place_mode(!Game::get_place_mode()); //If in delete mode and trying to change to not delete mode
+    if(!Game::get_place_mode()){
+        ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
     }
     else{
-        ui->centralWidget->setCursor(Qt::ArrowCursor);
+        Road temp_road(QColor(0,0,0),0,0,0,0);
+        std::vector<resource> needed_resources = temp_road.get_needed_resources(); //Gets the required resources for building
+        if(!new_game->get_current_player()->get_current_resources().empty()){
+            for(resource current_resources : new_game->get_current_player()->get_current_resources()){
+                //Tries to find the required resource from players resource and then delete it from players resource
+                if(std::find(needed_resources.begin(),needed_resources.end(),current_resources)!=needed_resources.end()){
+                    auto iter = std::find(needed_resources.begin(),needed_resources.end(),current_resources);
+                    needed_resources.erase(iter);
+                    new_game->get_current_player()->RemoveResource(current_resources);
+                }
+            }
+        }
+        QFont font = ui->status_label->font();
+        font.setBold(true);
+        ui->status_label->setFont(font);
+        if(needed_resources.empty() && Game::get_place_mode()){
+            ui->status_label->setText(QString("Pick two adjacent hexagon corners to place road"));
+            Game::set_building_string("candy road");
+            ui->centralWidget->setCursor(Qt::CrossCursor);
+        }
+        else{
+            ui->status_label->setText(QString("Not enough resources!"));
+        }
     }
 }
 
 void MainWindow::on_mansionButton_clicked()
 {
-    QFont font = ui->status_label->font();
-    font.setBold(true);
-    ui->status_label->setFont(font);
-    ui->status_label->setText(QString("Pick a hexagon corner to place chocolate mansion"));
     Game::set_place_mode(!Game::get_place_mode());
-    if(Game::get_place_mode()){
-        Game::set_building_string("choco mansion");
-        ui->centralWidget->setCursor(Qt::CrossCursor);
-    }
-    else{
+    if(!Game::get_place_mode()){
         ui->centralWidget->setCursor(Qt::ArrowCursor);
     }
+    else{
+        ChocolateMansion temp_mansion(QColor(0,0,0),0,0);
+        std::vector<resource> needed_resources = temp_mansion.get_needed_resources();
+        if(!new_game->get_current_player()->get_current_resources().empty()){
+            for(resource current_resources : new_game->get_current_player()->get_current_resources()){
+                if(std::find(needed_resources.begin(),needed_resources.end(),current_resources)!=needed_resources.end()){
+                    auto iter = std::find(needed_resources.begin(),needed_resources.end(),current_resources);
+                    needed_resources.erase(iter);
+                    new_game->get_current_player()->RemoveResource(current_resources);
+                }
+            }
+        }
+        QFont font = ui->status_label->font();
+        font.setBold(true);
+        ui->status_label->setFont(font);
+        if(needed_resources.empty() && Game::get_place_mode()){
+            ui->status_label->setText(QString("Pick a hexagon corner to place chocolate mansion"));
+            Game::set_building_string("choco mansion");
+            ui->centralWidget->setCursor(Qt::CrossCursor);
+        }
+        else{
+            ui->status_label->setText(QString("Not enough resources!"));
+        }
+    }
 }
-
 void MainWindow::AddBuildingSlot(Building *building_to_add)
 {
     scene->addItem(building_to_add);

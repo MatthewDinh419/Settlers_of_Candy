@@ -6,9 +6,12 @@
 
 class Player{
 public:
-    Player();
+    Player(int player_id);
     std::vector<resource> get_current_resources(){return current_resources;}
+    void AddResource(resource resource_to_add){current_resources.push_back(resource_to_add);}
+    void RemoveResource(resource resource_to_remove);
 private:
+    int player_id_;
     std::map<Building,Hexagon> current_buildings; //Player's current buildings relative to the hexagon
     std::vector<resource> current_resources; //Player's current resources
 };
