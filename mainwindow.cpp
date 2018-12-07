@@ -5,6 +5,7 @@
 #include <QColor>
 #include <QDebug>
 #include <vector>
+#include <iostream>
 #include <stdio.h>      /* printf, scanf, puts, NULL */
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
@@ -197,6 +198,14 @@ void MainWindow::on_roadButton_clicked()
     font.setBold(true);
     ui->status_label->setFont(font);
     ui->status_label->setText(QString("Pick a hexagon side to place candy road"));
+    Game::set_place_mode(!Game::get_place_mode());
+    if(Game::get_place_mode()){
+        Game::set_building_string("candy road");
+        ui->centralWidget->setCursor(Qt::CrossCursor);
+    }
+    else{
+        ui->centralWidget->setCursor(Qt::ArrowCursor);
+    }
 }
 
 void MainWindow::on_mansionButton_clicked()
@@ -218,4 +227,7 @@ void MainWindow::on_mansionButton_clicked()
 void MainWindow::AddBuildingSlot(Building *building_to_add)
 {
     scene->addItem(building_to_add);
+    scene->update();
 }
+
+

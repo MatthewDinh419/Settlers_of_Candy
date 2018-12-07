@@ -4,7 +4,6 @@
 #include <QColor>
 #include "building.h"
 using namespace std;
-
 class Hexagon : public QObject, public QGraphicsItem {
     Q_OBJECT
 
@@ -44,6 +43,7 @@ private:
     pair <int, int> p4_;
     pair <int, int> p5_;
     pair <int, int> p6_;
+    static pair<int,int> prev_corner_clicked;
 };
 
 #endif // HEXAGON_H

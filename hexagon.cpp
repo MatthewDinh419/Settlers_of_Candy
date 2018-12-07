@@ -5,6 +5,7 @@
 #include <QDebug>
 #include "game.h"
 using namespace std;
+pair<int,int> Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
 
 Hexagon::Hexagon(QColor color, const pair <int, int> p1, const pair <int, int> p2, const pair <int, int> p3,
                  const pair <int, int> p4, const pair <int, int> p5, const pair <int, int> p6, int id, resource resource_of_tile)
@@ -40,7 +41,6 @@ QPainterPath Hexagon::shape() const{
     poly << QPoint(this->p5_.first, this->p5_.second);
     poly << QPoint(this->p6_.first, this->p6_.second);
     path.addPolygon(poly);
-
     return path;
 }
 
@@ -86,25 +86,48 @@ void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
                     mouse_press_y >= point_pairs.second - 10 && mouse_press_y <= point_pairs.second + 10){
                 std::vector<resource> temp_resource; //Used for required resources for the building
                 QColor color_temp; //Used for color of the building
+                Building *temp_building;
                 if(Game::get_building_string() == "choco house"){
-                    color_temp = QColor(215,30,50);
+                    color_temp = QColor(204,102,0);
                     for(int i = 0; i < 2; i++){
                         temp_resource.push_back(resource::money);
                         temp_resource.push_back(resource::sugar);
                         temp_resource.push_back(resource::water);
                     }
+                    temp_building = new ChocolateHouse(temp_resource,1,color_temp,point_pairs.first-10,point_pairs.second-10);
+                    emit AddBuilding(temp_building);
+                    break;
                 }
                 else if(Game::get_building_string() == "choco mansion"){
-                    color_temp = QColor(20,100,50);
+                    color_temp = QColor(102,51,0);
                     for(int i = 0; i <= 3; i++){
                         temp_resource.push_back(resource::money);
                         temp_resource.push_back(resource::sugar);
                         temp_resource.push_back(resource::water);
                     }
+                    temp_building = new ChocolateMansion(temp_resource,1,color_temp,point_pairs.first-10,point_pairs.second-10);
+                    emit AddBuilding(temp_building);
+                    break;
                 }
-                Building *temp_building = new Building(temp_resource,1,point_pairs.first-10,point_pairs.second-10,color_temp);
-                emit AddBuilding(temp_building);
-                break;
+                else if(Game::get_building_string() == "candy road"){
+                    if(Hexagon::prev_corner_clicked.first == -1 && Hexagon::prev_corner_clicked.second == -1){
+                        qDebug() << "test2";
+                        qDebug() << point_pairs.first << point_pairs.second;
+                        Hexagon::prev_corner_clicked = point_pairs;
+                        break;
+                    }
+                    else{
+                        color_temp = QColor(215,30,50);
+                        temp_resource.push_back(resource::money);
+                        temp_resource.push_back(resource::sugar);
+                        temp_resource.push_back(resource::water);
+                        Road *temp_road = new Road(temp_resource,1,color_temp,Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
+                                                   point_pairs.first,point_pairs.second);
+                        Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
+                        emit AddBuilding(temp_road);
+                        break;
+                    }
+                }
             }
         }
     }
