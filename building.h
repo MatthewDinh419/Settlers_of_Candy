@@ -11,7 +11,7 @@ class Building : public QObject, public QGraphicsItem {
     Q_OBJECT
 
 public:
-    Building(QColor color, int x, int y);
+    Building(int x, int y);
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
@@ -27,17 +27,17 @@ protected:
 
 class ChocolateHouse : public  Building{
 public:
-    ChocolateHouse(QColor color, int x, int y);
+    ChocolateHouse(int x, int y);
 };
 
 class ChocolateMansion : public Building{
 public:
-    ChocolateMansion(QColor color, int x, int y);
+    ChocolateMansion(int x, int y);
 };
 
 class Road : public Building{
 public:
-    Road(QColor color,int x1, int y1, int x2, int y2);
+    Road(int x1, int y1, int x2, int y2);
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;

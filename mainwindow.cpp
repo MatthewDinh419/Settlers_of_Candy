@@ -177,6 +177,11 @@ MainWindow::MainWindow(QWidget *parent) :
     new_game->get_current_player()->AddResource(resource::water);
     new_game->get_current_player()->AddResource(resource::water);
     UpdateResources();
+    //First turn
+//    Game::set_place_mode(true);
+//    ui->centralWidget->setCursor(Qt::CrossCursor);
+//    ui->status_label->setText(QString("Pick a hexagon corner to place chocolate house"));
+//    Game::set_building_string("choco house");
 }
 
 MainWindow::~MainWindow()
@@ -191,7 +196,7 @@ void MainWindow::on_houseButton_clicked()
         ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
     }
     else{
-        ChocolateHouse temp_house(QColor(0,0,0),0,0);
+        ChocolateHouse temp_house(0,0);
         std::vector<resource> needed_resources = temp_house.get_needed_resources(); //Gets the required resources
         if(!new_game->get_current_player()->get_current_resources().empty()){
             for(resource current_resources : new_game->get_current_player()->get_current_resources()){
@@ -224,7 +229,7 @@ void MainWindow::on_roadButton_clicked()
         ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
     }
     else{
-        Road temp_road(QColor(0,0,0),0,0,0,0);
+        Road temp_road(0,0,0,0);
         std::vector<resource> needed_resources = temp_road.get_needed_resources(); //Gets the required resources for building
         if(!new_game->get_current_player()->get_current_resources().empty()){
             for(resource current_resources : new_game->get_current_player()->get_current_resources()){
@@ -257,7 +262,7 @@ void MainWindow::on_mansionButton_clicked()
         ui->centralWidget->setCursor(Qt::ArrowCursor);
     }
     else{
-        ChocolateMansion temp_mansion(QColor(0,0,0),0,0);
+        ChocolateMansion temp_mansion(0,0);
         std::vector<resource> needed_resources = temp_mansion.get_needed_resources();
         if(!new_game->get_current_player()->get_current_resources().empty()){
             for(resource current_resources : new_game->get_current_player()->get_current_resources()){
@@ -292,7 +297,6 @@ void MainWindow::AddBuildingSlot(Building *building_to_add)
 
 void MainWindow::UpdateResources()
 {
-    qDebug() << "test";
     std::map<resource,int> resource_quantity;
     for(Player *player : new_game->get_player_list()){
         if(player->get_current_resources().empty()){

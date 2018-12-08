@@ -78,6 +78,7 @@ void Hexagon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
 
 void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    qDebug() << "test";
     float mouse_press_x = event->pos().x();
     float mouse_press_y = event->pos().y();
     if(Game::get_place_mode()){ //If hexagon is clicked in place mode
@@ -86,14 +87,12 @@ void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
                     mouse_press_y >= point_pairs.second - 10 && mouse_press_y <= point_pairs.second + 10){
                 QColor color_temp; //Used for color of the building
                 if(Game::get_building_string() == "choco house"){
-                    color_temp = QColor(204,102,0);
-                    ChocolateHouse *temp_building = new ChocolateHouse(color_temp,point_pairs.first-10,point_pairs.second-10);
+                    ChocolateHouse *temp_building = new ChocolateHouse(point_pairs.first-10,point_pairs.second-10);
                     emit AddBuilding(temp_building);
                     break;
                 }
                 else if(Game::get_building_string() == "choco mansion"){
-                    color_temp = QColor(102,51,0);
-                    ChocolateMansion *temp_building = new ChocolateMansion(color_temp,point_pairs.first-10,point_pairs.second-10);
+                    ChocolateMansion *temp_building = new ChocolateMansion(point_pairs.first-10,point_pairs.second-10);
                     emit AddBuilding(temp_building);
                     break;
                 }
@@ -103,8 +102,7 @@ void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
                         break;
                     }
                     else{
-                        color_temp = QColor(215,30,50);
-                        Road *temp_road = new Road(color_temp,Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
+                        Road *temp_road = new Road(Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
                                                    point_pairs.first,point_pairs.second);
                         Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
                         emit AddBuilding(temp_road);
