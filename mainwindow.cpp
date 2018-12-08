@@ -175,6 +175,7 @@ MainWindow::MainWindow(QWidget *parent) :
     new_game->get_current_player()->AddResource(resource::sugar);
     new_game->get_current_player()->AddResource(resource::water);
     new_game->get_current_player()->AddResource(resource::water);
+    UpdateResources();
 }
 
 MainWindow::~MainWindow()
@@ -283,8 +284,38 @@ void MainWindow::AddBuildingSlot(Building *building_to_add)
 {
     Game::set_place_mode(false);
     ui->centralWidget->setCursor(Qt::ArrowCursor);
+    UpdateResources();
     scene->addItem(building_to_add);
     scene->update();
 }
 
-
+void MainWindow::UpdateResources()
+{
+    qDebug() << "test";
+    std::map<resource,int> resource_quantity;
+    for(Player *player : new_game->get_player_list()){
+        if(player->get_current_resources().empty()){
+            resource_quantity[resource::money] = 0;
+            resource_quantity[resource::sugar] = 0;
+            resource_quantity[resource::water] = 0;
+        }
+        for(resource current_resource : player->get_current_resources()){
+            resource_quantity[current_resource] = resource_quantity[current_resource] + 1;
+        }
+        if(player->get_id() == 1){
+            ui->p1Money->setText(QString::number(resource_quantity[resource::money]));
+            ui->p1Sugar->setText(QString::number(resource_quantity[resource::sugar]));
+            ui->p1Water->setText(QString::number(resource_quantity[resource::water]));
+        }
+        else if(player->get_id() == 2){
+            ui->p2Money->setText(QString::number(resource_quantity[resource::money]));
+            ui->p2Sugar->setText(QString::number(resource_quantity[resource::sugar]));
+            ui->p2Water->setText(QString::number(resource_quantity[resource::water]));
+        }
+        else if(player->get_id() == 3){
+            ui->p3Money->setText(QString::number(resource_quantity[resource::money]));
+            ui->p3Sugar->setText(QString::number(resource_quantity[resource::sugar]));
+            ui->p3Water->setText(QString::number(resource_quantity[resource::water]));
+        }
+    }
+}

@@ -5,6 +5,11 @@ std::vector<pair<int,int>> Game::all_corners;
 std::string Game::place_building_string = "";
 Game::Game(){
     current_player = new Player(1);
+    Player *player2 = new Player(2);
+    Player *player3 = new Player(3);
+    player_list.push_back(current_player);
+    player_list.push_back(player2);
+    player_list.push_back(player3);
 }
 
 /*

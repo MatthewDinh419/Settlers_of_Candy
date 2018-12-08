@@ -10,6 +10,7 @@ public:
     std::vector<resource> get_current_resources(){return current_resources;}
     void AddResource(resource resource_to_add){current_resources.push_back(resource_to_add);}
     void RemoveResource(resource resource_to_remove);
+    int get_id(){return player_id_;}
 private:
     int player_id_;
     std::map<Building,Hexagon> current_buildings; //Player's current buildings relative to the hexagon
