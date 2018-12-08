@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->status_label->setFont(font);
     ui->status_label->setText(QString("Start of Player 1's turn..."));
     scene = new QGraphicsScene;
+    scene_dice = new QGraphicsScene;
     QGraphicsView * view = ui->gameBoard;
     view->setScene(scene);
     view->setSceneRect(0,0,view->frameSize().width(),view->frameSize().height());
@@ -317,5 +318,148 @@ void MainWindow::UpdateResources()
             ui->p3Sugar->setText(QString::number(resource_quantity[resource::sugar]));
             ui->p3Water->setText(QString::number(resource_quantity[resource::water]));
         }
+    }
+}
+
+void MainWindow::on_diceButton_clicked()
+{
+    scene_dice->clear();
+    QGraphicsView * view_dice = ui->diceView;
+    view_dice->setScene(scene_dice);
+    view_dice->setSceneRect(0,0,view_dice->frameSize().width(),view_dice->frameSize().height());
+    std::vector<QGraphicsEllipseItem*> all_dots;
+    int dice_roll_1 = rand() % 6 + 1;
+    int dice_roll_2 = rand() % 6 + 1;
+    QGraphicsEllipseItem *dot_one;
+    switch(dice_roll_1){
+        /* Getting the dots in the correct position
+         * width / 4 + 5 and height / 4 - 5 will get the dot to the center of the dice view
+         * Adjusting the width will get the position of the dots for dice rolls 1-3
+         * Adjusting the appropriate width and height will get the positions for dice rolls 4-6
+         */
+        case 1:
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4-5,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            break;
+        case 2:
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4-10,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            break;
+        case 3:
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4+10,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4-5,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4-20,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            break;
+        case 4:
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4,view_dice->height()/4,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4-10,view_dice->height()/4,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4,view_dice->height()/4+10,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4-10,view_dice->height()/4+10,5,5);
+            all_dots.push_back(dot_one);
+            break;
+        case 5:
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4,view_dice->height()/4,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4-10,view_dice->height()/4,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4-5,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4,view_dice->height()/4+10,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4-10,view_dice->height()/4+10,5,5);
+            all_dots.push_back(dot_one);
+            break;
+        case 6:
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4-15,view_dice->height()/4-5,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4-15,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4-15,view_dice->height()/4+15,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4+5,view_dice->height()/4-5,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4+5,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(view_dice->width()/4+5,view_dice->height()/4+15,5,5);
+            all_dots.push_back(dot_one);
+            break;
+    }
+    for(QGraphicsEllipseItem *dot : all_dots){
+        dot->setBrush(QBrush(Qt::black));
+        scene_dice->addItem(dot);
+    }
+    all_dots.clear();
+    switch(dice_roll_2){
+        /* Getting the dots in the correct position
+         * 3*width / 2 + 5 and 3*height / 2 - 5 will get the dot to the center of the dice view
+         * Adjusting the width will get the position of the dots for dice rolls 1-3
+         * Adjusting the appropriate width and height will get the positions for dice rolls 4-6
+         */
+        case 1:
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4-5,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            break;
+        case 2:
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4-10,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            break;
+        case 3:
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4+10,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4-5,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4-20,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            break;
+        case 4:
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4,view_dice->height()/4,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4-10,view_dice->height()/4,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4,view_dice->height()/4+10,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4-10,view_dice->height()/4+10,5,5);
+            all_dots.push_back(dot_one);
+            break;
+        case 5:
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4,view_dice->height()/4,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4-10,view_dice->height()/4,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4-5,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4,view_dice->height()/4+10,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4-10,view_dice->height()/4+10,5,5);
+            all_dots.push_back(dot_one);
+            break;
+        case 6:
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4-15,view_dice->height()/4-5,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4-15,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4-15,view_dice->height()/4+15,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4+5,view_dice->height()/4-5,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4+5,view_dice->height()/4+5,5,5);
+            all_dots.push_back(dot_one);
+            dot_one = new QGraphicsEllipseItem(3*view_dice->width()/4+5,view_dice->height()/4+15,5,5);
+            all_dots.push_back(dot_one);
+            break;
+    }
+    for(QGraphicsEllipseItem *dot : all_dots){
+        dot->setBrush(QBrush(Qt::black));
+        scene_dice->addItem(dot);
     }
 }

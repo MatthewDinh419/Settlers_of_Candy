@@ -27,10 +27,13 @@ private slots:
     void on_mansionButton_clicked();
 
     void AddBuildingSlot(Building *building_to_add);
+    void on_diceButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     Game *new_game; //Game instance
     QGraphicsScene *scene;
+    QGraphicsScene *scene_dice;
 };
 
 #endif // MAINWINDOW_H
