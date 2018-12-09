@@ -1,3 +1,4 @@
+#Settlers of Candy
 QTCREATOR -> OPEN FILE/PROJECT -> SETTLERS_OF_CANDY.PRO -> BUILD -> RUN
 TO-DO:
 Connecting buildings to the player and the game
