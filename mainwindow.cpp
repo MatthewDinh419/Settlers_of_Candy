@@ -280,7 +280,7 @@ void MainWindow::on_mansionButton_clicked()
         }
     }
 }
-void MainWindow::AddBuildingSlot(Building *building_to_add)
+void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p)
 {
     Game::set_place_mode(false);
     ui->centralWidget->setCursor(Qt::ArrowCursor);
@@ -292,6 +292,7 @@ void MainWindow::AddBuildingSlot(Building *building_to_add)
         }
     }
     UpdateResources();
+    new_game->get_current_player()->AddBuilding(p, building_to_add);
     scene->addItem(building_to_add);
     scene->update();
 }

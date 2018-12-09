@@ -27,7 +27,7 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
 signals:
-    void AddBuilding(Building *building_to_add);
+    void AddBuilding(Building *building_to_add, std::pair<int,int> p);
 
 private:
     int x_; //x-coordinate of the hexagon
