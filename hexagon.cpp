@@ -78,8 +78,7 @@ void Hexagon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
 
 void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << event->pos().x();
-    qDebug() << event->pos().y();
+    qDebug() << "Hexagon Clicked";
     float mouse_press_x = event->pos().x();
     float mouse_press_y = event->pos().y();
     if(Game::get_place_mode()){ //If hexagon is clicked in place mode
@@ -103,54 +102,11 @@ void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
                         break;
                     }
                     else{
-                        //can't be same point
-                        if(Hexagon::prev_corner_clicked != point_pairs){
-                            //must be point next to it(an edge) using bounds to check
-                            if(point_pairs.first > Hexagon::prev_corner_clicked.first){
-                                if(point_pairs.second > Hexagon::prev_corner_clicked.second){
-                                    if(point_pairs.first <= Hexagon::prev_corner_clicked.first + 60
-                                            && point_pairs.second <= Hexagon::prev_corner_clicked.second + 60){
-                                        Road *temp_road = new Road(Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
-                                                                   point_pairs.first,point_pairs.second);
-                                        Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
-                                        emit AddBuilding(temp_road);
-                                        break;
-                                    }
-                                }
-                                else{ // y is init smaller
-                                    if(point_pairs.first <= Hexagon::prev_corner_clicked.first + 60
-                                            && point_pairs.second >= Hexagon::prev_corner_clicked.second - 60){
-                                        Road *temp_road = new Road(Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
-                                                                   point_pairs.first,point_pairs.second);
-                                        Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
-                                        emit AddBuilding(temp_road);
-                                        break;
-                                    }
-                                }
-                            }
-                            else{ // x is init smaller
-                                if(point_pairs.second > Hexagon::prev_corner_clicked.second){
-                                    if(point_pairs.first >= Hexagon::prev_corner_clicked.first - 60
-                                            && point_pairs.second <= Hexagon::prev_corner_clicked.second + 60){
-                                        Road *temp_road = new Road(Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
-                                                                   point_pairs.first,point_pairs.second);
-                                        Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
-                                        emit AddBuilding(temp_road);
-                                        break;
-                                    }
-                                }
-                                else{
-                                    if(point_pairs.first >= Hexagon::prev_corner_clicked.first - 60
-                                            && point_pairs.second >= Hexagon::prev_corner_clicked.second - 60){
-                                        Road *temp_road = new Road(Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
-                                                                   point_pairs.first,point_pairs.second);
-                                        Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
-                                        emit AddBuilding(temp_road);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
+                        Road *temp_road = new Road(Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
+                                                   point_pairs.first,point_pairs.second);
+                        Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
+                        emit AddBuilding(temp_road);
+                        break;
                     }
                 }
             }

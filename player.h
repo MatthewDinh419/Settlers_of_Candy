@@ -13,7 +13,6 @@ public:
     int get_id(){return player_id_;}
 private:
     int player_id_;
-    std::map<Building,Hexagon> current_buildings; //Player's current buildings relative to the hexagon
     std::vector<resource> current_resources; //Player's current resources
 };
 

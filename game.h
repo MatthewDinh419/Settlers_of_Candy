@@ -2,7 +2,6 @@
 #define GAME_H
 #include "player.h"
 #include <vector>
-#include "gameboard.h"
 
 class Game{
 public:
@@ -19,7 +18,6 @@ private:
     Player *current_player; //Current player's turn
     std::vector<Player*> player_list; //Vector containing all the players in the game
     static std::vector<pair<int,int>> all_corners; //Contains all the points of the hexagons
-    Gameboard &new_gameboard = Gameboard::GetInstance(); //Singleton gameboard object
     static std::string place_building_string; //String of the building to place
     static bool place_mode; //If a place building button is pressed then it will be in place mode or exit out of it
 };

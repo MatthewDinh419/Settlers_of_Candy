@@ -27,7 +27,10 @@ private slots:
     void on_mansionButton_clicked();
 
     void AddBuildingSlot(Building *building_to_add);
+
     void on_diceButton_clicked();
+
+    bool EnoughResources(Building *building_to_check);
 
 private:
     Ui::MainWindow *ui;

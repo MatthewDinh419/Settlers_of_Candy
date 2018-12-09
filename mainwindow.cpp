@@ -172,8 +172,11 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     new_game->get_current_player()->AddResource(resource::money);
     new_game->get_current_player()->AddResource(resource::money);
+    new_game->get_current_player()->AddResource(resource::money);
     new_game->get_current_player()->AddResource(resource::sugar);
     new_game->get_current_player()->AddResource(resource::sugar);
+    new_game->get_current_player()->AddResource(resource::sugar);
+    new_game->get_current_player()->AddResource(resource::water);
     new_game->get_current_player()->AddResource(resource::water);
     new_game->get_current_player()->AddResource(resource::water);
     UpdateResources();
@@ -189,29 +192,37 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_houseButton_clicked()
-{
-    Game::set_place_mode(!Game::get_place_mode()); //If in delete mode and trying to change to not delete mode
-    if(!Game::get_place_mode()){
-        ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
+bool MainWindow::EnoughResources(Building *building_to_check){
+    std::vector<resource> needed_resources = building_to_check->get_needed_resources();
+    for(resource current_resources : new_game->get_current_player()->get_current_resources()){
+        //Tries to find the required resource from players resource and then delete it from players resource
+        if(std::find(needed_resources.begin(),needed_resources.end(),current_resources)!=needed_resources.end()){
+            auto iter = std::find(needed_resources.begin(),needed_resources.end(),current_resources);
+            needed_resources.erase(iter);
+        }
+    }
+    if(needed_resources.empty()){
+        return true;
     }
     else{
-        ChocolateHouse temp_house(0,0);
-        std::vector<resource> needed_resources = temp_house.get_needed_resources(); //Gets the required resources
-        if(!new_game->get_current_player()->get_current_resources().empty()){
-            for(resource current_resources : new_game->get_current_player()->get_current_resources()){
-                //Tries to find the required resource from players resource and then delete it from players resource
-                if(std::find(needed_resources.begin(),needed_resources.end(),current_resources)!=needed_resources.end()){
-                    auto iter = std::find(needed_resources.begin(),needed_resources.end(),current_resources);
-                    needed_resources.erase(iter);
-                    new_game->get_current_player()->RemoveResource(current_resources);
-                }
-            }
-        }
+        return false;
+    }
+}
+
+void MainWindow::on_houseButton_clicked()
+{
+    if(Game::get_place_mode()){ //If in place mode and want to reset
+        Game::set_place_mode(!Game::get_place_mode()); //Set to false
+        ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
+    }
+    else{ //Not in place mode
         QFont font = ui->status_label->font();
         font.setBold(true);
         ui->status_label->setFont(font);
-        if(needed_resources.empty() && Game::get_place_mode()){
+        ChocolateHouse *temp_house = new ChocolateHouse(0,0);
+        bool enough_resources = EnoughResources(temp_house);
+        if(enough_resources){
+            Game::set_place_mode(!Game::get_place_mode());
             ui->status_label->setText(QString("Pick a hexagon corner to place chocolate house"));
             Game::set_building_string("choco house");
             ui->centralWidget->setCursor(Qt::CrossCursor);
@@ -224,28 +235,19 @@ void MainWindow::on_houseButton_clicked()
 
 void MainWindow::on_roadButton_clicked()
 {
-    Game::set_place_mode(!Game::get_place_mode()); //If in delete mode and trying to change to not delete mode
-    if(!Game::get_place_mode()){
+    if(Game::get_place_mode()){ //If in place mode and want to reset
+        Game::set_place_mode(!Game::get_place_mode()); //Set to false
         ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
     }
-    else{
-        Road temp_road(0,0,0,0);
-        std::vector<resource> needed_resources = temp_road.get_needed_resources(); //Gets the required resources for building
-        if(!new_game->get_current_player()->get_current_resources().empty()){
-            for(resource current_resources : new_game->get_current_player()->get_current_resources()){
-                //Tries to find the required resource from players resource and then delete it from players resource
-                if(std::find(needed_resources.begin(),needed_resources.end(),current_resources)!=needed_resources.end()){
-                    auto iter = std::find(needed_resources.begin(),needed_resources.end(),current_resources);
-                    needed_resources.erase(iter);
-                    new_game->get_current_player()->RemoveResource(current_resources);
-                }
-            }
-        }
+    else{ //Not in place mode
         QFont font = ui->status_label->font();
         font.setBold(true);
         ui->status_label->setFont(font);
-        if(needed_resources.empty() && Game::get_place_mode()){
-            ui->status_label->setText(QString("Pick two adjacent hexagon corners to place road"));
+        Road *temp_road = new Road(0,0,0,0);
+        bool enough_resources = EnoughResources(temp_road);
+        if(enough_resources){
+            Game::set_place_mode(!Game::get_place_mode());
+            ui->status_label->setText(QString("Pick two adjacent corners to place road"));
             Game::set_building_string("candy road");
             ui->centralWidget->setCursor(Qt::CrossCursor);
         }
@@ -257,26 +259,18 @@ void MainWindow::on_roadButton_clicked()
 
 void MainWindow::on_mansionButton_clicked()
 {
-    Game::set_place_mode(!Game::get_place_mode());
-    if(!Game::get_place_mode()){
-        ui->centralWidget->setCursor(Qt::ArrowCursor);
+    if(Game::get_place_mode()){ //If in place mode and want to reset
+        Game::set_place_mode(!Game::get_place_mode()); //Set to false
+        ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
     }
-    else{
-        ChocolateMansion temp_mansion(0,0);
-        std::vector<resource> needed_resources = temp_mansion.get_needed_resources();
-        if(!new_game->get_current_player()->get_current_resources().empty()){
-            for(resource current_resources : new_game->get_current_player()->get_current_resources()){
-                if(std::find(needed_resources.begin(),needed_resources.end(),current_resources)!=needed_resources.end()){
-                    auto iter = std::find(needed_resources.begin(),needed_resources.end(),current_resources);
-                    needed_resources.erase(iter);
-                    new_game->get_current_player()->RemoveResource(current_resources);
-                }
-            }
-        }
+    else{ //Not in place mode
         QFont font = ui->status_label->font();
         font.setBold(true);
         ui->status_label->setFont(font);
-        if(needed_resources.empty() && Game::get_place_mode()){
+        ChocolateHouse *temp_house = new ChocolateHouse(0,0);
+        bool enough_resources = EnoughResources(temp_house);
+        if(enough_resources){
+            Game::set_place_mode(!Game::get_place_mode());
             ui->status_label->setText(QString("Pick a hexagon corner to place chocolate mansion"));
             Game::set_building_string("choco mansion");
             ui->centralWidget->setCursor(Qt::CrossCursor);
@@ -290,6 +284,13 @@ void MainWindow::AddBuildingSlot(Building *building_to_add)
 {
     Game::set_place_mode(false);
     ui->centralWidget->setCursor(Qt::ArrowCursor);
+    std::vector<resource> needed_resources = building_to_add->get_needed_resources();
+    for(resource current_resources : new_game->get_current_player()->get_current_resources()){ //Delete the resources from player
+        //Tries to find the required resource from players resource and then delete it from players resource
+        if(std::find(needed_resources.begin(),needed_resources.end(),current_resources)!=needed_resources.end()){
+            new_game->get_current_player()->RemoveResource(current_resources);
+        }
+    }
     UpdateResources();
     scene->addItem(building_to_add);
     scene->update();
