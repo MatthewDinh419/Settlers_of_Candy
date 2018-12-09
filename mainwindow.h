@@ -26,7 +26,7 @@ private slots:
 
     void on_mansionButton_clicked();
 
-    void AddBuildingSlot(Building *building_to_add, std::pair<int,int> p);
+    void AddBuildingSlot(Building *building_to_add);
 
     void on_diceButton_clicked();
 
@@ -35,6 +35,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     Game *new_game; //Game instance
+    bool first_turn = true;
     QGraphicsScene *scene;
     QGraphicsScene *scene_dice;
 };
