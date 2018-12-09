@@ -4,12 +4,7 @@ bool Game::place_mode = false;
 std::vector<pair<int,int>> Game::all_corners;
 std::string Game::place_building_string = "";
 Game::Game(){
-    current_player = new Player(1);
-    Player *player2 = new Player(2);
-    Player *player3 = new Player(3);
-    player_list.push_back(current_player);
-    player_list.push_back(player2);
-    player_list.push_back(player3);
+
 }
 
 /*
@@ -17,4 +12,12 @@ Game::Game(){
 */
 void Game::AddCorner(pair<int,int> pair_to_add){
     all_corners.push_back(pair_to_add);
+}
+
+void Game::CreatePlayers(std::vector<int> player_order){
+   Player *first_player = new Player(player_order[0]);
+   current_player = first_player;
+   player_list.push_back(first_player);
+   player_list.push_back(new Player(player_order[1]));
+   player_list.push_back(new Player(player_order[2]));
 }

@@ -14,6 +14,7 @@ public:
     static std::string get_building_string(){return place_building_string;}
     Player *get_current_player(){return current_player;}
     std::vector<Player*> get_player_list(){return player_list;}
+    void CreatePlayers(std::vector<int> player_order);
 private:
     Player *current_player; //Current player's turn
     std::vector<Player*> player_list; //Vector containing all the players in the game

@@ -180,11 +180,9 @@ MainWindow::MainWindow(QWidget *parent) :
     new_game->get_current_player()->AddResource(resource::water);
     new_game->get_current_player()->AddResource(resource::water);
     UpdateResources();
-    //First turn
-//    Game::set_place_mode(true);
-//    ui->centralWidget->setCursor(Qt::CrossCursor);
-//    ui->status_label->setText(QString("Pick a hexagon corner to place chocolate house"));
-//    Game::set_building_string("choco house");
+
+    //First Turn
+    ui->status_label->setText(QString("Roll Dice to see who goes first!"));
 }
 
 MainWindow::~MainWindow()
@@ -280,7 +278,7 @@ void MainWindow::on_mansionButton_clicked()
         }
     }
 }
-void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p)
+void MainWindow::AddBuildingSlot(Building *building_to_add)
 {
     Game::set_place_mode(false);
     ui->centralWidget->setCursor(Qt::ArrowCursor);
@@ -292,7 +290,6 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
         }
     }
     UpdateResources();
-    new_game->get_current_player()->AddBuilding(p, building_to_add);
     scene->addItem(building_to_add);
     scene->update();
 }
@@ -467,5 +464,49 @@ void MainWindow::on_diceButton_clicked()
     for(QGraphicsEllipseItem *dot : all_dots){
         dot->setBrush(QBrush(Qt::black));
         scene_dice->addItem(dot);
+    }
+    if(first_turn){
+        std::vector<int> player_order;
+        int sum_player = dice_roll_1 + dice_roll_2;
+        int sum_ai_two = (rand() % 6 + 1) + (rand() % 6 + 1);
+        int sum_ai_three = (rand() % 6 + 1) + (rand() % 6 + 1);
+        if(sum_player >= sum_ai_two && sum_player >= sum_ai_three){ //Player One is first
+            qDebug() << "test";
+            player_order.push_back(1);
+            if(sum_ai_two > sum_ai_three){ //Player two is second and Player three is third
+                player_order.push_back(2);
+                player_order.push_back(3);
+            }
+            else{ //Player 3 is second and Player 2 is third
+                player_order.push_back(3);
+                player_order.push_back(2);
+            }
+        }
+        else if(sum_ai_two > sum_player && sum_ai_two >= sum_ai_three){ //Player two is first
+            qDebug() << "test2";
+            player_order.push_back(2);
+            if(sum_player > sum_ai_three){ //Player one is second and Player three is third
+                player_order.push_back(1);
+                player_order.push_back(3);
+            }
+            else{ //Player three is second and Player one is third
+                player_order.push_back(3);
+                player_order.push_back(1);
+            }
+        }
+        else if(sum_ai_three > sum_player && sum_ai_three > sum_ai_two){ //Player 3 is first
+            qDebug() << "test3";
+            player_order.push_back(3);
+            if(sum_player > sum_ai_two){ //Player 1 is second and Player 2 is third
+                player_order.push_back(1);
+                player_order.push_back(2);
+            }
+            else{ //Player 2 is second and Player 1 is third
+                player_order.push_back(2);
+                player_order.push_back(1);
+            }
+        }
+        first_turn = false;
+        new_game->CreatePlayers(player_order);
     }
 }
