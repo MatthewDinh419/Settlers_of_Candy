@@ -26,7 +26,7 @@ private slots:
 
     void on_mansionButton_clicked();
 
-    void AddBuildingSlot(Building *building_to_add);
+    void AddBuildingSlot(Building *building_to_add, std::pair<int,int> p);
 
     void on_diceButton_clicked();
 

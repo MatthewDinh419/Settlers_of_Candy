@@ -170,16 +170,6 @@ MainWindow::MainWindow(QWidget *parent) :
         new_game->AddCorner(p6);
         connect(h, &Hexagon::AddBuilding, this, &MainWindow::AddBuildingSlot);
     }
-    new_game->get_current_player()->AddResource(resource::money);
-    new_game->get_current_player()->AddResource(resource::money);
-    new_game->get_current_player()->AddResource(resource::money);
-    new_game->get_current_player()->AddResource(resource::sugar);
-    new_game->get_current_player()->AddResource(resource::sugar);
-    new_game->get_current_player()->AddResource(resource::sugar);
-    new_game->get_current_player()->AddResource(resource::water);
-    new_game->get_current_player()->AddResource(resource::water);
-    new_game->get_current_player()->AddResource(resource::water);
-    UpdateResources();
 
     //First Turn
     ui->status_label->setText(QString("Roll Dice to see who goes first!"));
@@ -191,20 +181,15 @@ MainWindow::~MainWindow()
 }
 
 bool MainWindow::EnoughResources(Building *building_to_check){
-    std::vector<resource> needed_resources = building_to_check->get_needed_resources();
-    for(resource current_resources : new_game->get_current_player()->get_current_resources()){
-        //Tries to find the required resource from players resource and then delete it from players resource
-        if(std::find(needed_resources.begin(),needed_resources.end(),current_resources)!=needed_resources.end()){
-            auto iter = std::find(needed_resources.begin(),needed_resources.end(),current_resources);
-            needed_resources.erase(iter);
+    std::map<resource,int> needed_resources = building_to_check->get_needed_resources();
+    std::map<resource,int>::iterator it;
+    std::map<resource,int> current_players_resources = new_game->get_current_player()->get_current_resources();
+    for(it = building_to_check->get_needed_resources().begin(); it != building_to_check->get_needed_resources().end(); it++){
+        if(current_players_resources[it->first] < it->second){
+            return false;
         }
     }
-    if(needed_resources.empty()){
-        return true;
-    }
-    else{
-        return false;
-    }
+    return true;
 }
 
 void MainWindow::on_houseButton_clicked()
@@ -278,48 +263,37 @@ void MainWindow::on_mansionButton_clicked()
         }
     }
 }
-void MainWindow::AddBuildingSlot(Building *building_to_add)
+void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p)
 {
     Game::set_place_mode(false);
     ui->centralWidget->setCursor(Qt::ArrowCursor);
-    std::vector<resource> needed_resources = building_to_add->get_needed_resources();
-    for(resource current_resources : new_game->get_current_player()->get_current_resources()){ //Delete the resources from player
-        //Tries to find the required resource from players resource and then delete it from players resource
-        if(std::find(needed_resources.begin(),needed_resources.end(),current_resources)!=needed_resources.end()){
-            new_game->get_current_player()->RemoveResource(current_resources);
-        }
+    map<resource,int>::iterator it;
+    for(it = building_to_add->get_needed_resources().begin(); it != building_to_add->get_needed_resources().end(); it++){
+        new_game->get_current_player()->RemoveResource(it->first,it->second);
     }
     UpdateResources();
+    new_game->get_current_player()->AddBuilding(p, building_to_add);
     scene->addItem(building_to_add);
     scene->update();
 }
 
 void MainWindow::UpdateResources()
 {
-    std::map<resource,int> resource_quantity;
     for(Player *player : new_game->get_player_list()){
-        if(player->get_current_resources().empty()){
-            resource_quantity[resource::money] = 0;
-            resource_quantity[resource::sugar] = 0;
-            resource_quantity[resource::water] = 0;
-        }
-        for(resource current_resource : player->get_current_resources()){
-            resource_quantity[current_resource] = resource_quantity[current_resource] + 1;
-        }
         if(player->get_id() == 1){
-            ui->p1Money->setText(QString::number(resource_quantity[resource::money]));
-            ui->p1Sugar->setText(QString::number(resource_quantity[resource::sugar]));
-            ui->p1Water->setText(QString::number(resource_quantity[resource::water]));
+            ui->p1Money->setText(QString::number(player->get_current_resources()[resource::money]));
+            ui->p1Sugar->setText(QString::number(player->get_current_resources()[resource::sugar]));
+            ui->p1Water->setText(QString::number(player->get_current_resources()[resource::water]));
         }
         else if(player->get_id() == 2){
-            ui->p2Money->setText(QString::number(resource_quantity[resource::money]));
-            ui->p2Sugar->setText(QString::number(resource_quantity[resource::sugar]));
-            ui->p2Water->setText(QString::number(resource_quantity[resource::water]));
+            ui->p2Money->setText(QString::number(player->get_current_resources()[resource::money]));
+            ui->p2Sugar->setText(QString::number(player->get_current_resources()[resource::sugar]));
+            ui->p2Water->setText(QString::number(player->get_current_resources()[resource::water]));
         }
         else if(player->get_id() == 3){
-            ui->p3Money->setText(QString::number(resource_quantity[resource::money]));
-            ui->p3Sugar->setText(QString::number(resource_quantity[resource::sugar]));
-            ui->p3Water->setText(QString::number(resource_quantity[resource::water]));
+            ui->p3Money->setText(QString::number(player->get_current_resources()[resource::money]));
+            ui->p3Sugar->setText(QString::number(player->get_current_resources()[resource::sugar]));
+            ui->p3Water->setText(QString::number(player->get_current_resources()[resource::water]));
         }
     }
 }
@@ -508,5 +482,7 @@ void MainWindow::on_diceButton_clicked()
         }
         first_turn = false;
         new_game->CreatePlayers(player_order);
+        UpdateResources();
+        ui->status_label->setText(QString("Player ") + QString::number(player_order[0]) + QString(" turn"));
     }
 }

@@ -15,9 +15,9 @@ public:
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
-    std::vector<resource> get_needed_resources(){return needed_resources_;}
+    std::map<resource,int> get_needed_resources(){return needed_resources_;}
 protected:
-    std::vector<resource> needed_resources_; //Vector that contains the amount of resources needed to build this building
+    std::map<resource,int> needed_resources_;//Vector that contains the amount of resources needed to build this building
     int points_; //Points awarded for having this building
     int x_; //X-coordinate of the building
     int y_; //y-coordinate of the building

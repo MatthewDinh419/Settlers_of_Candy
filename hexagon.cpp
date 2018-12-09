@@ -88,12 +88,12 @@ void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
                 QColor color_temp; //Used for color of the building
                 if(Game::get_building_string() == "choco house"){
                     ChocolateHouse *temp_building = new ChocolateHouse(point_pairs.first-10,point_pairs.second-10);
-                    emit AddBuilding(temp_building);
+                    emit AddBuilding(temp_building, point_pairs);
                     break;
                 }
                 else if(Game::get_building_string() == "choco mansion"){
                     ChocolateMansion *temp_building = new ChocolateMansion(point_pairs.first-10,point_pairs.second-10);
-                    emit AddBuilding(temp_building);
+                    emit AddBuilding(temp_building, point_pairs);
                     break;
                 }
                 else if(Game::get_building_string() == "candy road"){
@@ -105,7 +105,7 @@ void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
                         Road *temp_road = new Road(Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
                                                    point_pairs.first,point_pairs.second);
                         Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
-                        emit AddBuilding(temp_road);
+                        emit AddBuilding(temp_road, point_pairs);
                         break;
                     }
                 }

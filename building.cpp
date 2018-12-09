@@ -40,33 +40,30 @@ void Building::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 }
 
 ChocolateHouse::ChocolateHouse(int x, int y) : Building(x, y){
-    for(int i = 0; i < 2; i++){
-        needed_resources_.push_back(resource::money);
-        needed_resources_.push_back(resource::sugar);
-        needed_resources_.push_back(resource::water);
-    }
+    needed_resources_[resource::money] = 2;
+    needed_resources_[resource::sugar] = 2;
+    needed_resources_[resource::water] = 2;
     this->color_ = QColor(204,102,0);
     x_ = x;
     y_ = y;
+    points_ = 2;
 }
 
 ChocolateMansion::ChocolateMansion(int x, int y) : Building(x, y){
-    for(int i = 0; i < 3; i++){
-        needed_resources_.push_back(resource::money);
-        needed_resources_.push_back(resource::sugar);
-        needed_resources_.push_back(resource::water);
-    }
-    needed_resources_.push_back(resource::money);
+    needed_resources_[resource::money] = 3;
+    needed_resources_[resource::sugar] = 3;
+    needed_resources_[resource::water] = 3;
     this->color_ = QColor(102,51,0);
     x_ = x;
     y_ = y;
+    points_ = 3;
 }
 
 Road::Road(int x1, int y1,int x2, int y2) : Building(x1, y1)
 {
-    needed_resources_.push_back(resource::money);
-    needed_resources_.push_back(resource::sugar);
-    needed_resources_.push_back(resource::water);
+    needed_resources_[resource::money] = 1;
+    needed_resources_[resource::sugar] = 1;
+    needed_resources_[resource::water] = 1;
     points_ = 1;
     x1_ = x1;
     y1_ = y1;
