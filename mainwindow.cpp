@@ -206,6 +206,8 @@ bool MainWindow::EnoughResources(Building *building_to_check){
 void MainWindow::on_houseButton_clicked()
 {
     if(Game::get_place_mode()){ //If in place mode and want to reset
+        ui->infoBrowser->setText(QString(""));
+        ui->status_label->setText(QString(""));
         Game::set_place_mode(!Game::get_place_mode()); //Set to false
         ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
     }
@@ -234,6 +236,8 @@ void MainWindow::on_houseButton_clicked()
 void MainWindow::on_roadButton_clicked()
 {
     if(Game::get_place_mode()){ //If in place mode and want to reset
+        ui->infoBrowser->setText(QString(""));
+        ui->status_label->setText(QString(""));
         Game::set_place_mode(!Game::get_place_mode()); //Set to false
         ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
     }
@@ -262,6 +266,8 @@ void MainWindow::on_roadButton_clicked()
 void MainWindow::on_mansionButton_clicked()
 {
     if(Game::get_place_mode()){ //If in place mode and want to reset
+        ui->infoBrowser->setText(QString(""));
+        ui->status_label->setText(QString(""));
         Game::set_place_mode(!Game::get_place_mode()); //Set to false
         ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
     }
@@ -288,18 +294,144 @@ void MainWindow::on_mansionButton_clicked()
 }
 void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p)
 {
-    Game::set_place_mode(false);
-    ui->centralWidget->setCursor(Qt::ArrowCursor);
-    ui->status_label->setText(QString("Player " +QString::number(new_game->get_current_player()->get_id()) +QString("'s turn")));
-    for(const auto it : building_to_add->get_needed_resources()){
-        new_game->get_current_player()->RemoveResource(it.first,it.second);
+    //cond for valid building placement
+    if(building_to_add->get_building_type() == "choco mansion"){
+        //checks for if house in map
+        bool house = false;
+        Building *building_to_remove = new Building(-1, -1);
+        //must be upgrade of a house
+        if(new_game->get_current_player()->get_buildings().count(p)){
+            //point in map, check if house
+            for(auto const& value: new_game->get_current_player()->get_buildings().at(p)){
+                if(value->get_building_type() == "choco house"){
+                    building_to_remove = value;
+                    house = true;
+                    break;
+                }
+            }
+            if(house){
+                Game::set_place_mode(false);
+                ui->centralWidget->setCursor(Qt::ArrowCursor);
+                ui->status_label->setText(QString("Player " +QString::number(new_game->get_current_player()->get_id()) +QString("'s turn")));
+                for(const auto it : building_to_add->get_needed_resources()){
+                    new_game->get_current_player()->RemoveResource(it.first,it.second);
+                }
+                new_game->get_current_player()->RemoveBuilding(p, building_to_remove);
+                new_game->get_current_player()->AddBuilding(p, building_to_add);
+                scene->addItem(building_to_add);
+                scene->update();
+                UpdateResources();
+                UpdatePoints();
+                ui->infoBrowser->setText(QString(""));
+            }
+            else{
+                //otherwise don't do building addition
+                ui->infoBrowser->setText(QString("Invalid Placement; Upgrade A Chocolate House."));
+            }
+        }
+        else{
+            //point not in map void building addition
+            ui->infoBrowser->setText(QString("Invalid Placement; Upgrade A Chocolate House."));
+        }
+        house = false;
     }
-    new_game->get_current_player()->AddBuilding(p, building_to_add);
-    scene->addItem(building_to_add);
-    scene->update();
-    UpdateResources();
-    UpdatePoints();
-    ui->infoBrowser->setText(QString(""));
+    else if(building_to_add->get_building_type() == "candy road"){
+        //must connect to road or house or mansion
+        bool house = false;
+        if(new_game->get_current_player()->get_buildings().count(p)){
+            //something at point you want to add road -> check if house or mansion
+            for(auto const& value: new_game->get_current_player()->get_buildings().at(p)){
+                if(value->get_building_type() == "choco house"
+                        || value->get_building_type() == "choco mansion"){
+                    house = true;
+                    break;
+                }
+            }
+            if(house){
+                Game::set_place_mode(false);
+                ui->centralWidget->setCursor(Qt::ArrowCursor);
+                ui->status_label->setText(QString("Player " +QString::number(new_game->get_current_player()->get_id()) +QString("'s turn")));
+                for(const auto it : building_to_add->get_needed_resources()){
+                    new_game->get_current_player()->RemoveResource(it.first,it.second);
+                }
+                //add to vector at key p
+                new_game->get_current_player()->AddBuilding(p, building_to_add);
+                //also add second point of road to map to aid house placement checks
+                pair<int,int> other_p = building_to_add->get_x_y();
+                new_game->get_current_player()->AddBuilding(other_p, building_to_add);
+                scene->addItem(building_to_add);
+                scene->update();
+                UpdateResources();
+                UpdatePoints();
+                ui->infoBrowser->setText(QString(""));
+            }
+            else{
+                //otherwise don't do road addition
+                ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
+            }
+        }
+        else{
+            //nothing at point you want to add road
+            ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
+        }
+        house = false;
+    }
+    else{
+        //must connect to road and p in this case is the prev point so we have to manually access its second points
+        bool house = false;
+        if(new_game->get_current_player()->get_buildings().count(p)){
+            for(auto const& value: new_game->get_current_player()->get_buildings().at(p)){
+                if(value->get_building_type() == "candy road"){
+                    house = true;
+                    break;
+                }
+            }
+            //something at point you want to add road -> check if house or mansion
+            if(house){
+                Game::set_place_mode(false);
+                ui->centralWidget->setCursor(Qt::ArrowCursor);
+                ui->status_label->setText(QString("Player " +QString::number(new_game->get_current_player()->get_id()) +QString("'s turn")));
+                for(const auto it : building_to_add->get_needed_resources()){
+                    new_game->get_current_player()->RemoveResource(it.first,it.second);
+                }
+                new_game->get_current_player()->AddBuilding(p, building_to_add);
+                scene->addItem(building_to_add);
+                scene->update();
+                UpdateResources();
+                UpdatePoints();
+                ui->infoBrowser->setText(QString(""));
+            }
+            else{
+                //otherwise don't do road addition
+                ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
+            }
+        }
+        else{
+            if(!new_game->get_current_player()->get_first_turn()){
+                //nothing at point you want to add road
+                ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
+            }
+            else{//players first turn they get to place one house free of charge
+                if(new_game->get_current_player()->get_first_turn()){
+                    Game::set_place_mode(false);
+                    ui->centralWidget->setCursor(Qt::ArrowCursor);
+                    ui->status_label->setText(QString("Player " +QString::number(new_game->get_current_player()->get_id()) +QString("'s turn")));
+                    for(const auto it : building_to_add->get_needed_resources()){
+                        new_game->get_current_player()->RemoveResource(it.first,it.second);
+                    }
+                    new_game->get_current_player()->AddBuilding(p, building_to_add);
+                    scene->addItem(building_to_add);
+                    scene->update();
+                    UpdateResources();
+                    UpdatePoints();
+                    ui->infoBrowser->setText(QString(""));
+                    //set to false
+                    new_game->get_current_player()->set_first_turn();
+                }
+            }
+        }
+        house = false;
+    }
 }
 
 void MainWindow::UpdateResources()
@@ -514,6 +646,18 @@ void MainWindow::on_diceButton_clicked()
         ui->endButton->setEnabled(true);
     }
     ui->diceButton->setEnabled(false);
+    if(new_game->get_current_player()->get_first_turn()){
+        Game::set_place_mode(!Game::get_place_mode());
+        ui->status_label->setText(QString("Add Chocolate House!"));
+        Game::set_building_string("choco house");
+        ui->centralWidget->setCursor(Qt::CrossCursor);
+        QFile file(":/infoResources/InfoText/choco_house.txt");
+        if(!file.open(QIODevice::ReadOnly)){
+            QMessageBox::information(0,"Info",file.errorString());
+        }
+        QTextStream in(&file);
+        ui->infoBrowser->setText(in.readAll());
+    }
 }
 
 void MainWindow::UpdatePoints(){
@@ -581,7 +725,7 @@ std::map<std::string, Player*> MainWindow::UpdateRecords(){
     //Updating the UI
     ui->currRecord->setText(QString("Current Records\n\n") + QString("Longest Road (+1):") + QString(" Player ")
                             + QString::number(record_holders["Longest Road"]->get_id()) + QString("\n")
-            + QString("Largest Dice Sum (+1): ") + QString("Player ") +QString::number(record_holders["Largest Dice Sum"]->get_id()) + QString("\n")
-            + QString("Most Resources (+2): ") +QString("Player ") + QString::number(record_holders["Most Resources"]->get_id()));
+                            + QString("Largest Dice Sum (+1): ") + QString("Player ") +QString::number(record_holders["Largest Dice Sum"]->get_id()) + QString("\n")
+                            + QString("Most Resources (+2): ") +QString("Player ") + QString::number(record_holders["Most Resources"]->get_id()));
     return record_holders;
 }

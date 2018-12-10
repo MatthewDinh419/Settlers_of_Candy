@@ -37,32 +37,34 @@ void Game::CollectResources(){
     for(Player *player : player_list){ //Iterate through each player
         for(const auto it : player->get_buildings()){ //Iterate through all of the player's buildings
             for(Hexagon *hexagon : hexagon_list_){ //Iterate through every single hexagon
-                //If point of the building matches that of a hexagon then update the variables above
-                if(hexagon->get_p1() == it.first){
-                    building_to_hex[it.second] = hexagon;
-                    hexagon_contains.push_back(building_to_hex);
+                for(auto const& value: it.second){
+                    //If point of the building matches that of a hexagon then update the variables above
+                    if(hexagon->get_p1() == it.first){
+                        building_to_hex[value] = hexagon;
+                        hexagon_contains.push_back(building_to_hex);
+                    }
+                    else if(hexagon->get_p2() == it.first){
+                        building_to_hex[value] = hexagon;
+                        hexagon_contains.push_back(building_to_hex);
+                    }
+                    else if(hexagon->get_p3() == it.first){
+                        building_to_hex[value] = hexagon;
+                        hexagon_contains.push_back(building_to_hex);
+                    }
+                    else if(hexagon->get_p4() == it.first){
+                        building_to_hex[value] = hexagon;
+                        hexagon_contains.push_back(building_to_hex);
+                    }
+                    else if(hexagon->get_p5() == it.first){
+                        building_to_hex[value] = hexagon;
+                        hexagon_contains.push_back(building_to_hex);
+                    }
+                    else if(hexagon->get_p6() == it.first){
+                        building_to_hex[value] = hexagon;
+                        hexagon_contains.push_back(building_to_hex);
+                    }
+                   building_to_hex.clear(); //Reset the map for another hexagon
                 }
-                else if(hexagon->get_p2() == it.first){
-                    building_to_hex[it.second] = hexagon;
-                    hexagon_contains.push_back(building_to_hex);
-                }
-                else if(hexagon->get_p3() == it.first){
-                    building_to_hex[it.second] = hexagon;
-                    hexagon_contains.push_back(building_to_hex);
-                }
-                else if(hexagon->get_p4() == it.first){
-                    building_to_hex[it.second] = hexagon;
-                    hexagon_contains.push_back(building_to_hex);
-                }
-                else if(hexagon->get_p5() == it.first){
-                    building_to_hex[it.second] = hexagon;
-                    hexagon_contains.push_back(building_to_hex);
-                }
-                else if(hexagon->get_p6() == it.first){
-                    building_to_hex[it.second] = hexagon;
-                    hexagon_contains.push_back(building_to_hex);
-                }
-               building_to_hex.clear(); //Reset the map for another hexagon
             }
         }
         for(std::map<Building *, Hexagon *> build_hex : hexagon_contains){
@@ -82,8 +84,10 @@ std::map<Player *, int> Game::PlayerPoints(){
     for(Player *player : player_list){
         player_pts[player] = 0;
         for(const auto it : player->get_buildings()){
-            player_pts[player] += it.second->get_points();
-            player->AddToTotalPoints(it.second->get_points());
+            for(auto const& value: it.second){
+                player_pts[player] += value->get_points();
+                player->AddToTotalPoints(value->get_points());
+            }
         }
     }
     return player_pts;

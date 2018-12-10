@@ -17,6 +17,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
     std::map<resource,int> get_needed_resources(){return needed_resources_;}
     virtual std::string get_building_type(){return "";}
+    std::pair<int,int> get_x_y(){return std::make_pair(x_,y_);}
     int get_points(){return points_;}
 protected:
     std::map<resource,int> needed_resources_;//Vector that contains the amount of resources needed to build this building
@@ -47,6 +48,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
     void print_values(){qDebug() << x1_ << y1_ << x2_ << y2_;}
     std::string get_building_type(){return "candy road";}
+    std::pair<int,int> get_x_y(){return std::make_pair(x2_,y2_);}
 
 private:
     int x1_;

@@ -102,6 +102,7 @@ void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
                         break;
                     }
                     else{
+                        pair<int,int> temp_prev = Hexagon::prev_corner_clicked;
                         //can't be the same point
                         if(Hexagon::prev_corner_clicked != point_pairs){
                            //must be point next to it(an edge) using bounds to check
@@ -112,7 +113,7 @@ void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
                                        Road *temp_road = new Road(Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
                                                                   point_pairs.first,point_pairs.second);
                                        Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
-                                       emit AddBuilding(temp_road, point_pairs);
+                                       emit AddBuilding(temp_road, temp_prev);
                                        break;
                                    }
                                }
@@ -122,7 +123,7 @@ void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
                                        Road *temp_road = new Road(Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
                                                                   point_pairs.first,point_pairs.second);
                                        Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
-                                       emit AddBuilding(temp_road, point_pairs);
+                                       emit AddBuilding(temp_road, temp_prev);
                                        break;
                                    }
                                }
@@ -134,7 +135,7 @@ void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
                                        Road *temp_road = new Road(Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
                                                                   point_pairs.first,point_pairs.second);
                                        Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
-                                       emit AddBuilding(temp_road, point_pairs);
+                                       emit AddBuilding(temp_road, temp_prev);
                                        break;
                                    }
                                }
@@ -144,7 +145,7 @@ void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
                                        Road *temp_road = new Road(Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
                                                                   point_pairs.first,point_pairs.second);
                                        Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
-                                       emit AddBuilding(temp_road, point_pairs);
+                                       emit AddBuilding(temp_road, temp_prev);
                                        break;
                                    }
                                }
