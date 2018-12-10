@@ -22,6 +22,7 @@ public:
     int get_x() const {return x_;}
     int get_y() const {return y_;}
     int get_id() {return id_;}
+    resource get_resource_tile(){return resource_tile;}
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

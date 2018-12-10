@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 break;
         }
         Hexagon *h = new Hexagon(resource_color, p1, p2, p3, p4, p5, p6, id,rand_resource);
+        new_game->AddHexagon(h);
         id += 1;
         scene->addItem(h);
         new_game->AddCorner(p1);
@@ -94,6 +95,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 break;
         }
         Hexagon *h = new Hexagon(resource_color, p1, p2, p3, p4, p5, p6, id, rand_resource);
+        new_game->AddHexagon(h);
         id += 1;
         scene->addItem(h);
         new_game->AddCorner(p1);
@@ -127,6 +129,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 break;
         }
         Hexagon *h = new Hexagon(resource_color, p1, p2, p3, p4, p5, p6, id, rand_resource);
+        new_game->AddHexagon(h);
         id += 1;
         scene->addItem(h);
         new_game->AddCorner(p1);
@@ -160,6 +163,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 break;
         }
         Hexagon *h = new Hexagon(resource_color, p1, p2, p3, p4, p5, p6, id, rand_resource);
+        new_game->AddHexagon(h);
         id += 1;
         scene->addItem(h);
         new_game->AddCorner(p1);
@@ -271,10 +275,10 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
     for(it = building_to_add->get_needed_resources().begin(); it != building_to_add->get_needed_resources().end(); it++){
         new_game->get_current_player()->RemoveResource(it->first,it->second);
     }
-    UpdateResources();
     new_game->get_current_player()->AddBuilding(p, building_to_add);
     scene->addItem(building_to_add);
     scene->update();
+    UpdateResources();
 }
 
 void MainWindow::UpdateResources()
@@ -445,7 +449,6 @@ void MainWindow::on_diceButton_clicked()
         int sum_ai_two = (rand() % 6 + 1) + (rand() % 6 + 1);
         int sum_ai_three = (rand() % 6 + 1) + (rand() % 6 + 1);
         if(sum_player >= sum_ai_two && sum_player >= sum_ai_three){ //Player One is first
-            qDebug() << "test";
             player_order.push_back(1);
             if(sum_ai_two > sum_ai_three){ //Player two is second and Player three is third
                 player_order.push_back(2);

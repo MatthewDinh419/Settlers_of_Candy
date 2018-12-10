@@ -15,10 +15,13 @@ public:
     Player *get_current_player(){return current_player;}
     std::vector<Player*> get_player_list(){return player_list;}
     void CreatePlayers(std::vector<int> player_order);
+    void CollectResources();
+    void AddHexagon(Hexagon *hexagon_to_add){hexagon_list_.push_back(hexagon_to_add);}
 private:
     Player *current_player; //Current player's turn
     std::vector<Player*> player_list; //Vector containing all the players in the game
     static std::vector<pair<int,int>> all_corners; //Contains all the points of the hexagons
+    std::vector<Hexagon*> hexagon_list_;
     static std::string place_building_string; //String of the building to place
     static bool place_mode; //If a place building button is pressed then it will be in place mode or exit out of it
 };

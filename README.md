@@ -23,3 +23,4 @@
      * AI players
      
 ## Known Bugs:
+     * Pressing any buy button on the first turn without pressing the dice crashes the application

@@ -8,7 +8,7 @@ class Player{
 public:
     Player(int player_id);
     std::map<resource,int> get_current_resources(){return current_resources;}
-    void AddResource(resource resource_to_add){current_resources[resource_to_add] += 1;}
+    void AddResource(resource resource_to_add, int quantity){current_resources[resource_to_add] += quantity;}
     void AddBuilding(std::pair <int,int> point, Building *b){buildings_.insert({point,b});}
     void RemoveResource(resource resource_to_remove, int quantity);
     int get_id(){return player_id_;}
