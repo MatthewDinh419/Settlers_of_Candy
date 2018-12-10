@@ -180,6 +180,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->houseButton->setEnabled(false);
     ui->mansionButton->setEnabled(false);
     ui->roadButton->setEnabled(false);
+    ui->endButton->setEnabled(false);
 }
 
 MainWindow::~MainWindow()
@@ -281,6 +282,7 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
     new_game->get_current_player()->AddBuilding(p, building_to_add);
     scene->addItem(building_to_add);
     scene->update();
+    ui->status_label->setText(QString("Player " +QString::number(new_game->get_current_player()->get_id()) +QString("'s turn")));
     UpdateResources();
     UpdatePoints();
 }
@@ -490,28 +492,29 @@ void MainWindow::on_diceButton_clicked()
         first_turn = false;
         new_game->CreatePlayers(player_order);
         UpdateResources();
-        ui->status_label->setText(QString("Player ") + QString::number(player_order[0]) + QString(" turn"));
+        ui->status_label->setText(QString("Player ") + QString::number(player_order[0]) + QString("'s turn"));
         ui->houseButton->setEnabled(true);
         ui->mansionButton->setEnabled(true);
         ui->roadButton->setEnabled(true);
+        ui->endButton->setEnabled(true);
     }
 }
 
 void MainWindow::UpdatePoints(){
-    std::map<Player *, int> players_points = new_game->PlayerPoints();
+    new_game->PlayerPoints();
     std::map<Player *, int>::iterator it;
-    for(it = players_points.begin(); it != players_points.end(); it++){
-        if(it->first->get_id() == 1){
-            ui->p1Points->setText(QString::number(it->second));
-            ui->p1Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(it->second));
+    for(Player *player : new_game->get_player_list()){
+        if(player->get_id() == 1){
+            ui->p1Points->setText(QString::number(player->get_total_points()));
+            ui->p1Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(player->get_total_points()));
         }
-        else if(it->first->get_id() == 2){
-            ui->p2Points->setText(QString::number(it->second));
-            ui->p2Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(it->second));
+        else if(player->get_id() == 2){
+            ui->p2Points->setText(QString::number(player->get_total_points()));
+            ui->p2Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(player->get_total_points()));
         }
-        else if(it->first->get_id() == 3){
-            ui->p3Points->setText(QString::number(it->second));
-            ui->p3Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(it->second));
+        else if(player->get_id() == 3){
+            ui->p3Points->setText(QString::number(player->get_total_points()));
+            ui->p3Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(player->get_total_points()));
         }
     }
 }

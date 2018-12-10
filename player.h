@@ -13,8 +13,12 @@ public:
     void RemoveResource(resource resource_to_remove, int quantity);
     int get_id(){return player_id_;}
     std::map<std::pair <int,int>, Building *> get_buildings(){return buildings_;}
+    void AddToTotalPoints(int quantity){total_points += quantity;}
+    void ResetTotalPoints(){total_points = 0;}
+    int get_total_points(){return total_points;}
 private:
     int player_id_;
+    int total_points;
     std::map<resource,int> current_resources; //Player's current resources
     std::map<std::pair<int,int>, Building *> buildings_; // players buildings
 };

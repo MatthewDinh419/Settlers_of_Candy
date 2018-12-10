@@ -79,14 +79,11 @@ void Game::CollectResources(){
     }
 }
 
-std::map<Player *, int> Game::PlayerPoints(){
-    std::map<Player *, int> players_points;
+void Game::PlayerPoints(){
     for(Player *player : player_list){
-        players_points[player] = 0;
+        player->ResetTotalPoints();
         for(const auto it : player->get_buildings()){
-            qDebug() << it.second->get_points();
-            players_points[player] += it.second->get_points();
+            player->AddToTotalPoints(it.second->get_points());
         }
     }
-    return players_points;
 }
