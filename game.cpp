@@ -77,13 +77,16 @@ void Game::CollectResources(){
     }
 }
 
-void Game::PlayerPoints(){
+std::map<Player *, int> Game::PlayerPoints(){
+    std::map<Player *, int> player_pts;
     for(Player *player : player_list){
-        player->ResetTotalPoints();
+        player_pts[player] = 0;
         for(const auto it : player->get_buildings()){
+            player_pts[player] += it.second->get_points();
             player->AddToTotalPoints(it.second->get_points());
         }
     }
+    return player_pts;
 }
 
 void Game::set_next_player(Player *curr_player){
@@ -98,4 +101,39 @@ void Game::set_next_player(Player *curr_player){
         }
 
     }
+}
+
+std::map<std::string,Player *> Game::Records(){
+    std::map<std::string, Player*> records;
+    //Longest Road
+    std::map<Player *, int> max_player_road; //Holder of the longest road
+    max_player_road[player_list[0]] = player_list[0]->CountRoads();
+    max_player_road[player_list[1]] = player_list[1]->CountRoads();
+    max_player_road[player_list[2]] = player_list[2]->CountRoads();
+    if(max_player_road[player_list[0]] >= max_player_road[player_list[1]] && max_player_road[player_list[0]] >= max_player_road[player_list[2]]){ //First player longest road
+        records["Longest Road"] = player_list[0];
+    }
+    else if(max_player_road[player_list[1]] > max_player_road[player_list[0]] && max_player_road[player_list[1]] > max_player_road[player_list[2]]){ //Second player longest road
+        records["Longest Road"] = player_list[1];
+    }
+    else if(max_player_road[player_list[2]] > max_player_road[player_list[0]] && max_player_road[player_list[2]] > max_player_road[player_list[1]]){ //Third player longest road
+        records["Longest Road"] = player_list[2];
+    }
+    //Largest dice sum
+    Player *current_largest_player = player_list[0]; //Holder of the largest dice roll sums in the game overall
+    Player *player_resources = player_list[0]; //Holder of the most resources in the game
+    for(Player *player : player_list){
+        if(player->get_dice_roll_sum() > current_largest_player->get_dice_roll_sum()){
+            current_largest_player = player;
+        }
+        if(player->CountResources() > player_resources->CountResources()){
+            player_resources = player;
+        }
+    }
+    records["Largest Dice Sum"] = current_largest_player;
+    records["Most Resources"] = player_resources;
+    records["Longest Road"]->AddToTotalPoints(1);
+    records["Largest Dice Sum"]->AddToTotalPoints(1);
+    records["Most Resources"]->AddToTotalPoints(2);
+    return records;
 }

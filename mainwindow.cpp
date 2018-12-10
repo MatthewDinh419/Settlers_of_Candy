@@ -517,20 +517,55 @@ void MainWindow::on_diceButton_clicked()
 }
 
 void MainWindow::UpdatePoints(){
-    new_game->PlayerPoints();
-    std::map<Player *, int>::iterator it;
+    std::map<Player *, int> player_pts = new_game->PlayerPoints();
+    std::map<std::string, Player*> record_holders = UpdateRecords();
     for(Player *player : new_game->get_player_list()){
         if(player->get_id() == 1){
             ui->p1Points->setText(QString::number(player->get_total_points()));
-            ui->p1Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(player->get_total_points()));
+            ui->p1Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(player_pts[player]));
         }
         else if(player->get_id() == 2){
             ui->p2Points->setText(QString::number(player->get_total_points()));
-            ui->p2Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(player->get_total_points()));
+            ui->p2Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(player_pts[player]));
         }
         else if(player->get_id() == 3){
             ui->p3Points->setText(QString::number(player->get_total_points()));
-            ui->p3Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(player->get_total_points()));
+            ui->p3Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(player_pts[player]));
+        }
+    }
+    for(const auto it : record_holders){
+        if(it.second->get_id() == 1){
+            if(it.first == "Longest Road"){
+                ui->p1Breakdown->append(QString::fromStdString(it.first) + QString(": 1"));
+            }
+            else if(it.first == "Largest Dice Sum"){
+                ui->p1Breakdown->append(QString::fromStdString(it.first) + QString(": 1"));
+            }
+            else if(it.first == "Most Resources"){
+                ui->p1Breakdown->append(QString::fromStdString(it.first) + QString(": 2"));
+            }
+        }
+        else if(it.second->get_id() == 2){
+            if(it.first == "Longest Road"){
+                 ui->p2Breakdown->append(QString::fromStdString(it.first) + QString(": 1"));
+            }
+            else if(it.first == "Largest Dice Sum"){
+                ui->p2Breakdown->append(QString::fromStdString(it.first) + QString(": 1"));
+            }
+            else if(it.first == "Most Resources"){
+                ui->p2Breakdown->append(QString::fromStdString(it.first) + QString(": 2"));
+            }
+        }
+        else if(it.second->get_id() == 3){
+            if(it.first == "Longest Road"){
+                ui->p3Breakdown->append(QString::fromStdString(it.first) + QString(": 1"));
+            }
+            else if(it.first == "Largest Dice Sum"){
+                ui->p3Breakdown->append(QString::fromStdString(it.first) + QString(": 1"));
+            }
+            else if(it.first == "Most Resources"){
+                ui->p3Breakdown->append(QString::fromStdString(it.first) + QString(": 2"));
+            }
         }
     }
 }
@@ -539,4 +574,14 @@ void MainWindow::on_endButton_clicked()
 {
     new_game->set_next_player(new_game->get_current_player());
     ui->diceButton->setEnabled(true);
+}
+
+std::map<std::string, Player*> MainWindow::UpdateRecords(){
+    std::map<std::string, Player*> record_holders = new_game->Records();
+    //Updating the UI
+    ui->currRecord->setText(QString("Current Records\n\n") + QString("Longest Road (+1):") + QString(" Player ")
+                            + QString::number(record_holders["Longest Road"]->get_id()) + QString("\n")
+            + QString("Largest Dice Sum (+1): ") + QString("Player ") +QString::number(record_holders["Largest Dice Sum"]->get_id()) + QString("\n")
+            + QString("Most Resources (+2): ") +QString("Player ") + QString::number(record_holders["Most Resources"]->get_id()));
+    return record_holders;
 }

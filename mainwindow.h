@@ -36,6 +36,7 @@ private slots:
 
     void on_endButton_clicked();
 
+    std::map<std::string, Player*> UpdateRecords();
 private:
     Ui::MainWindow *ui;
     Game *new_game; //Game instance
