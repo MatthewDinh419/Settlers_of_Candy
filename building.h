@@ -17,6 +17,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
     std::map<resource,int> get_needed_resources(){return needed_resources_;}
     virtual std::string get_building_type(){return "";}
+    int get_points(){return points_;}
 protected:
     std::map<resource,int> needed_resources_;//Vector that contains the amount of resources needed to build this building
     int points_; //Points awarded for having this building

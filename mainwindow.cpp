@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -279,6 +279,7 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
     scene->addItem(building_to_add);
     scene->update();
     UpdateResources();
+    UpdatePoints();
 }
 
 void MainWindow::UpdateResources()
@@ -487,5 +488,28 @@ void MainWindow::on_diceButton_clicked()
         new_game->CreatePlayers(player_order);
         UpdateResources();
         ui->status_label->setText(QString("Player ") + QString::number(player_order[0]) + QString(" turn"));
+    }
+}
+
+void MainWindow::UpdatePoints(){
+    std::map<Player *, int> players_points = new_game->PlayerPoints();
+    std::map<Player *, int>::iterator it;
+    for(it = players_points.begin(); it != players_points.end(); it++){
+        qDebug() << it->first->get_id() << it->second;
+        if(it->first->get_id() == 1){
+            ui->p1Points->setText(QString::number(it->second));
+            ui->p1Breakdown->append(QString(""));
+            ui->p1Breakdown->append(QString("Buildings: ") + QString::number(it->second));
+        }
+        else if(it->first->get_id() == 2){
+            ui->p2Points->setText(QString::number(it->second));
+            ui->p2Breakdown->append(QString(""));
+            ui->p2Breakdown->append(QString("Buildings: ") + QString::number(it->second));
+        }
+        else if(it->first->get_id() == 3){
+            ui->p3Points->setText(QString::number(it->second));
+            ui->p3Breakdown->append(QString(""));
+            ui->p3Breakdown->append(QString("Buildings: ") + QString::number(it->second));
+        }
     }
 }

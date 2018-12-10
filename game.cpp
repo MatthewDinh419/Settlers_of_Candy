@@ -109,3 +109,20 @@ void Game::CollectResources(){
         hexagon_contains.clear(); //Reset the vector for a new player
     }
 }
+
+std::map<Player *, int> Game::PlayerPoints(){
+    std::map<Player *, int> players_points;
+    for(Player *player : player_list){
+        players_points[player] = 0;
+        if(player->get_buildings().size() == 1){
+            players_points[player] += player->get_buildings().begin()->second->get_points();
+        }
+        else if(player->get_buildings().size() > 1){
+            std::map<std::pair<int,int>, Building *>::iterator it;
+            for(it = player->get_buildings().begin(); it != player->get_buildings().end(); it++){
+                players_points[player] += it->second->get_points();
+            }
+        }
+    }
+    return players_points;
+}

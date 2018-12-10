@@ -32,6 +32,8 @@ private slots:
 
     bool EnoughResources(Building *building_to_check);
 
+    void UpdatePoints();
+
 private:
     Ui::MainWindow *ui;
     Game *new_game; //Game instance

@@ -17,6 +17,7 @@ public:
     void CreatePlayers(std::vector<int> player_order);
     void CollectResources();
     void AddHexagon(Hexagon *hexagon_to_add){hexagon_list_.push_back(hexagon_to_add);}
+    map<Player *, int> PlayerPoints();
 private:
     Player *current_player; //Current player's turn
     std::vector<Player*> player_list; //Vector containing all the players in the game
