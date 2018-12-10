@@ -13,11 +13,12 @@ public:
     static void set_building_string(std::string string_to_set){place_building_string = string_to_set;}
     static std::string get_building_string(){return place_building_string;}
     Player *get_current_player(){return current_player;}
+    void set_next_player(Player *curr_player);
     std::vector<Player*> get_player_list(){return player_list;}
     void CreatePlayers(std::vector<int> player_order);
     void CollectResources();
     void AddHexagon(Hexagon *hexagon_to_add){hexagon_list_.push_back(hexagon_to_add);}
-    void PlayerPoints();
+    map<Player *, int> PlayerPoints();
 private:
     Player *current_player; //Current player's turn
     std::vector<Player*> player_list; //Vector containing all the players in the game

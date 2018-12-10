@@ -1,0 +1,5 @@
+Select a hexagon corner you wish to place your Chocolate House!
+
+Chocolate House: Grants +1 of each surrounding resource tile per turn.
+
+Cost: 2 Money, 2 Water, 2 Sugar

@@ -34,6 +34,8 @@ private slots:
 
     void UpdatePoints();
 
+    void on_endButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     Game *new_game; //Game instance

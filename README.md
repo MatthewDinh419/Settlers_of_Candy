@@ -16,9 +16,6 @@
      * Thief(?) 
      * Game while loop stuff (when does the game end?) 
      * AI players
-     * House -> Mansion
-     * Road must be connected to a building
      
 ## Known Bugs:
-     * Adding multiple buildings to the same point
-     * Can get to -1 resources through a certain combination of house and mansion
+     * Pressing any buy button on the first turn without pressing the dice crashes the application

@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/infoResources">
+        <file>InfoText/choco_house.txt</file>
+        <file>InfoText/choco_mansion.txt</file>
+        <file>InfoText/candy_road.txt</file>
+    </qresource>
+</RCC>

@@ -9,6 +9,9 @@
 #include <stdio.h>      /* printf, scanf, puts, NULL */
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
+#include <QFile>
+#include <QTextStream>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -177,10 +180,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //First Turn
     ui->status_label->setText(QString("Roll Dice to see who goes first!"));
-    ui->houseButton->setEnabled(false);
-    ui->mansionButton->setEnabled(false);
-    ui->roadButton->setEnabled(false);
-    ui->endButton->setEnabled(false);
 }
 
 MainWindow::~MainWindow()
@@ -214,12 +213,19 @@ void MainWindow::on_houseButton_clicked()
         bool enough_resources = EnoughResources(temp_house);
         if(enough_resources){
             Game::set_place_mode(!Game::get_place_mode());
-            ui->status_label->setText(QString("Pick a hexagon corner to place chocolate house"));
+            ui->status_label->setText(QString("Add Chocolate House!"));
             Game::set_building_string("choco house");
             ui->centralWidget->setCursor(Qt::CrossCursor);
+            QFile file(":/infoResources/InfoText/choco_house.txt");
+            if(!file.open(QIODevice::ReadOnly)){
+                QMessageBox::information(0,"Info",file.errorString());
+            }
+            QTextStream in(&file);
+            ui->infoBrowser->setText(in.readAll());
         }
         else{
-            ui->status_label->setText(QString("Not enough resources!"));
+            ui->status_label->setText(QString(""));
+            ui->infoBrowser->setText(QString("Not Enough Resources!"));
         }
     }
 }
@@ -238,12 +244,19 @@ void MainWindow::on_roadButton_clicked()
         bool enough_resources = EnoughResources(temp_road);
         if(enough_resources){
             Game::set_place_mode(!Game::get_place_mode());
-            ui->status_label->setText(QString("Pick two adjacent corners to place road"));
+            ui->status_label->setText(QString("Add Candy Road!"));
             Game::set_building_string("candy road");
             ui->centralWidget->setCursor(Qt::CrossCursor);
+            QFile file(":/infoResources/InfoText/candy_road.txt");
+            if(!file.open(QIODevice::ReadOnly)){
+                QMessageBox::information(0,"Info",file.errorString());
+            }
+            QTextStream in(&file);
+            ui->infoBrowser->setText(in.readAll());
         }
         else{
-            ui->status_label->setText(QString("Not enough resources!"));
+            ui->status_label->setText(QString(""));
+            ui->infoBrowser->setText(QString("Not Enough Resources!"));
         }
     }
 }
@@ -262,12 +275,19 @@ void MainWindow::on_mansionButton_clicked()
         bool enough_resources = EnoughResources(temp_house);
         if(enough_resources){
             Game::set_place_mode(!Game::get_place_mode());
-            ui->status_label->setText(QString("Pick a hexagon corner to place chocolate mansion"));
+            ui->status_label->setText(QString("Add Chocolate Mansion!"));
             Game::set_building_string("choco mansion");
             ui->centralWidget->setCursor(Qt::CrossCursor);
+            QFile file(":/infoResources/InfoText/choco_mansion.txt");
+            if(!file.open(QIODevice::ReadOnly)){
+                QMessageBox::information(0,"Info",file.errorString());
+            }
+            QTextStream in(&file);
+            ui->infoBrowser->setText(in.readAll());
         }
         else{
-            ui->status_label->setText(QString("Not enough resources!"));
+            ui->status_label->setText(QString(""));
+            ui->infoBrowser->setText(QString("Not Enough Resources!"));
         }
     }
 }
@@ -282,7 +302,6 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
     new_game->get_current_player()->AddBuilding(p, building_to_add);
     scene->addItem(building_to_add);
     scene->update();
-    ui->status_label->setText(QString("Player " +QString::number(new_game->get_current_player()->get_id()) +QString("'s turn")));
     UpdateResources();
     UpdatePoints();
 }
@@ -492,29 +511,36 @@ void MainWindow::on_diceButton_clicked()
         first_turn = false;
         new_game->CreatePlayers(player_order);
         UpdateResources();
-        ui->status_label->setText(QString("Player ") + QString::number(player_order[0]) + QString("'s turn"));
-        ui->houseButton->setEnabled(true);
-        ui->mansionButton->setEnabled(true);
-        ui->roadButton->setEnabled(true);
-        ui->endButton->setEnabled(true);
+        ui->status_label->setText(QString("Player ") + QString::number(player_order[0]) + QString(" turn"));
     }
+    ui->diceButton->setEnabled(false);
 }
 
 void MainWindow::UpdatePoints(){
-    new_game->PlayerPoints();
+    std::map<Player *, int> players_points = new_game->PlayerPoints();
     std::map<Player *, int>::iterator it;
-    for(Player *player : new_game->get_player_list()){
-        if(player->get_id() == 1){
-            ui->p1Points->setText(QString::number(player->get_total_points()));
-            ui->p1Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(player->get_total_points()));
+    for(it = players_points.begin(); it != players_points.end(); it++){
+        qDebug() << it->first->get_id() << it->second;
+        if(it->first->get_id() == 1){
+            ui->p1Points->setText(QString::number(it->second));
+            ui->p1Breakdown->append(QString(""));
+            ui->p1Breakdown->append(QString("Buildings: ") + QString::number(it->second));
         }
-        else if(player->get_id() == 2){
-            ui->p2Points->setText(QString::number(player->get_total_points()));
-            ui->p2Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(player->get_total_points()));
+        else if(it->first->get_id() == 2){
+            ui->p2Points->setText(QString::number(it->second));
+            ui->p2Breakdown->append(QString(""));
+            ui->p2Breakdown->append(QString("Buildings: ") + QString::number(it->second));
         }
-        else if(player->get_id() == 3){
-            ui->p3Points->setText(QString::number(player->get_total_points()));
-            ui->p3Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(player->get_total_points()));
+        else if(it->first->get_id() == 3){
+            ui->p3Points->setText(QString::number(it->second));
+            ui->p3Breakdown->append(QString(""));
+            ui->p3Breakdown->append(QString("Buildings: ") + QString::number(it->second));
         }
     }
+}
+
+void MainWindow::on_endButton_clicked()
+{
+    new_game->set_next_player(new_game->get_current_player());
+    ui->diceButton->setEnabled(true);
 }
