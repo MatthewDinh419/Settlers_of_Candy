@@ -35,36 +35,34 @@ void Game::CollectResources(){
     //Get all the hexagons that have the player's buildings
     //std::map<std::pair <int,int>, Building *> get_buildings()
     for(Player *player : player_list){ //Iterate through each player
-        if(player->get_buildings().size() > 1){
-            for(const auto it : player->get_buildings()){ //Iterate through all of the player's buildings
-                for(Hexagon *hexagon : hexagon_list_){ //Iterate through every single hexagon
-                    //If point of the building matches that of a hexagon then update the variables above
-                    if(hexagon->get_p1() == it.first){
-                        building_to_hex[it.second] = hexagon;
-                        hexagon_contains.push_back(building_to_hex);
-                    }
-                    else if(hexagon->get_p2() == it.first){
-                        building_to_hex[it.second] = hexagon;
-                        hexagon_contains.push_back(building_to_hex);
-                    }
-                    else if(hexagon->get_p3() == it.first){
-                        building_to_hex[it.second] = hexagon;
-                        hexagon_contains.push_back(building_to_hex);
-                    }
-                    else if(hexagon->get_p4() == it.first){
-                        building_to_hex[it.second] = hexagon;
-                        hexagon_contains.push_back(building_to_hex);
-                    }
-                    else if(hexagon->get_p5() == it.first){
-                        building_to_hex[it.second] = hexagon;
-                        hexagon_contains.push_back(building_to_hex);
-                    }
-                    else if(hexagon->get_p6() == it.first){
-                        building_to_hex[it.second] = hexagon;
-                        hexagon_contains.push_back(building_to_hex);
-                    }
-                   building_to_hex.clear(); //Reset the map for another hexagon
+        for(const auto it : player->get_buildings()){ //Iterate through all of the player's buildings
+            for(Hexagon *hexagon : hexagon_list_){ //Iterate through every single hexagon
+                //If point of the building matches that of a hexagon then update the variables above
+                if(hexagon->get_p1() == it.first){
+                    building_to_hex[it.second] = hexagon;
+                    hexagon_contains.push_back(building_to_hex);
                 }
+                else if(hexagon->get_p2() == it.first){
+                    building_to_hex[it.second] = hexagon;
+                    hexagon_contains.push_back(building_to_hex);
+                }
+                else if(hexagon->get_p3() == it.first){
+                    building_to_hex[it.second] = hexagon;
+                    hexagon_contains.push_back(building_to_hex);
+                }
+                else if(hexagon->get_p4() == it.first){
+                    building_to_hex[it.second] = hexagon;
+                    hexagon_contains.push_back(building_to_hex);
+                }
+                else if(hexagon->get_p5() == it.first){
+                    building_to_hex[it.second] = hexagon;
+                    hexagon_contains.push_back(building_to_hex);
+                }
+                else if(hexagon->get_p6() == it.first){
+                    building_to_hex[it.second] = hexagon;
+                    hexagon_contains.push_back(building_to_hex);
+                }
+               building_to_hex.clear(); //Reset the map for another hexagon
             }
         }
         for(std::map<Building *, Hexagon *> build_hex : hexagon_contains){
@@ -85,5 +83,19 @@ void Game::PlayerPoints(){
         for(const auto it : player->get_buildings()){
             player->AddToTotalPoints(it.second->get_points());
         }
+    }
+}
+
+void Game::set_next_player(Player *curr_player){
+    auto it = find(player_list.begin(), player_list.end(), curr_player);
+    if(it != player_list.end()){
+        auto index = distance(player_list.begin(), it);
+        if(index == 2){
+            current_player = player_list[0];
+        }
+        else{
+            current_player = player_list[index+1];
+        }
+
     }
 }

@@ -9,7 +9,6 @@
     5. RUN 
     
 ## To-Do:
-     * Points update 
      * Points graph 
      * Records 
      * Resources information 
@@ -22,3 +21,4 @@
 ## Known Bugs:
      * Adding multiple buildings to the same point
      * Can get to -1 resources through a certain combination of house and mansion
+     * Sometimes it says not enough resources even though there it is possible

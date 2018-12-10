@@ -13,6 +13,7 @@ public:
     static void set_building_string(std::string string_to_set){place_building_string = string_to_set;}
     static std::string get_building_string(){return place_building_string;}
     Player *get_current_player(){return current_player;}
+    void set_next_player(Player *curr_player);
     std::vector<Player*> get_player_list(){return player_list;}
     void CreatePlayers(std::vector<int> player_order);
     void CollectResources();

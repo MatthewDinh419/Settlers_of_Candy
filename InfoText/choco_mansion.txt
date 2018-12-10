@@ -1,0 +1,5 @@
+Select a hexagon corner you wish to place your Chocolate Mansion!
+
+Chocolate Mansion: Grants +2 of each surrounding resource tile per turn.
+
+Cost: 3 Money, 3 Water, 3 Sugar

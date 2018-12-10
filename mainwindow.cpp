@@ -9,6 +9,9 @@
 #include <stdio.h>      /* printf, scanf, puts, NULL */
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
+#include <QFile>
+#include <QTextStream>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -207,19 +210,23 @@ void MainWindow::on_houseButton_clicked()
         ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
     }
     else{ //Not in place mode
-        QFont font = ui->status_label->font();
-        font.setBold(true);
-        ui->status_label->setFont(font);
         ChocolateHouse *temp_house = new ChocolateHouse(0,0);
         bool enough_resources = EnoughResources(temp_house);
         if(enough_resources){
             Game::set_place_mode(!Game::get_place_mode());
-            ui->status_label->setText(QString("Pick a hexagon corner to place chocolate house"));
+            ui->status_label->setText(QString("Add Chocolate House!"));
             Game::set_building_string("choco house");
             ui->centralWidget->setCursor(Qt::CrossCursor);
+            QFile file(":/infoResources/InfoText/choco_house.txt");
+            if(!file.open(QIODevice::ReadOnly)){
+                QMessageBox::information(0,"Info",file.errorString());
+            }
+            QTextStream in(&file);
+            ui->infoBrowser->setText(in.readAll());
         }
         else{
-            ui->status_label->setText(QString("Not enough resources!"));
+            ui->status_label->setText(QString(""));
+            ui->infoBrowser->setText(QString("Not Enough Resources!"));
         }
     }
 }
@@ -231,19 +238,23 @@ void MainWindow::on_roadButton_clicked()
         ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
     }
     else{ //Not in place mode
-        QFont font = ui->status_label->font();
-        font.setBold(true);
-        ui->status_label->setFont(font);
         Road *temp_road = new Road(0,0,0,0);
         bool enough_resources = EnoughResources(temp_road);
         if(enough_resources){
             Game::set_place_mode(!Game::get_place_mode());
-            ui->status_label->setText(QString("Pick two adjacent corners to place road"));
+            ui->status_label->setText(QString("Add Candy Road!"));
             Game::set_building_string("candy road");
             ui->centralWidget->setCursor(Qt::CrossCursor);
+            QFile file(":/infoResources/InfoText/candy_road.txt");
+            if(!file.open(QIODevice::ReadOnly)){
+                QMessageBox::information(0,"Info",file.errorString());
+            }
+            QTextStream in(&file);
+            ui->infoBrowser->setText(in.readAll());
         }
         else{
-            ui->status_label->setText(QString("Not enough resources!"));
+            ui->status_label->setText(QString(""));
+            ui->infoBrowser->setText(QString("Not Enough Resources!"));
         }
     }
 }
@@ -255,19 +266,23 @@ void MainWindow::on_mansionButton_clicked()
         ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
     }
     else{ //Not in place mode
-        QFont font = ui->status_label->font();
-        font.setBold(true);
-        ui->status_label->setFont(font);
-        ChocolateHouse *temp_house = new ChocolateHouse(0,0);
+        ChocolateMansion *temp_house = new ChocolateMansion(0,0);
         bool enough_resources = EnoughResources(temp_house);
         if(enough_resources){
             Game::set_place_mode(!Game::get_place_mode());
-            ui->status_label->setText(QString("Pick a hexagon corner to place chocolate mansion"));
+            ui->status_label->setText(QString("Add Chocolate Mansion!"));
             Game::set_building_string("choco mansion");
             ui->centralWidget->setCursor(Qt::CrossCursor);
+            QFile file(":/infoResources/InfoText/choco_mansion.txt");
+            if(!file.open(QIODevice::ReadOnly)){
+                QMessageBox::information(0,"Info",file.errorString());
+            }
+            QTextStream in(&file);
+            ui->infoBrowser->setText(in.readAll());
         }
         else{
-            ui->status_label->setText(QString("Not enough resources!"));
+            ui->status_label->setText(QString(""));
+            ui->infoBrowser->setText(QString("Not Enough Resources!"));
         }
     }
 }
@@ -275,16 +290,16 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
 {
     Game::set_place_mode(false);
     ui->centralWidget->setCursor(Qt::ArrowCursor);
-    map<resource,int>::iterator it;
-    for(it = building_to_add->get_needed_resources().begin(); it != building_to_add->get_needed_resources().end(); it++){
-        new_game->get_current_player()->RemoveResource(it->first,it->second);
+    ui->status_label->setText(QString("Player " +QString::number(new_game->get_current_player()->get_id()) +QString("'s turn")));
+    for(const auto it : building_to_add->get_needed_resources()){
+        new_game->get_current_player()->RemoveResource(it.first,it.second);
     }
     new_game->get_current_player()->AddBuilding(p, building_to_add);
     scene->addItem(building_to_add);
     scene->update();
-    ui->status_label->setText(QString("Player " +QString::number(new_game->get_current_player()->get_id()) +QString("'s turn")));
     UpdateResources();
     UpdatePoints();
+    ui->infoBrowser->setText(QString(""));
 }
 
 void MainWindow::UpdateResources()
@@ -498,6 +513,7 @@ void MainWindow::on_diceButton_clicked()
         ui->roadButton->setEnabled(true);
         ui->endButton->setEnabled(true);
     }
+    ui->diceButton->setEnabled(false);
 }
 
 void MainWindow::UpdatePoints(){
@@ -517,4 +533,10 @@ void MainWindow::UpdatePoints(){
             ui->p3Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(player->get_total_points()));
         }
     }
+}
+
+void MainWindow::on_endButton_clicked()
+{
+    new_game->set_next_player(new_game->get_current_player());
+    ui->diceButton->setEnabled(true);
 }

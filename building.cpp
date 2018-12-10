@@ -64,7 +64,7 @@ Road::Road(int x1, int y1,int x2, int y2) : Building(x1, y1)
     needed_resources_[resource::money] = 1;
     needed_resources_[resource::sugar] = 1;
     needed_resources_[resource::water] = 1;
-    points_ = 1;
+    points_ = 0;
     x1_ = x1;
     y1_ = y1;
     x2_ = x2;

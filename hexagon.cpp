@@ -102,11 +102,54 @@ void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
                         break;
                     }
                     else{
-                        Road *temp_road = new Road(Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
-                                                   point_pairs.first,point_pairs.second);
-                        Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
-                        emit AddBuilding(temp_road, point_pairs);
-                        break;
+                        //can't be the same point
+                        if(Hexagon::prev_corner_clicked != point_pairs){
+                           //must be point next to it(an edge) using bounds to check
+                           if(point_pairs.first > Hexagon::prev_corner_clicked.first){
+                               if(point_pairs.second > Hexagon::prev_corner_clicked.second){
+                                   if(point_pairs.first <= Hexagon::prev_corner_clicked.first + 60
+                                           && point_pairs.second <= Hexagon::prev_corner_clicked.second + 60){
+                                       Road *temp_road = new Road(Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
+                                                                  point_pairs.first,point_pairs.second);
+                                       Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
+                                       emit AddBuilding(temp_road, point_pairs);
+                                       break;
+                                   }
+                               }
+                               else{ // y is init smaller
+                                   if(point_pairs.first <= Hexagon::prev_corner_clicked.first + 60
+                                           && point_pairs.second >= Hexagon::prev_corner_clicked.second - 60){
+                                       Road *temp_road = new Road(Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
+                                                                  point_pairs.first,point_pairs.second);
+                                       Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
+                                       emit AddBuilding(temp_road, point_pairs);
+                                       break;
+                                   }
+                               }
+                           }
+                           else{ // x is init smaller
+                               if(point_pairs.second > Hexagon::prev_corner_clicked.second){
+                                   if(point_pairs.first >= Hexagon::prev_corner_clicked.first - 60
+                                           && point_pairs.second <= Hexagon::prev_corner_clicked.second + 60){
+                                       Road *temp_road = new Road(Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
+                                                                  point_pairs.first,point_pairs.second);
+                                       Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
+                                       emit AddBuilding(temp_road, point_pairs);
+                                       break;
+                                   }
+                               }
+                               else{
+                                   if(point_pairs.first >= Hexagon::prev_corner_clicked.first - 60
+                                           && point_pairs.second >= Hexagon::prev_corner_clicked.second - 60){
+                                       Road *temp_road = new Road(Hexagon::prev_corner_clicked.first,Hexagon::prev_corner_clicked.second,
+                                                                  point_pairs.first,point_pairs.second);
+                                       Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
+                                       emit AddBuilding(temp_road, point_pairs);
+                                       break;
+                                   }
+                               }
+                           }
+                       }
                     }
                 }
             }

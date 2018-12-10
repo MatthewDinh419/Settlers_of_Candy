@@ -1,0 +1,5 @@
+Select a hexagon corner you wish to place your Candy Road!
+
+Candy Road: Create roads in order to spread out more buildings!
+
+Cost: 1 Money, 1 Water, 1 Sugar
