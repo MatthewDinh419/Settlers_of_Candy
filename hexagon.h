@@ -13,6 +13,8 @@ public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
     QPainterPath shape() const override;
+    static Hexagon *CreateHexagon(const pair <int, int> p1, const pair <int, int> p2, const pair <int, int> p3,
+                                  const pair <int, int> p4, const pair <int, int> p5, const pair <int, int> p6, int tile_choice);
     pair <int, int> get_p1() const {return p1_;}
     pair <int, int> get_p2() const {return p2_;}
     pair <int, int> get_p3() const {return p3_;}
@@ -33,7 +35,7 @@ signals:
 private:
     int x_; //x-coordinate of the hexagon
     int y_; //y-coordinate of the hexagon
-    int id_; //id of the hexagon
+    static int id_; //id of the hexagon
     resource resource_tile; //Resource of the hexagon
     static const int width_ = 20; //Width of the hexagon
     QColor color_; //color of the hexagon

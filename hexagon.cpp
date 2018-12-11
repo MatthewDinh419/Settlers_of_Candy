@@ -6,6 +6,7 @@
 #include "game.h"
 using namespace std;
 pair<int,int> Hexagon::prev_corner_clicked = std::make_pair(-1,-1);
+int Hexagon::id_ = 0;
 
 Hexagon::Hexagon(QColor color, const pair <int, int> p1, const pair <int, int> p2, const pair <int, int> p3,
                  const pair <int, int> p4, const pair <int, int> p5, const pair <int, int> p6, int id, resource resource_of_tile)
@@ -19,6 +20,22 @@ Hexagon::Hexagon(QColor color, const pair <int, int> p1, const pair <int, int> p
     p6_ = p6;
     id_ = id;
     resource_tile = resource_of_tile;
+}
+
+Hexagon *Hexagon::CreateHexagon(const pair <int, int> p1, const pair <int, int> p2, const pair <int, int> p3,
+                                const pair <int, int> p4, const pair <int, int> p5, const pair <int, int> p6, int tile_choice){
+    switch(tile_choice)
+    {
+        case 0:
+            id_ += 1;
+            return new Hexagon(QColor(0,236,46),p1,p2,p3,p4,p5,p6,id_,resource::money);
+        case 1:
+            id_ += 1;
+            return new Hexagon(QColor(241,237,237),p1,p2,p3,p4,p5,p6,id_,resource::sugar);
+        case 2:
+            id_ += 1;
+            return new Hexagon(QColor(0,212,255),p1,p2,p3,p4,p5,p6,id_,resource::water);
+    }
 }
 
 QRectF Hexagon::boundingRect() const

@@ -479,6 +479,9 @@ p, li { white-space: pre-wrap; }
       <height>91</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="text">
      <string>END TURN</string>
     </property>
@@ -509,6 +512,9 @@ p, li { white-space: pre-wrap; }
       <width>81</width>
       <height>41</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="text">
      <string>Roll Dice</string>
@@ -1283,6 +1289,9 @@ p, li { white-space: pre-wrap; }
       <height>22</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="text">
      <string>Add Candy Road</string>
     </property>
@@ -1296,6 +1305,9 @@ p, li { white-space: pre-wrap; }
       <height>22</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="text">
      <string>Add Chocolate Mansion</string>
     </property>
@@ -1308,6 +1320,9 @@ p, li { white-space: pre-wrap; }
       <width>131</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="text">
      <string>Add Chocolate House</string>

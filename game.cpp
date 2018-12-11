@@ -81,11 +81,12 @@ void Game::CollectResources(){
 
 std::map<Player *, int> Game::PlayerPoints(){
     std::map<Player *, int> player_pts;
-    for(Player *player : player_list){
-        player_pts[player] = 0;
-        for(const auto it : player->get_buildings()){
-            for(auto const& value: it.second){
-                player_pts[player] += value->get_points();
+    for(Player *player : player_list){ //For each player...
+        player->ResetTotalPoints(); //Reset the player's total points
+        player_pts[player] = 0; //Initialize their points to zero
+        for(const auto it : player->get_buildings()){ //For each pair<points,vector<buildings *>
+            for(auto const& value: it.second){ //For each building the player owns...
+                player_pts[player] += value->get_points(); //Add the value of the building to it
                 player->AddToTotalPoints(value->get_points());
             }
         }
