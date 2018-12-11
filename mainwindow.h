@@ -42,6 +42,7 @@ private:
     Ui::MainWindow *ui;
     Game *new_game; //Game instance
     bool first_turn = true;
+    std::map<std::pair<int,int>, Player *> taken_map;
     QGraphicsScene *scene;
     QGraphicsScene *scene_dice;
 };

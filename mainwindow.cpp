@@ -285,149 +285,313 @@ void MainWindow::on_mansionButton_clicked()
 }
 void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p)
 {
-    building_to_add->set_color(new_game->get_current_player()->get_player_color());
-    //cond for valid building placement
-    if(building_to_add->get_building_type() == "choco mansion"){
-        //checks for if house in map
-        bool house = false;
-        Building *building_to_remove = new Building(-1, -1);
-        //must be upgrade of a house
-        if(new_game->get_current_player()->get_buildings().count(p)){
-            //point in map, check if house
-            for(auto const& value: new_game->get_current_player()->get_buildings().at(p)){
-                if(value->get_building_type() == "choco house"){
-                    building_to_remove = value;
-                    house = true;
-                    break;
-                }
-            }
-            if(house){
-                Game::set_place_mode(false);
-                ui->centralWidget->setCursor(Qt::ArrowCursor);
-                for(const auto it : building_to_add->get_needed_resources()){
-                    new_game->get_current_player()->RemoveResource(it.first,it.second);
-                }
-                new_game->get_current_player()->RemoveBuilding(p, building_to_remove);
-                new_game->get_current_player()->AddBuilding(p, building_to_add);
-                scene->addItem(building_to_add);
-                scene->update();
-                UpdateResources();
-                UpdatePoints();
-                ui->infoBrowser->setText(QString(""));
-            }
-            else{
-                //otherwise don't do building addition
-                ui->infoBrowser->setText(QString("Invalid Placement; Upgrade A Chocolate House."));
-            }
-        }
-        else{
-            //point not in map void building addition
-            ui->infoBrowser->setText(QString("Invalid Placement; Upgrade A Chocolate House."));
-        }
-        house = false;
-    }
-    else if(building_to_add->get_building_type() == "candy road"){
-        //must connect to road or house or mansion
-        bool house = false;
-        if(new_game->get_current_player()->get_buildings().count(p)){
-            //something at point you want to add road -> check if house or mansion
-            for(auto const& value: new_game->get_current_player()->get_buildings().at(p)){
-                if(value->get_building_type() == "choco house"
-                        || value->get_building_type() == "choco mansion"){
-                    house = true;
-                    break;
-                }
-            }
-            if(house){
-                Game::set_place_mode(false);
-                ui->centralWidget->setCursor(Qt::ArrowCursor);
-                for(const auto it : building_to_add->get_needed_resources()){
-                    new_game->get_current_player()->RemoveResource(it.first,it.second);
-                }
-                //add to vector at key p
-                new_game->get_current_player()->AddBuilding(p, building_to_add);
-                //also add second point of road to map to aid house placement checks
-                pair<int,int> other_p = building_to_add->get_x_y();
-                new_game->get_current_player()->AddBuilding(other_p, building_to_add);
-                scene->addItem(building_to_add);
-                scene->update();
-                UpdateResources();
-                UpdatePoints();
-                ui->infoBrowser->setText(QString(""));
-            }
-            else{
-                //otherwise don't do road addition
-                ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
-            }
-        }
-        else{
-            //nothing at point you want to add road
-            ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
-        }
-        house = false;
-    }
-    else{
-        //must connect to road and p in this case is the prev point so we have to manually access its second points
-        bool house = false;
-        bool exist = false;
-        if(new_game->get_current_player()->get_buildings().count(p)){
-            for(auto const& value: new_game->get_current_player()->get_buildings().at(p)){
-                if(value->get_building_type() == "candy road"){
-                    house = true;
+    //check if point is owned by another player owns a point already
+    if(taken_map.count(p)){
+        if(taken_map.at(p) == new_game->get_current_player()){
+            building_to_add->set_color(new_game->get_current_player()->get_player_color());
+            //cond for valid building placement
+            if(building_to_add->get_building_type() == "choco mansion"){
+                //checks for if house in map
+                bool house = false;
+                Building *building_to_remove = new Building(-1, -1);
+                //must be upgrade of a house
+                if(new_game->get_current_player()->get_buildings().count(p)){
+                    //point in map, check if house
+                    for(auto const& value: new_game->get_current_player()->get_buildings().at(p)){
+                        if(value->get_building_type() == "choco house"){
+                            building_to_remove = value;
+                            house = true;
+                            break;
+                        }
+                    }
+                    if(house){
+                        Game::set_place_mode(false);
+                        ui->centralWidget->setCursor(Qt::ArrowCursor);
+                        for(const auto it : building_to_add->get_needed_resources()){
+                            new_game->get_current_player()->RemoveResource(it.first,it.second);
+                        }
+                        new_game->get_current_player()->RemoveBuilding(p, building_to_remove);
+                        new_game->get_current_player()->AddBuilding(p, building_to_add);
+                        taken_map[p] = new_game->get_current_player();
+                        scene->addItem(building_to_add);
+                        scene->update();
+                        UpdateResources();
+                        UpdatePoints();
+                        ui->infoBrowser->setText(QString(""));
+                    }
+                    else{
+                        //otherwise don't do building addition
+                        ui->infoBrowser->setText(QString("Invalid Placement; Upgrade A Chocolate House."));
+                    }
                 }
                 else{
-                    exist = true;
+                    //point not in map void building addition
+                    ui->infoBrowser->setText(QString("Invalid Placement; Upgrade A Chocolate House."));
                 }
+                house = false;
             }
-            //something at point you want to add road -> check if house or mansion
-            if(house && !exist){
-                Game::set_place_mode(false);
-                ui->centralWidget->setCursor(Qt::ArrowCursor);
-                for(const auto it : building_to_add->get_needed_resources()){
-                    new_game->get_current_player()->RemoveResource(it.first,it.second);
+            else if(building_to_add->get_building_type() == "candy road"){
+                //must connect to road or house or mansion
+                bool house = false;
+                if(new_game->get_current_player()->get_buildings().count(p)){
+                    //something at point you want to add road -> check if house or mansion
+                    for(auto const& value: new_game->get_current_player()->get_buildings().at(p)){
+                        if(value->get_building_type() == "choco house"
+                                || value->get_building_type() == "choco mansion"){
+                            house = true;
+                            break;
+                        }
+                    }
+                    if(house){
+                        Game::set_place_mode(false);
+                        ui->centralWidget->setCursor(Qt::ArrowCursor);
+                        for(const auto it : building_to_add->get_needed_resources()){
+                            new_game->get_current_player()->RemoveResource(it.first,it.second);
+                        }
+                        //add to vector at key p
+                        new_game->get_current_player()->AddBuilding(p, building_to_add);
+                        //also add second point of road to map to aid house placement checks
+                        pair<int,int> other_p = building_to_add->get_x_y();
+                        new_game->get_current_player()->AddBuilding(other_p, building_to_add);
+                        taken_map[p] = new_game->get_current_player();
+                        taken_map[other_p] = new_game->get_current_player();
+                        scene->addItem(building_to_add);
+                        scene->update();
+                        UpdateResources();
+                        UpdatePoints();
+                        ui->infoBrowser->setText(QString(""));
+                    }
+                    else{
+                        //otherwise don't do road addition
+                        ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
+                    }
                 }
-                new_game->get_current_player()->AddBuilding(p, building_to_add);
-                scene->addItem(building_to_add);
-                scene->update();
-                UpdateResources();
-                UpdatePoints();
-                ui->infoBrowser->setText(QString(""));
+                else{
+                    //nothing at point you want to add road
+                    ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
+                }
+                house = false;
             }
             else{
-                //otherwise don't do road addition
-                ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
+                //must connect to road and p in this case is the prev point so we have to manually access its second points
+                bool house = false;
+                bool exist = false;
+                if(new_game->get_current_player()->get_buildings().count(p)){
+                    for(auto const& value: new_game->get_current_player()->get_buildings().at(p)){
+                        if(value->get_building_type() == "candy road"){
+                            house = true;
+                        }
+                        else{
+                            exist = true;
+                        }
+                    }
+                    //something at point you want to add road -> check if house or mansion
+                    if(house && !exist){
+                        Game::set_place_mode(false);
+                        ui->centralWidget->setCursor(Qt::ArrowCursor);
+                        for(const auto it : building_to_add->get_needed_resources()){
+                            new_game->get_current_player()->RemoveResource(it.first,it.second);
+                        }
+                        new_game->get_current_player()->AddBuilding(p, building_to_add);
+                        taken_map[p] = new_game->get_current_player();
+                        scene->addItem(building_to_add);
+                        scene->update();
+                        UpdateResources();
+                        UpdatePoints();
+                        ui->infoBrowser->setText(QString(""));
+                    }
+                    else{
+                        //otherwise don't do road addition
+                        ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
+                    }
+                }
+                else{
+                    if(!new_game->get_current_player()->get_first_turn()){
+                        //nothing at point you want to add road
+                        ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
+                    }
+                    else{//players first turn they get to place one house free of charge
+                        ui->houseButton->setEnabled(false);
+                        ui->mansionButton->setEnabled(false);
+                        ui->roadButton->setEnabled(false);
+                        Game::set_place_mode(false);
+                        ui->centralWidget->setCursor(Qt::ArrowCursor);
+                        for(const auto it : building_to_add->get_needed_resources()){
+                            new_game->get_current_player()->RemoveResource(it.first,it.second);
+                        }
+                        new_game->get_current_player()->AddBuilding(p, building_to_add);
+                        taken_map[p] = new_game->get_current_player();
+                        scene->addItem(building_to_add);
+                        scene->update();
+                        UpdateResources();
+                        UpdatePoints();
+                        ui->infoBrowser->setText(QString(""));
+                        //set to false
+                        new_game->get_current_player()->set_first_turn();
+                        //turn buttons back on
+                        ui->houseButton->setEnabled(true);
+                        ui->mansionButton->setEnabled(true);
+                        ui->roadButton->setEnabled(true);
+                    }
+                }
+                exist = false;
+                house = false;
             }
         }
         else{
-            if(!new_game->get_current_player()->get_first_turn()){
+            ui->infoBrowser->setText(QString("Point Already Taken"));
+        }
+    }
+    else{
+        building_to_add->set_color(new_game->get_current_player()->get_player_color());
+        //cond for valid building placement
+        if(building_to_add->get_building_type() == "choco mansion"){
+            //checks for if house in map
+            bool house = false;
+            Building *building_to_remove = new Building(-1, -1);
+            //must be upgrade of a house
+            if(new_game->get_current_player()->get_buildings().count(p)){
+                //point in map, check if house
+                for(auto const& value: new_game->get_current_player()->get_buildings().at(p)){
+                    if(value->get_building_type() == "choco house"){
+                        building_to_remove = value;
+                        house = true;
+                        break;
+                    }
+                }
+                if(house){
+                    Game::set_place_mode(false);
+                    ui->centralWidget->setCursor(Qt::ArrowCursor);
+                    for(const auto it : building_to_add->get_needed_resources()){
+                        new_game->get_current_player()->RemoveResource(it.first,it.second);
+                    }
+                    new_game->get_current_player()->RemoveBuilding(p, building_to_remove);
+                    new_game->get_current_player()->AddBuilding(p, building_to_add);
+                    taken_map[p] = new_game->get_current_player();
+                    scene->addItem(building_to_add);
+                    scene->update();
+                    UpdateResources();
+                    UpdatePoints();
+                    ui->infoBrowser->setText(QString(""));
+                }
+                else{
+                    //otherwise don't do building addition
+                    ui->infoBrowser->setText(QString("Invalid Placement; Upgrade A Chocolate House."));
+                }
+            }
+            else{
+                //point not in map void building addition
+                ui->infoBrowser->setText(QString("Invalid Placement; Upgrade A Chocolate House."));
+            }
+            house = false;
+        }
+        else if(building_to_add->get_building_type() == "candy road"){
+            //must connect to road or house or mansion
+            bool house = false;
+            if(new_game->get_current_player()->get_buildings().count(p)){
+                //something at point you want to add road -> check if house or mansion
+                for(auto const& value: new_game->get_current_player()->get_buildings().at(p)){
+                    if(value->get_building_type() == "choco house"
+                            || value->get_building_type() == "choco mansion"){
+                        house = true;
+                        break;
+                    }
+                }
+                if(house){
+                    Game::set_place_mode(false);
+                    ui->centralWidget->setCursor(Qt::ArrowCursor);
+                    for(const auto it : building_to_add->get_needed_resources()){
+                        new_game->get_current_player()->RemoveResource(it.first,it.second);
+                    }
+                    //add to vector at key p
+                    new_game->get_current_player()->AddBuilding(p, building_to_add);
+                    //also add second point of road to map to aid house placement checks
+                    pair<int,int> other_p = building_to_add->get_x_y();
+                    new_game->get_current_player()->AddBuilding(other_p, building_to_add);
+                    taken_map[p] = new_game->get_current_player();
+                    taken_map[other_p] = new_game->get_current_player();
+                    scene->addItem(building_to_add);
+                    scene->update();
+                    UpdateResources();
+                    UpdatePoints();
+                    ui->infoBrowser->setText(QString(""));
+                }
+                else{
+                    //otherwise don't do road addition
+                    ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
+                }
+            }
+            else{
                 //nothing at point you want to add road
                 ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
             }
-            else{//players first turn they get to place one house free of charge
-                ui->houseButton->setEnabled(false);
-                ui->mansionButton->setEnabled(false);
-                ui->roadButton->setEnabled(false);
-                Game::set_place_mode(false);
-                ui->centralWidget->setCursor(Qt::ArrowCursor);
-                for(const auto it : building_to_add->get_needed_resources()){
-                    new_game->get_current_player()->RemoveResource(it.first,it.second);
-                }
-                new_game->get_current_player()->AddBuilding(p, building_to_add);
-                scene->addItem(building_to_add);
-                scene->update();
-                UpdateResources();
-                UpdatePoints();
-                ui->infoBrowser->setText(QString(""));
-                //set to false
-                new_game->get_current_player()->set_first_turn();
-                //turn buttons back on
-                ui->houseButton->setEnabled(true);
-                ui->mansionButton->setEnabled(true);
-                ui->roadButton->setEnabled(true);
-            }
+            house = false;
         }
-        exist = false;
-        house = false;
+        else{
+            //must connect to road and p in this case is the prev point so we have to manually access its second points
+            bool house = false;
+            bool exist = false;
+            if(new_game->get_current_player()->get_buildings().count(p)){
+                for(auto const& value: new_game->get_current_player()->get_buildings().at(p)){
+                    if(value->get_building_type() == "candy road"){
+                        house = true;
+                    }
+                    else{
+                        exist = true;
+                    }
+                }
+                //something at point you want to add road -> check if house or mansion
+                if(house && !exist){
+                    Game::set_place_mode(false);
+                    ui->centralWidget->setCursor(Qt::ArrowCursor);
+                    for(const auto it : building_to_add->get_needed_resources()){
+                        new_game->get_current_player()->RemoveResource(it.first,it.second);
+                    }
+                    new_game->get_current_player()->AddBuilding(p, building_to_add);
+                    taken_map[p] = new_game->get_current_player();
+                    scene->addItem(building_to_add);
+                    scene->update();
+                    UpdateResources();
+                    UpdatePoints();
+                    ui->infoBrowser->setText(QString(""));
+                }
+                else{
+                    //otherwise don't do road addition
+                    ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
+                }
+            }
+            else{
+                if(!new_game->get_current_player()->get_first_turn()){
+                    //nothing at point you want to add road
+                    ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
+                }
+                else{//players first turn they get to place one house free of charge
+                    ui->houseButton->setEnabled(false);
+                    ui->mansionButton->setEnabled(false);
+                    ui->roadButton->setEnabled(false);
+                    Game::set_place_mode(false);
+                    ui->centralWidget->setCursor(Qt::ArrowCursor);
+                    for(const auto it : building_to_add->get_needed_resources()){
+                        new_game->get_current_player()->RemoveResource(it.first,it.second);
+                    }
+                    new_game->get_current_player()->AddBuilding(p, building_to_add);
+                    taken_map[p] = new_game->get_current_player();
+                    scene->addItem(building_to_add);
+                    scene->update();
+                    UpdateResources();
+                    UpdatePoints();
+                    ui->infoBrowser->setText(QString(""));
+                    //set to false
+                    new_game->get_current_player()->set_first_turn();
+                    //turn buttons back on
+                    ui->houseButton->setEnabled(true);
+                    ui->mansionButton->setEnabled(true);
+                    ui->roadButton->setEnabled(true);
+                }
+            }
+            exist = false;
+            house = false;
+        }
     }
 }
 
