@@ -18,9 +18,13 @@ Based off the game "Settlers of Catan" that is candy themed along with new featu
      * AI players
      * Factory Implementation
      * indicate whos buildings are whos
+     * restart
      
 ## Known Bugs:
      * Sometimes says not enought resource even though enough
+     * can overlap road
+     * Road sometimes says invalid placement but does work (have to restart tbhe button)
+        have to clear Hexagon::prev in error message
      * Can get to -1 resources through a certain combination of house and mansion
 
 ## Possible Features:
