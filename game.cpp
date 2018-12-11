@@ -16,11 +16,11 @@ void Game::AddCorner(pair<int,int> pair_to_add){
 }
 
 void Game::CreatePlayers(std::vector<int> player_order){
-   Player *first_player = new Player(player_order[0]);
+   Player *first_player = new Player(player_order[0], Qt::yellow);
    current_player = first_player;
    player_list.push_back(first_player);
-   player_list.push_back(new Player(player_order[1]));
-   player_list.push_back(new Player(player_order[2]));
+   player_list.push_back(new Player(player_order[1], Qt::red));
+   player_list.push_back(new Player(player_order[2], Qt::darkBlue));
    for(Player *player : player_list){
        player->AddResource(resource::money,15);
        player->AddResource(resource::sugar,15);

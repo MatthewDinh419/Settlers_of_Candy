@@ -1,10 +1,11 @@
 #include "player.h"
 
 using namespace std;
-Player::Player(int player_id){
+Player::Player(int player_id, QColor player_color){
     player_id_ = player_id;
     total_points = 0;
     dice_roll_sum = 0;
+    player_color_ = player_color;
 }
 
 void Player::RemoveResource(resource resource_to_remove, int quantity){

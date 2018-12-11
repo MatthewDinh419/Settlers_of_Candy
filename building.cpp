@@ -107,7 +107,7 @@ void Road::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     QBrush b = painter->brush();
     painter->setBrush(QBrush(color_.dark(option->state & QStyle::State_Sunken ? 120 : 100)));
 
-    painter->setPen(QPen(Qt::red, 7, Qt::SolidLine, Qt::SquareCap));
+    painter->setPen(QPen(color_, 7, Qt::SolidLine, Qt::SquareCap));
     painter->drawLine(x1_, y1_, x2_, y2_);
     painter->setBrush(b);
 }

@@ -6,7 +6,7 @@
 
 class Player{
 public:
-    Player(int player_id);
+    Player(int player_id, QColor player_color);
     std::map<resource,int> get_current_resources(){return current_resources;}
     void AddResource(resource resource_to_add, int quantity){current_resources[resource_to_add] += quantity;}
     void AddBuilding(std::pair <int,int> point, Building *b);
@@ -22,6 +22,7 @@ public:
     int CountRoads();
     int CountResources();
     int get_dice_roll_sum(){return dice_roll_sum;}
+    QColor get_player_color() {return player_color_;}
 
 private:
     bool first = true;
@@ -30,9 +31,7 @@ private:
     std::map<resource,int> current_resources; //Player's current resources
     std::map<std::pair<int,int>, std::vector<Building *>> buildings_; // players buildings
     int dice_roll_sum;
-    QColor color_house;
-    QColor color_mansion;
-    QColor color_road;
+    QColor player_color_;
 };
 
 #endif // PLAYER_H

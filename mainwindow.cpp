@@ -285,6 +285,7 @@ void MainWindow::on_mansionButton_clicked()
 }
 void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p)
 {
+    building_to_add->set_color(new_game->get_current_player()->get_player_color());
     //cond for valid building placement
     if(building_to_add->get_building_type() == "choco mansion"){
         //checks for if house in map
@@ -368,15 +369,18 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
     else{
         //must connect to road and p in this case is the prev point so we have to manually access its second points
         bool house = false;
+        bool exist = false;
         if(new_game->get_current_player()->get_buildings().count(p)){
             for(auto const& value: new_game->get_current_player()->get_buildings().at(p)){
                 if(value->get_building_type() == "candy road"){
                     house = true;
-                    break;
+                }
+                else{
+                    exist = true;
                 }
             }
             //something at point you want to add road -> check if house or mansion
-            if(house){
+            if(house && !exist){
                 Game::set_place_mode(false);
                 ui->centralWidget->setCursor(Qt::ArrowCursor);
                 for(const auto it : building_to_add->get_needed_resources()){
@@ -422,6 +426,7 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                 ui->roadButton->setEnabled(true);
             }
         }
+        exist = false;
         house = false;
     }
 }
