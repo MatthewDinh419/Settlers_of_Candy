@@ -17,6 +17,7 @@ Based off the game "Settlers of Catan" that is candy themed along with new featu
      * Game while loop stuff (when does the game end?)
      * AI players
      * Factory Implementation
+     * indicate whos buildings are whos
      
 ## Known Bugs:
      * Sometimes says not enought resource even though enough
