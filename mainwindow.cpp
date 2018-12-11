@@ -400,21 +400,26 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                 ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
             }
             else{//players first turn they get to place one house free of charge
-                if(new_game->get_current_player()->get_first_turn()){
-                    Game::set_place_mode(false);
-                    ui->centralWidget->setCursor(Qt::ArrowCursor);
-                    for(const auto it : building_to_add->get_needed_resources()){
-                        new_game->get_current_player()->RemoveResource(it.first,it.second);
-                    }
-                    new_game->get_current_player()->AddBuilding(p, building_to_add);
-                    scene->addItem(building_to_add);
-                    scene->update();
-                    UpdateResources();
-                    UpdatePoints();
-                    ui->infoBrowser->setText(QString(""));
-                    //set to false
-                    new_game->get_current_player()->set_first_turn();
+                ui->houseButton->setEnabled(false);
+                ui->mansionButton->setEnabled(false);
+                ui->roadButton->setEnabled(false);
+                Game::set_place_mode(false);
+                ui->centralWidget->setCursor(Qt::ArrowCursor);
+                for(const auto it : building_to_add->get_needed_resources()){
+                    new_game->get_current_player()->RemoveResource(it.first,it.second);
                 }
+                new_game->get_current_player()->AddBuilding(p, building_to_add);
+                scene->addItem(building_to_add);
+                scene->update();
+                UpdateResources();
+                UpdatePoints();
+                ui->infoBrowser->setText(QString(""));
+                //set to false
+                new_game->get_current_player()->set_first_turn();
+                //turn buttons back on
+                ui->houseButton->setEnabled(true);
+                ui->mansionButton->setEnabled(true);
+                ui->roadButton->setEnabled(true);
             }
         }
         house = false;

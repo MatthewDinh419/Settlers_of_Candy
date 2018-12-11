@@ -59,6 +59,22 @@ ChocolateMansion::ChocolateMansion(int x, int y) : Building(x, y){
     points_ = 3;
 }
 
+QPainterPath ChocolateMansion::shape() const
+{
+    QPainterPath path;
+    path.addRect(x_, y_, width_, width_);
+    return path;
+}
+
+void ChocolateMansion::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QBrush b = painter->brush();
+    painter->setBrush(QBrush(color_.dark(option->state & QStyle::State_Sunken ? 120 : 100)));
+
+    painter->drawRect(QRect(this->x_, this->y_, this->width_, this->width_));
+    painter->setBrush(b);
+}
+
 Road::Road(int x1, int y1,int x2, int y2) : Building(x1, y1)
 {
     needed_resources_[resource::money] = 1;

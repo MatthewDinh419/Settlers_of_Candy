@@ -37,6 +37,8 @@ public:
 class ChocolateMansion : public Building{
 public:
     ChocolateMansion(int x, int y);
+    QPainterPath shape() const override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
     std::string get_building_type(){return "choco mansion";}
 };
 

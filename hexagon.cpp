@@ -85,7 +85,6 @@ void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
         for(pair<int,int>point_pairs : Game::get_all_corners()){ //Goes through all the corners to see if where clicked is a corner
             if(mouse_press_x >= point_pairs.first - 10 && mouse_press_x <= point_pairs.first + 10 &&
                     mouse_press_y >= point_pairs.second - 10 && mouse_press_y <= point_pairs.second + 10){
-                QColor color_temp; //Used for color of the building
                 if(Game::get_building_string() == "choco house"){
                     ChocolateHouse *temp_building = new ChocolateHouse(point_pairs.first-10,point_pairs.second-10);
                     emit AddBuilding(temp_building, point_pairs);

@@ -22,6 +22,7 @@ public:
     int CountRoads();
     int CountResources();
     int get_dice_roll_sum(){return dice_roll_sum;}
+
 private:
     bool first = true;
     int player_id_;
@@ -29,6 +30,9 @@ private:
     std::map<resource,int> current_resources; //Player's current resources
     std::map<std::pair<int,int>, std::vector<Building *>> buildings_; // players buildings
     int dice_roll_sum;
+    QColor color_house;
+    QColor color_mansion;
+    QColor color_road;
 };
 
 #endif // PLAYER_H
