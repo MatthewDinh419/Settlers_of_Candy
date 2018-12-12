@@ -113,14 +113,11 @@ void Hexagon::mousePressEvent(QGraphicsSceneMouseEvent *event)
                     break;
                 }
                 else if(Game::get_building_string() == "candy road"){
-                    qDebug() << 1;
                     if(Hexagon::prev_corner_clicked.first == -1 && Hexagon::prev_corner_clicked.second == -1){
-                        qDebug() << 2;
                         Hexagon::prev_corner_clicked = point_pairs;
                         break;
                     }
                     else{
-                        qDebug() << 3;
                         pair<int,int> temp_prev = Hexagon::prev_corner_clicked;
                         //can't be the same point
                         if(Hexagon::prev_corner_clicked != point_pairs){

@@ -1,5 +1,5 @@
 #include "player.h"
-
+int Player::turn_count = 1;
 using namespace std;
 Player::Player(int player_id, QColor player_color){
     player_id_ = player_id;

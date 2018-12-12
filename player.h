@@ -27,15 +27,21 @@ public:
     std::map<resource,int> get_resources_used(){return resources_used;}
     void AddToTotalResources(resource resource_to_add, int quantity){total_resources[resource_to_add] += quantity;}
     void AddToResourcesUsed(resource resource_to_add, int quantity){resources_used[resource_to_add] += quantity;}
+    std::map<int,int> get_turn_to_points(){return turn_to_points;}
+    void SetTurnToPoints(int turn, int points){turn_to_points[turn] = points;}
+    static int get_turn_count(){return turn_count;}
+    static void IncrementTurnCount(){turn_count += 1;}
 
 private:
     bool first = true;
     std::map<resource,int> total_resources;
     std::map<resource,int> resources_used;
     int player_id_;
+    static int turn_count;
     int total_points;
     std::map<resource,int> current_resources; //Player's current resources
     std::map<std::pair<int,int>, std::vector<Building *>> buildings_; // players buildings
+    std::map<int,int> turn_to_points;
     int dice_roll_sum;
     QColor player_color_;
 };

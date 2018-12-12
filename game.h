@@ -22,12 +22,15 @@ public:
     std::map<std::string, Player *> Records();
     std::map<resource,int> get_total_resources_dist(){return total_resources_distributed;}
     void AddToTotalResourcesDist(resource resource_to_add, int quantity){total_resources_distributed[resource_to_add] += quantity;}
+    bool GameOver();
+    void UpdateTurnToPoints();
 private:
     Player *current_player; //Current player's turn
     std::map<resource,int> total_resources_distributed;
     std::vector<Player*> player_list; //Vector containing all the players in the game
     static std::vector<pair<int,int>> all_corners; //Contains all the points of the hexagons
     std::vector<Hexagon*> hexagon_list_;
+    int turn_rotations = 0;
     static std::string place_building_string; //String of the building to place
     static bool place_mode; //If a place building button is pressed then it will be in place mode or exit out of it
 };
