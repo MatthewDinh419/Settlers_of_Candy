@@ -560,6 +560,8 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                     taken_map[p] = new_game->get_current_player();
                     scene->addItem(building_to_add);
                     scene->update();
+                    UpdateResources();
+                    UpdatePoints();
                     ui->infoBrowser->setText(QString(""));
                     //set to false
                     new_game->get_current_player()->set_first_turn();
@@ -807,13 +809,19 @@ void MainWindow::on_diceButton_clicked()
         first_turn = false;
         new_game->CreatePlayers(player_order);
         UpdateResources();
-        ui->player1_label->setStyleSheet("QLabel {  color : lightGray; }");
-        ui->player2_label->setStyleSheet("QLabel {  color : red; }");
-        ui->player3_label->setStyleSheet("QLabel {  color : darkBlue; }");
-        ui->houseButton->setEnabled(true);
-        ui->mansionButton->setEnabled(true);
-        ui->roadButton->setEnabled(true);
-        ui->endButton->setEnabled(true);
+        //set colors for players label
+        QString player_style = "QLabel {  color : %1; }";
+        for(unsigned int i = 0; i < new_game->get_player_list().size(); i++){
+            if(new_game->get_player_list()[i]->get_id() == 1){
+                ui->player1_label->setStyleSheet(player_style.arg(new_game->get_player_list()[i]->get_player_color().name()));
+            }
+            else if(new_game->get_player_list()[i]->get_id() == 2){
+                ui->player2_label->setStyleSheet(player_style.arg(new_game->get_player_list()[i]->get_player_color().name()));
+            }
+            else{
+                ui->player3_label->setStyleSheet(player_style.arg(new_game->get_player_list()[i]->get_player_color().name()));
+            }
+        }
     }
     ui->diceButton->setEnabled(false);
     ui->endButton->setEnabled(true);
@@ -830,6 +838,10 @@ void MainWindow::on_diceButton_clicked()
         QTextStream in(&file);
         ui->infoBrowser->setText(in.readAll());
     }
+    ui->houseButton->setEnabled(true);
+    ui->mansionButton->setEnabled(true);
+    ui->roadButton->setEnabled(true);
+    ui->endButton->setEnabled(true);
 }
 
 void MainWindow::UpdatePoints(){
@@ -889,13 +901,24 @@ void MainWindow::UpdatePoints(){
 
 void MainWindow::on_endButton_clicked()
 {
-    new_game->set_next_player(new_game->get_current_player());
+    new_game->set_next_player(new_game->get_current_player()); //Get the next player
     ui->status_label->setText(QString("Player " +QString::number(new_game->get_current_player()->get_id()) +QString("'s turn")));
+    if(new_game->GameOver()){ //Checks if the game is over
+        for(Player *player : new_game->get_player_list()){
+            if(player->get_total_points() >= 13){ //If there is a player who has greater than 13 points
+                qDebug() << "Player " << player->get_id() <<" won!!!"; //Write to console that that player won
+                break;
+            }
+        }
+        QApplication::quit(); //Exit application
+    }
+   // new_game->CollectResources(new_game->get_current_player());
     ui->endButton->setEnabled(false);
     ui->diceButton->setEnabled(true);
     ui->houseButton->setEnabled(false);
     ui->mansionButton->setEnabled(false);
     ui->roadButton->setEnabled(false);
+    UpdateResources();
     DrawGraphs();
 }
 
@@ -1047,9 +1070,37 @@ void MainWindow::on_start_button_clicked()
     }
     else{
         ai_amount = ui->start_input->text().toInt();
+        //change players ai bools
+        set_ai_players();
         ui->start_button->hide();
         ui->start_input->hide();
         ui->diceButton->setEnabled(true);
         ui->status_label->setText(QString("Roll Dice To See Who Goes First!"));
+    }
+}
+
+void MainWindow::set_ai_players()
+{
+    if(ai_amount == 3){
+        for(unsigned int i = 0; i < new_game->get_player_list().size(); i++){
+            new_game->get_player_list()[i]->set_ai();
+        }
+    }
+    else if (ai_amount == 2){
+        for(unsigned int i = 0; i < new_game->get_player_list().size(); i++){
+            if(new_game->get_player_list()[i]->get_id() == 3){
+                new_game->get_player_list()[i]->set_ai();
+            }
+            if(new_game->get_player_list()[i]->get_id() == 2){
+                new_game->get_player_list()[i]->set_ai();
+            }
+        }
+    }
+    else if (ai_amount == 1){
+        for(unsigned int i = 0; i < new_game->get_player_list().size(); i++){
+            if(new_game->get_player_list()[i]->get_id() == 3){
+                new_game->get_player_list()[i]->set_ai();
+            }
+        }
     }
 }

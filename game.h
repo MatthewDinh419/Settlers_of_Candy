@@ -12,18 +12,18 @@ public:
     static std::vector<pair<int,int>> get_all_corners(){return all_corners;}
     static void set_building_string(std::string string_to_set){place_building_string = string_to_set;}
     static std::string get_building_string(){return place_building_string;}
-    Player *get_current_player(){return current_player;}
-    void set_next_player(Player *curr_player);
-    std::vector<Player*> get_player_list(){return player_list;}
     void CreatePlayers(std::vector<int> player_order);
-    void CollectResources();
+    void CollectResources(Player *player);
     void AddHexagon(Hexagon *hexagon_to_add){hexagon_list_.push_back(hexagon_to_add);}
+    void set_next_player(Player *curr_player);
+    void AddToTotalResourcesDist(resource resource_to_add, int quantity){total_resources_distributed[resource_to_add] += quantity;}
+    void UpdateTurnToPoints();
+    bool GameOver();
     std::map<Player *, int> PlayerPoints();
     std::map<std::string, Player *> Records();
     std::map<resource,int> get_total_resources_dist(){return total_resources_distributed;}
-    void AddToTotalResourcesDist(resource resource_to_add, int quantity){total_resources_distributed[resource_to_add] += quantity;}
-    bool GameOver();
-    void UpdateTurnToPoints();
+    std::vector<Player*> get_player_list(){return player_list;}
+    Player *get_current_player(){return current_player;}
 private:
     Player *current_player; //Current player's turn
     std::map<resource,int> total_resources_distributed;
