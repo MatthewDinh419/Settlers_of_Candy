@@ -16,7 +16,7 @@ void Game::AddCorner(pair<int,int> pair_to_add){
 }
 
 void Game::CreatePlayers(std::vector<int> player_order){
-   Player *first_player = new Player(player_order[0], Qt::yellow);
+   Player *first_player = new Player(player_order[0], Qt::lightGray);
    current_player = first_player;
    player_list.push_back(first_player);
    player_list.push_back(new Player(player_order[1], Qt::red));

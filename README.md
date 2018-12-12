@@ -18,18 +18,14 @@ Based off the game "Settlers of Catan" that is candy themed along with new featu
     * Analytics Display
     
 ## To-Do:
-     * Points graph 
      * Thief(?) 
-     * Game while loop stuff (when does the game end?)
      * AI players
-     * indicate whos buildings are whos
      * restart
-     
+     * set AI, player AI bool, check if true
+    
 ## Known Bugs:
-     * Sometimes says not enought resource even though enough
-     * can overlap road
-     * Road sometimes says invalid placement but does work (have to restart tbhe button)
-        have to clear Hexagon::prev in error message
+     * Collect Resource does all players
+     * Beginning of player turn (endbutton clicked)
 
 ## Possible Features:
     * Development Cards

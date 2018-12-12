@@ -139,7 +139,8 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     //First Turn
-    ui->status_label->setText(QString("Roll Dice to see who goes first!"));
+    ui->status_label->setText(QString("Enter The Amount Of AI Players (0-3)"));
+    ui->diceButton->setEnabled(false);
     ui->houseButton->setEnabled(false);
     ui->mansionButton->setEnabled(false);
     ui->roadButton->setEnabled(false);
@@ -300,15 +301,6 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                         bool house = false;
                         //something at point you want to add road -> check if house or mansion or road
                         if(new_game->get_current_player()->get_buildings().count(p)){
-
-//                            for(unsigned int i = 0; i < new_game->get_current_player()->get_buildings().at(p).size(); i++){// ugly but works
-//                                if(new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco house"
-//                                        || new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco mansion"){
-//                                    house = true;
-//                                    break;
-//                                }
-//                            }
-//                            if(house){
                                 Game::set_place_mode(false);
                                 ui->centralWidget->setCursor(Qt::ArrowCursor);
                                 for(const auto it : building_to_add->get_needed_resources()){
@@ -326,11 +318,6 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                                 UpdateResources();
                                 UpdatePoints();
                                 ui->infoBrowser->setText(QString(""));
-//                            }
-//                            else{
-//                                //otherwise don't do road addition
-//                                ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
-//                            }
                         }
                         else{
                             //nothing at point you want to add road
@@ -347,15 +334,6 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                     bool house = false;
                     //something at point you want to add road -> check if house or mansion or road
                     if(new_game->get_current_player()->get_buildings().count(p)){
-
-//                        for(unsigned int i = 0; i < new_game->get_current_player()->get_buildings().at(p).size(); i++){// ugly but works
-//                            if(new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco house"
-//                                    || new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco mansion"){
-//                                house = true;
-//                                break;
-//                            }
-//                        }
-//                        if(house){
                             Game::set_place_mode(false);
                             ui->centralWidget->setCursor(Qt::ArrowCursor);
                             for(const auto it : building_to_add->get_needed_resources()){
@@ -373,11 +351,6 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                             UpdateResources();
                             UpdatePoints();
                             ui->infoBrowser->setText(QString(""));
-//                        }
-//                        else{
-//                            //otherwise don't do road addition
-//                            ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
-//                        }
                     }
                     else{
                         //nothing at point you want to add road
@@ -480,15 +453,6 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                     bool house = false;
                      //something at point you want to add road -> check if house or mansion or road
                     if(new_game->get_current_player()->get_buildings().count(p)){
-
-//                        for(unsigned int i = 0; i < new_game->get_current_player()->get_buildings().at(p).size(); i++){// ugly but works
-//                            if(new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco house"
-//                                    || new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco mansion"){
-//                                house = true;
-//                                break;
-//                            }
-//                        }
-//                        if(house){
                             Game::set_place_mode(false);
                             ui->centralWidget->setCursor(Qt::ArrowCursor);
                             for(const auto it : building_to_add->get_needed_resources()){
@@ -506,11 +470,6 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                             UpdateResources();
                             UpdatePoints();
                             ui->infoBrowser->setText(QString(""));
-//                        }
-//                        else{
-//                            //otherwise don't do road addition
-//                            ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
-//                        }
                     }
                     else{
                         //nothing at point you want to add road
@@ -527,15 +486,6 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                 bool house = false;
                 //something at point you want to add road -> check if house or mansion or road
                 if(new_game->get_current_player()->get_buildings().count(p)){
-
-//                    for(unsigned int i = 0; i < new_game->get_current_player()->get_buildings().at(p).size(); i++){// ugly but works
-//                        if(new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco house"
-//                                || new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco mansion"){
-//                            house = true;
-//                            break;
-//                        }
-//                    }
-//                    if(house){
                         Game::set_place_mode(false);
                         ui->centralWidget->setCursor(Qt::ArrowCursor);
                         for(const auto it : building_to_add->get_needed_resources()){
@@ -553,11 +503,6 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                         UpdateResources();
                         UpdatePoints();
                         ui->infoBrowser->setText(QString(""));
-//                    }
-//                    else{
-//                        //otherwise don't do road addition
-//                        ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
-//                    }
                 }
                 else{
                     //nothing at point you want to add road
@@ -862,6 +807,9 @@ void MainWindow::on_diceButton_clicked()
         first_turn = false;
         new_game->CreatePlayers(player_order);
         UpdateResources();
+        ui->player1_label->setStyleSheet("QLabel {  color : lightGray; }");
+        ui->player2_label->setStyleSheet("QLabel {  color : red; }");
+        ui->player3_label->setStyleSheet("QLabel {  color : darkBlue; }");
         ui->houseButton->setEnabled(true);
         ui->mansionButton->setEnabled(true);
         ui->roadButton->setEnabled(true);
@@ -945,6 +893,9 @@ void MainWindow::on_endButton_clicked()
     ui->status_label->setText(QString("Player " +QString::number(new_game->get_current_player()->get_id()) +QString("'s turn")));
     ui->endButton->setEnabled(false);
     ui->diceButton->setEnabled(true);
+    ui->houseButton->setEnabled(false);
+    ui->mansionButton->setEnabled(false);
+    ui->roadButton->setEnabled(false);
     DrawGraphs();
 }
 
@@ -1086,5 +1037,19 @@ void MainWindow::on_p3_graph_button_clicked()
     else{
         p3_graph_button_clicked = true;
         ui->p3Graph->setVisible(true);
+    }
+}
+
+void MainWindow::on_start_button_clicked()
+{
+    if(ui->start_input->text() != "3" && ui->start_input->text() != "2" && ui->start_input->text() != "1" && ui->start_input->text() != "0"){
+        ui->status_label->setText(QString("Invalid! Please Enter AI Amount, (0-3)"));
+    }
+    else{
+        ai_amount = ui->start_input->text().toInt();
+        ui->start_button->hide();
+        ui->start_input->hide();
+        ui->diceButton->setEnabled(true);
+        ui->status_label->setText(QString("Roll Dice To See Who Goes First!"));
     }
 }

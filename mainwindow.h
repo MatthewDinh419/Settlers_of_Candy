@@ -48,6 +48,8 @@ private slots:
 
     void on_p3_graph_button_clicked();
 
+    void on_start_button_clicked();
+
 private:
     Ui::MainWindow *ui;
     Game *new_game; //Game instance
@@ -65,6 +67,7 @@ private:
     bool p1_graph_button_clicked = false;
     bool p2_graph_button_clicked = false;
     bool p3_graph_button_clicked = false;
+    int ai_amount = 0;
 };
 
 #endif // MAINWINDOW_H
