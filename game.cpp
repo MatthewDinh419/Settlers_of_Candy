@@ -9,12 +9,18 @@ Game::Game(){
 }
 
 /*
- *Adds a corner to the vector with all the corners
+    Adds a corner to the vector with all the corners
 */
 void Game::AddCorner(pair<int,int> pair_to_add){
     all_corners.push_back(pair_to_add);
 }
 
+/*
+    creates Player objects with id and specific colors and pushes
+    onto a player list vector to keep track of turns
+
+    @param Takes a vector with the player order
+*/
 void Game::CreatePlayers(std::vector<int> player_order){
    Player *first_player = new Player(player_order[0], Qt::lightGray);
    current_player = first_player;
@@ -28,6 +34,13 @@ void Game::CreatePlayers(std::vector<int> player_order){
    }
 }
 
+/*
+    Checks what hexagons a player has a building on
+    then what those building are and if its house
+    add 1 of every adjacent resource and mansion 2.
+
+    @param the player collecting resources
+*/
 void Game::CollectResources(Player *player){
     std::map<std::pair<int,int>, Building *>::iterator it;
     std::vector<std::map<Building *, Hexagon *>> hexagon_contains; //Vector that contains all the buildings to its corresponding hexagon
@@ -78,9 +91,9 @@ void Game::CollectResources(Player *player){
             }
         }
     }
+    //if house add 1 of the tile resource; if mansion 2
     for(std::map<Building *, Hexagon *> build_hex : hexagon_contains){
         if(build_hex.begin()->first->get_building_type() == "choco house"){
-            qDebug() << "yeehaw";
             player->AddResource(build_hex.begin()->second->get_resource_tile(),1);
             player->AddToTotalResources(build_hex.begin()->second->get_resource_tile(),1);
             AddToTotalResourcesDist(build_hex.begin()->second->get_resource_tile(),1);
@@ -94,6 +107,11 @@ void Game::CollectResources(Player *player){
     hexagon_contains.clear(); //Reset the vector for a new player
 }
 
+/*
+    maps each player with the points it calculates they have
+
+    @return new map with players and their points
+*/
 std::map<Player *, int> Game::PlayerPoints(){
     std::map<Player *, int> player_pts;
     for(Player *player : player_list){ //For each player...
@@ -109,6 +127,12 @@ std::map<Player *, int> Game::PlayerPoints(){
     return player_pts;
 }
 
+/*
+    sets the current player to the next one in list of players which is in order
+    based on dice roll that deteremined order.
+
+    @param the current player (who just ended their turn)
+*/
 void Game::set_next_player(Player *curr_player){
     auto it = find(player_list.begin(), player_list.end(), curr_player);
     if(it != player_list.end()){
@@ -123,6 +147,11 @@ void Game::set_next_player(Player *curr_player){
     }
 }
 
+/*
+    Calculates to see who hold records: longest road, Most resources, largest dice sum
+
+    @return a map of record names and who owns the record
+*/
 std::map<std::string,Player *> Game::Records(){
     std::map<std::string, Player*> records;
     //Longest Road
@@ -158,6 +187,11 @@ std::map<std::string,Player *> Game::Records(){
     return records;
 }
 
+/*
+    checks if someone has enought points to have won
+
+    @return bool of if game over.
+*/
 bool Game::GameOver(){
     for(Player *player : player_list){
         if(player->get_total_points() >= 13){
@@ -167,11 +201,16 @@ bool Game::GameOver(){
     return false;
 }
 
+/*
+    keeps track of when a full rotation happens
+    3 players so 3 times end turn is hit
+    Aids the points graph to know when a full turn happens to update the graph per round
+*/
 void Game::UpdateTurnToPoints(){
     for(Player *player : player_list){
-        if(turn_rotations == 3){
+        if(turn_rotations == 3){//reset if full round
             turn_rotations = -1;
-            Player::IncrementTurnCount();
+            Player::IncrementTurnCount();// add how many turns have occured
         }
         player->SetTurnToPoints(Player::get_turn_count(), player->get_total_points());
     }
