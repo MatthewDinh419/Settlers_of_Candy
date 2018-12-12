@@ -26,10 +26,10 @@ Based off the game "Settlers of Catan" that is candy themed along with new featu
      * restart
      
 ## Known Bugs:
-     * Sometimes says not enought resource even though enough
      * can overlap road
      * Road sometimes says invalid placement but does work (have to restart tbhe button)
         have to clear Hexagon::prev in error message
+
 
 ## Possible Features:
     * Development Cards
