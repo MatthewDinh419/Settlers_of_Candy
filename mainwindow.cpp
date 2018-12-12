@@ -17,8 +17,12 @@
 #include <QtCharts/QChart>
 #include <QtCharts/QBarCategoryAxis>
 #include <QtCharts/QChartView>
+#include <QTimer>
 using namespace QtCharts;
 
+/*
+    MainWindow constructor to initalize everything and get ready to start game
+*/
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -153,11 +157,20 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->p3Graph->setVisible(false);
 }
 
+/*
+    deconstructor
+*/
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
+/*
+ * Check if player has resources to add a building
+ *
+ * @param Takes the building wanted to be added by a player
+    @return bool on whether a player has enough resources for a building addition
+*/
 bool MainWindow::EnoughResources(Building *building_to_check){
     std::map<resource,int> current_players_resources = new_game->get_current_player()->get_current_resources();
     for(const auto it : building_to_check->get_needed_resources()){
@@ -168,6 +181,9 @@ bool MainWindow::EnoughResources(Building *building_to_check){
     return true;
 }
 
+/*
+    When add House button clikced
+*/
 void MainWindow::on_houseButton_clicked()
 {
     if(Game::get_place_mode()){ //If in place mode and want to reset
@@ -175,14 +191,14 @@ void MainWindow::on_houseButton_clicked()
         Game::set_place_mode(!Game::get_place_mode()); //Set to false
         ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
     }
-    else{ //Not in place mode
+    else{ //Not in place mode, put in place mode
         ChocolateHouse *temp_house = new ChocolateHouse(0,0);
         bool enough_resources = EnoughResources(temp_house);
-        if(enough_resources){
+        if(enough_resources){ // check if enough resources to place
             Game::set_place_mode(!Game::get_place_mode());
             Game::set_building_string("choco house");
             ui->centralWidget->setCursor(Qt::CrossCursor);
-            QFile file(":/infoResources/InfoText/choco_house.txt");
+            QFile file(":/infoResources/InfoText/choco_house.txt"); // display instructions on what to do
             if(!file.open(QIODevice::ReadOnly)){
                 QMessageBox::information(0,"Info",file.errorString());
             }
@@ -195,6 +211,9 @@ void MainWindow::on_houseButton_clicked()
     }
 }
 
+/*
+    When add Road button clikced
+*/
 void MainWindow::on_roadButton_clicked()
 {
     if(Game::get_place_mode()){ //If in place mode and want to reset
@@ -202,14 +221,14 @@ void MainWindow::on_roadButton_clicked()
         Game::set_place_mode(!Game::get_place_mode()); //Set to false
         ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
     }
-    else{ //Not in place mode
+    else{ //Not in place mode, put in place mode
         Road *temp_road = new Road(0,0,0,0);
         bool enough_resources = EnoughResources(temp_road);
-        if(enough_resources){
+        if(enough_resources){ // check if enough resources to place building
             Game::set_place_mode(!Game::get_place_mode());
             Game::set_building_string("candy road");
             ui->centralWidget->setCursor(Qt::CrossCursor);
-            QFile file(":/infoResources/InfoText/candy_road.txt");
+            QFile file(":/infoResources/InfoText/candy_road.txt"); // display instructions on what to do
             if(!file.open(QIODevice::ReadOnly)){
                 QMessageBox::information(0,"Info",file.errorString());
             }
@@ -222,6 +241,9 @@ void MainWindow::on_roadButton_clicked()
     }
 }
 
+/*
+    When add Mansion button clikced
+*/
 void MainWindow::on_mansionButton_clicked()
 {
     if(Game::get_place_mode()){ //If in place mode and want to reset
@@ -236,7 +258,7 @@ void MainWindow::on_mansionButton_clicked()
             Game::set_place_mode(!Game::get_place_mode());
             Game::set_building_string("choco mansion");
             ui->centralWidget->setCursor(Qt::CrossCursor);
-            QFile file(":/infoResources/InfoText/choco_mansion.txt");
+            QFile file(":/infoResources/InfoText/choco_mansion.txt"); // display instructions on what to do
             if(!file.open(QIODevice::ReadOnly)){
                 QMessageBox::information(0,"Info",file.errorString());
             }
@@ -248,11 +270,19 @@ void MainWindow::on_mansionButton_clicked()
         }
     }
 }
+
+/*
+ * slot that will take in a desired building to add and where to be added
+ * and checks valid placement
+ *
+ * @param p is point a buidling is to be added
+ * @param building_to_add is the building in question to be added
+*/
 void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p)
 {
     //check if point is owned by another player owns a point already
     if(taken_map.count(p)){
-        if(taken_map.at(p) == new_game->get_current_player()){
+        if(taken_map.at(p) == new_game->get_current_player()){ // if point is taken make sure it is taken by the current player
             building_to_add->set_color(new_game->get_current_player()->get_player_color());
             //cond for valid building placement
             if(building_to_add->get_building_type() == "choco mansion"){
@@ -269,16 +299,16 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                             break;
                         }
                     }
-                    if(house){
+                    if(house){ // if there is a house there we can upgrade it
                         Game::set_place_mode(false);
                         ui->centralWidget->setCursor(Qt::ArrowCursor);
-                        for(const auto it : building_to_add->get_needed_resources()){
+                        for(const auto it : building_to_add->get_needed_resources()){ // remove resources and update game stats
                             new_game->get_current_player()->RemoveResource(it.first,it.second);
                             new_game->get_current_player()->AddToResourcesUsed(it.first,it.second);
                         }
-                        new_game->get_current_player()->RemoveBuilding(p, building_to_remove);
+                        new_game->get_current_player()->RemoveBuilding(p, building_to_remove); // remove the house and add the mansion
                         new_game->get_current_player()->AddBuilding(p, building_to_add);
-                        taken_map[p] = new_game->get_current_player();
+                        taken_map[p] = new_game->get_current_player(); // add to taken map to keep track of who owns what
                         scene->addItem(building_to_add);
                         scene->update();
                         UpdateResources();
@@ -300,22 +330,20 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                 pair<int,int> other_p = building_to_add->get_x_y();
                 if(taken_map.count(other_p)){
                     if(taken_map.at(other_p) == new_game->get_current_player()){
-                        //must connect to road or house or mansion
-                        bool house = false;
                         //something at point you want to add road -> check if house or mansion or road
                         if(new_game->get_current_player()->get_buildings().count(p)){
                                 Game::set_place_mode(false);
                                 ui->centralWidget->setCursor(Qt::ArrowCursor);
-                                for(const auto it : building_to_add->get_needed_resources()){
+                                for(const auto it : building_to_add->get_needed_resources()){ // remove resources and update game stats
                                     new_game->get_current_player()->RemoveResource(it.first,it.second);
                                     new_game->get_current_player()->AddToResourcesUsed(it.first,it.second);
                                 }
                                 //add to vector at key p
-                                new_game->get_current_player()->AddBuilding(p, building_to_add);
+                                new_game->get_current_player()->AddBuilding(p, building_to_add); // adding to players building map
                                 //also add second point of road to map to aid house placement checks
                                 new_game->get_current_player()->AddBuilding(other_p, building_to_add);
                                 taken_map[p] = new_game->get_current_player();
-                                taken_map[other_p] = new_game->get_current_player();
+                                taken_map[other_p] = new_game->get_current_player(); // add to taken map to keep track of who owns what
                                 scene->addItem(building_to_add);
                                 scene->update();
                                 UpdateResources();
@@ -326,7 +354,6 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                             //nothing at point you want to add road
                             ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
                         }
-                        house = false;
                     }
                     else{
                         ui->infoBrowser->setText(QString("Point Already Taken"));
@@ -362,13 +389,13 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                     house = false;
                 }
             }
-            else{
+            else{ // house
                 //must connect to road and p in this case is the prev point so we have to manually access its second points
                 bool house = false;
                 bool exist = false;
                 if(new_game->get_current_player()->get_buildings().count(p)){
                     for(unsigned int i = 0; i < new_game->get_current_player()->get_buildings().at(p).size(); i++){// ugly but works
-                        if(new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "candy road"){
+                        if(new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "candy road"){ // make sure its on a connected with a candy road
                             house = true;
                         }
                         else{
@@ -383,8 +410,8 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                             new_game->get_current_player()->RemoveResource(it.first,it.second);
                             new_game->get_current_player()->AddToResourcesUsed(it.first,it.second);
                         }
-                        new_game->get_current_player()->AddBuilding(p, building_to_add);
-                        taken_map[p] = new_game->get_current_player();
+                        new_game->get_current_player()->AddBuilding(p, building_to_add); // add the house to players map of buildings
+                        taken_map[p] = new_game->get_current_player(); // add to taken map
                         scene->addItem(building_to_add);
                         scene->update();
                         UpdateResources();
@@ -396,15 +423,15 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                         ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
                     }
                 }
-                exist = false;
+                exist = false; // reset vars
                 house = false;
             }
         }
-        else{
+        else{ // point taken by another player
             ui->infoBrowser->setText(QString("Point Already Taken"));
         }
     }
-    else{
+    else{ // if its not in the taken map its free for grabs
         building_to_add->set_color(new_game->get_current_player()->get_player_color());
         //cond for valid building placement
         if(building_to_add->get_building_type() == "choco mansion"){
@@ -415,7 +442,7 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
             if(new_game->get_current_player()->get_buildings().count(p)){
                 //point in map, check if house
                 for(unsigned int i = 0; i < new_game->get_current_player()->get_buildings().at(p).size(); i++){// ugly but works
-                    if(new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco house"){
+                    if(new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco house"){ // if the players building at point is a house
                         building_to_remove = new_game->get_current_player()->get_buildings().at(p)[i];
                         house = true;
                         break;
@@ -424,13 +451,13 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                 if(house){
                     Game::set_place_mode(false);
                     ui->centralWidget->setCursor(Qt::ArrowCursor);
-                    for(const auto it : building_to_add->get_needed_resources()){
+                    for(const auto it : building_to_add->get_needed_resources()){ // take away the require resource
                         new_game->get_current_player()->RemoveResource(it.first,it.second);
                         new_game->get_current_player()->AddToResourcesUsed(it.first,it.second);
                     }
-                    new_game->get_current_player()->RemoveBuilding(p, building_to_remove);
+                    new_game->get_current_player()->RemoveBuilding(p, building_to_remove); // remove house and add mansion
                     new_game->get_current_player()->AddBuilding(p, building_to_add);
-                    taken_map[p] = new_game->get_current_player();
+                    taken_map[p] = new_game->get_current_player(); // update taken map
                     scene->addItem(building_to_add);
                     scene->update();
                     UpdateResources();
@@ -449,78 +476,39 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
             house = false;
         }
         else if(building_to_add->get_building_type() == "candy road"){
-            pair<int,int> other_p = building_to_add->get_x_y();
-            if(taken_map.count(other_p)){
-                if(taken_map.at(other_p) == new_game->get_current_player()){
-                    //must connect to road or house or mansion
-                    bool house = false;
-                     //something at point you want to add road -> check if house or mansion or road
-                    if(new_game->get_current_player()->get_buildings().count(p)){
-                            Game::set_place_mode(false);
-                            ui->centralWidget->setCursor(Qt::ArrowCursor);
-                            for(const auto it : building_to_add->get_needed_resources()){
-                                new_game->get_current_player()->RemoveResource(it.first,it.second);
-                                new_game->get_current_player()->AddToResourcesUsed(it.first,it.second);
-                            }
-                            //add to vector at key p
-                            new_game->get_current_player()->AddBuilding(p, building_to_add);
-                            //also add second point of road to map to aid house placement checks
-                            new_game->get_current_player()->AddBuilding(other_p, building_to_add);
-                            taken_map[p] = new_game->get_current_player();
-                            taken_map[other_p] = new_game->get_current_player();
-                            scene->addItem(building_to_add);
-                            scene->update();
-                            UpdateResources();
-                            UpdatePoints();
-                            ui->infoBrowser->setText(QString(""));
+            pair<int,int> other_p = building_to_add->get_x_y(); // gets the other point of the road
+             //something at point you want to add road -> check if house or mansion or road
+            if(new_game->get_current_player()->get_buildings().count(p)){
+                    Game::set_place_mode(false);
+                    ui->centralWidget->setCursor(Qt::ArrowCursor);
+                    for(const auto it : building_to_add->get_needed_resources()){ // take away needed resources
+                        new_game->get_current_player()->RemoveResource(it.first,it.second);
+                        new_game->get_current_player()->AddToResourcesUsed(it.first,it.second);
                     }
-                    else{
-                        //nothing at point you want to add road
-                        ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
-                    }
-                    house = false;
-                }
-                else{
-                    ui->infoBrowser->setText(QString("Point Already Taken"));
-                }
+                    //add to vector at key p
+                    new_game->get_current_player()->AddBuilding(p, building_to_add);
+                    //also add second point of road to map to aid house placement checks
+                    new_game->get_current_player()->AddBuilding(other_p, building_to_add);
+                    taken_map[p] = new_game->get_current_player();
+                    taken_map[other_p] = new_game->get_current_player(); // update taken map
+                    scene->addItem(building_to_add);
+                    scene->update();
+                    UpdateResources();
+                    UpdatePoints();
+                    ui->infoBrowser->setText(QString(""));
             }
             else{
-                //must connect to road or house or mansion
-                bool house = false;
-                //something at point you want to add road -> check if house or mansion or road
-                if(new_game->get_current_player()->get_buildings().count(p)){
-                        Game::set_place_mode(false);
-                        ui->centralWidget->setCursor(Qt::ArrowCursor);
-                        for(const auto it : building_to_add->get_needed_resources()){
-                            new_game->get_current_player()->RemoveResource(it.first,it.second);
-                            new_game->get_current_player()->AddToResourcesUsed(it.first,it.second);
-                        }
-                        //add to vector at key p
-                        new_game->get_current_player()->AddBuilding(p, building_to_add);
-                        //also add second point of road to map to aid house placement checks
-                        new_game->get_current_player()->AddBuilding(other_p, building_to_add);
-                        taken_map[p] = new_game->get_current_player();
-                        taken_map[other_p] = new_game->get_current_player();
-                        scene->addItem(building_to_add);
-                        scene->update();
-                        UpdateResources();
-                        UpdatePoints();
-                        ui->infoBrowser->setText(QString(""));
-                }
-                else{
-                    //nothing at point you want to add road
-                    ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
-                }
-                house = false;
+                //nothing at point you want to add road
+                ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
             }
         }
-        else{
+        else{ // house
             //must connect to road and p in this case is the prev point so we have to manually access its second points
             bool house = false;
             bool exist = false;
             if(new_game->get_current_player()->get_buildings().count(p)){
                 for(unsigned int i = 0; i < new_game->get_current_player()->get_buildings().at(p).size(); i++){// ugly but works
-                    if(new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "candy road"){
+                    if(new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "candy road"){ // check its connected to road
                         house = true;
                     }
                     else{
@@ -531,12 +519,12 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                 if(house && !exist){
                     Game::set_place_mode(false);
                     ui->centralWidget->setCursor(Qt::ArrowCursor);
-                    for(const auto it : building_to_add->get_needed_resources()){
+                    for(const auto it : building_to_add->get_needed_resources()){ // take away needed resources
                         new_game->get_current_player()->RemoveResource(it.first,it.second);
                         new_game->get_current_player()->AddToResourcesUsed(it.first,it.second);
                     }
-                    new_game->get_current_player()->AddBuilding(p, building_to_add);
-                    taken_map[p] = new_game->get_current_player();
+                    new_game->get_current_player()->AddBuilding(p, building_to_add); // update players buildings map
+                    taken_map[p] = new_game->get_current_player();// update taken map
                     scene->addItem(building_to_add);
                     scene->update();
                     UpdateResources();
@@ -548,19 +536,19 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                     ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
                 }
             }
-            else{
-                if(!new_game->get_current_player()->get_first_turn()){
+            else{// if doesnt have anything at point p
+                if(!new_game->get_current_player()->get_first_turn()){ // if nothing at this point cant play house
                     //nothing at point you want to add road
                     ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Road."));
                 }
-                else{//players first turn they get to place one house free of charge
+                else{// players first turn they get to place one house free of charge
                     ui->houseButton->setEnabled(false);
                     ui->mansionButton->setEnabled(false);
                     ui->roadButton->setEnabled(false);
                     Game::set_place_mode(false);
                     ui->centralWidget->setCursor(Qt::ArrowCursor);
-                    new_game->get_current_player()->AddBuilding(p, building_to_add);
-                    taken_map[p] = new_game->get_current_player();
+                    new_game->get_current_player()->AddBuilding(p, building_to_add); // house to add
+                    taken_map[p] = new_game->get_current_player();// update taken map
                     scene->addItem(building_to_add);
                     scene->update();
                     UpdateResources();
@@ -574,16 +562,19 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                     ui->roadButton->setEnabled(true);
                 }
             }
-            exist = false;
+            exist = false; // reset vars
             house = false;
         }
     }
 }
 
+/*
+    label updates for players resources
+*/
 void MainWindow::UpdateResources()
 {
     for(Player *player : new_game->get_player_list()){
-        if(player->get_id() == 1){
+        if(player->get_id() == 1){ // player 1
             ui->p1Money->setText(QString::number(player->get_current_resources()[resource::money]));
             ui->p1Sugar->setText(QString::number(player->get_current_resources()[resource::sugar]));
             ui->p1Water->setText(QString::number(player->get_current_resources()[resource::water]));
@@ -596,7 +587,7 @@ void MainWindow::UpdateResources()
             ui->p1UsedSugar->setText(QString::number(used_resources[resource::sugar]));
             ui->p1UsedWater->setText(QString::number(used_resources[resource::water]));
         }
-        else if(player->get_id() == 2){
+        else if(player->get_id() == 2){ // palyer 2
             ui->p2Money->setText(QString::number(player->get_current_resources()[resource::money]));
             ui->p2Sugar->setText(QString::number(player->get_current_resources()[resource::sugar]));
             ui->p2Water->setText(QString::number(player->get_current_resources()[resource::water]));
@@ -609,7 +600,7 @@ void MainWindow::UpdateResources()
             ui->p2UsedSugar->setText(QString::number(used_resources[resource::sugar]));
             ui->p2UsedWater->setText(QString::number(used_resources[resource::water]));
         }
-        else if(player->get_id() == 3){
+        else if(player->get_id() == 3){// player 3
             ui->p3Money->setText(QString::number(player->get_current_resources()[resource::money]));
             ui->p3Sugar->setText(QString::number(player->get_current_resources()[resource::sugar]));
             ui->p3Water->setText(QString::number(player->get_current_resources()[resource::water]));
@@ -628,6 +619,9 @@ void MainWindow::UpdateResources()
     ui->totWaterLabel->setText(QString::number(new_game->get_total_resources_dist()[resource::water]));
 }
 
+/*
+    When the dice button is clicked
+*/
 void MainWindow::on_diceButton_clicked()
 {
     scene_dice->clear();
@@ -765,11 +759,11 @@ void MainWindow::on_diceButton_clicked()
             all_dots.push_back(dot_one);
             break;
     }
-    for(QGraphicsEllipseItem *dot : all_dots){
+    for(QGraphicsEllipseItem *dot : all_dots){ // make the dots black
         dot->setBrush(QBrush(Qt::black));
         scene_dice->addItem(dot);
     }
-    if(first_turn){
+    if(first_turn){ // if its the first turn we decide the order with dice rolls
         std::vector<int> player_order;
         int sum_player = dice_roll_1 + dice_roll_2;
         int sum_ai_two = (rand() % 6 + 1) + (rand() % 6 + 1);
@@ -786,7 +780,6 @@ void MainWindow::on_diceButton_clicked()
             }
         }
         else if(sum_ai_two > sum_player && sum_ai_two >= sum_ai_three){ //Player two is first
-            qDebug() << "test2";
             player_order.push_back(2);
             if(sum_player > sum_ai_three){ //Player one is second and Player three is third
                 player_order.push_back(1);
@@ -798,7 +791,6 @@ void MainWindow::on_diceButton_clicked()
             }
         }
         else if(sum_ai_three > sum_player && sum_ai_three > sum_ai_two){ //Player 3 is first
-            qDebug() << "test3";
             player_order.push_back(3);
             if(sum_player > sum_ai_two){ //Player 1 is second and Player 2 is third
                 player_order.push_back(1);
@@ -813,7 +805,7 @@ void MainWindow::on_diceButton_clicked()
         new_game->CreatePlayers(player_order);
         UpdateResources();
         //set colors for players label
-        QString player_style = "QLabel {  color : %1; }";
+        QString player_style = "QLabel {  color : %1; }"; // set players text color to their corresponding player color/building color
         for(unsigned int i = 0; i < new_game->get_player_list().size(); i++){
             if(new_game->get_player_list()[i]->get_id() == 1){
                 ui->player1_label->setStyleSheet(player_style.arg(new_game->get_player_list()[i]->get_player_color().name()));
@@ -825,12 +817,13 @@ void MainWindow::on_diceButton_clicked()
                 ui->player3_label->setStyleSheet(player_style.arg(new_game->get_player_list()[i]->get_player_color().name()));
             }
         }
+        set_ai_players(); // set the AI players specified before
     }
     ui->diceButton->setEnabled(false);
     ui->endButton->setEnabled(true);
     ui->status_label->setText(QString("Player " +QString::number(new_game->get_current_player()->get_id()) +QString("'s turn")));
 
-    if(new_game->get_current_player()->get_first_turn()){
+    if(new_game->get_current_player()->get_first_turn()){ // if first turn we go into letting them place a house
         Game::set_place_mode(!Game::get_place_mode());
         Game::set_building_string("choco house");
         ui->centralWidget->setCursor(Qt::CrossCursor);
@@ -847,10 +840,14 @@ void MainWindow::on_diceButton_clicked()
     ui->endButton->setEnabled(true);
 }
 
+/*
+    Updates point breakdown for the players and their total points labels
+*/
 void MainWindow::UpdatePoints(){
     std::map<Player *, int> player_pts = new_game->PlayerPoints();
     std::map<std::string, Player*> record_holders = UpdateRecords();
-    for(Player *player : new_game->get_player_list()){
+    for(Player *player : new_game->get_player_list()){ // go through all players
+        //sets label to show players points and their point breakdown
         if(player->get_id() == 1){
             ui->p1Points->setText(QString::number(player->get_total_points()));
             ui->p1Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(player_pts[player]));
@@ -864,7 +861,8 @@ void MainWindow::UpdatePoints(){
             ui->p3Breakdown->setText(QString("Point Breakdown\n\n")+QString("Buildings: ") + QString::number(player_pts[player]));
         }
     }
-    for(const auto it : record_holders){
+    for(const auto it : record_holders){// goes through records
+        // figure our which player has a current record we are at and update their point breakdown
         if(it.second->get_id() == 1){
             if(it.first == "Longest Road"){
                 ui->p1Breakdown->append(QString::fromStdString(it.first) + QString(": 1"));
@@ -902,6 +900,9 @@ void MainWindow::UpdatePoints(){
     new_game->UpdateTurnToPoints();
 }
 
+/*
+    When end button to end turn is clicked
+*/
 void MainWindow::on_endButton_clicked()
 {
     new_game->set_next_player(new_game->get_current_player()); //Get the next player
@@ -916,7 +917,15 @@ void MainWindow::on_endButton_clicked()
         QApplication::quit(); //Exit application
     }
     new_game->CollectResources(new_game->get_current_player());
-    ui->endButton->setEnabled(false);
+    if(new_game->get_current_player()->get_ai()){ //If the current player is an AI
+        std::pair<std::pair<int,int>,Building *> ai_map = new_game->AITurn(); //Get the building to add
+        connect(timer,SIGNAL(timeout()),this,SLOT(on_endButton_clicked())); //Connect the timer to the end game function
+        AddBuildingSlot(ai_map.second,ai_map.first); //Add the building to the UI
+        UpdateResources();
+        DrawGraphs();
+        timer->start(1500); //End Turn with a delay
+    }
+    ui->endButton->setEnabled(false); // reset button to ensure next turn is done correctly
     ui->diceButton->setEnabled(true);
     ui->houseButton->setEnabled(false);
     ui->mansionButton->setEnabled(false);
@@ -925,8 +934,11 @@ void MainWindow::on_endButton_clicked()
     DrawGraphs();
 }
 
+/*
+    updates the records info at the bottom right
+*/
 std::map<std::string, Player*> MainWindow::UpdateRecords(){
-    std::map<std::string, Player*> record_holders = new_game->Records();
+    std::map<std::string, Player*> record_holders = new_game->Records(); // gets all the recrods into a map of record and the player that has it
     //Updating the UI
     ui->currRecord->setText(QString("Current Records\n\n") + QString("Longest Road (+1):") + QString(" Player ")
                             + QString::number(record_holders["Longest Road"]->get_id()) + QString("\n")
@@ -935,8 +947,9 @@ std::map<std::string, Player*> MainWindow::UpdateRecords(){
     return record_holders;
 }
 
-
-
+/*
+    Does graph drawing for each players graph after a whole round of turns
+*/
 void MainWindow::DrawGraphs(){
     //Initialization of variables for the graphs
     QBarSeries *series_p1 = new QBarSeries();
@@ -1029,7 +1042,9 @@ void MainWindow::DrawGraphs(){
     p3_scene_bar->update();
 }
 
-
+/*
+    When player 1's graph button is clicked show the graph
+*/
 void MainWindow::on_p1_graph_button_clicked()
 {
     if(p1_graph_button_clicked){
@@ -1042,6 +1057,9 @@ void MainWindow::on_p1_graph_button_clicked()
     }
 }
 
+/*
+    When player 2's graph button is clicked show the graph
+*/
 void MainWindow::on_p2_graph_button_clicked()
 {
     if(p2_graph_button_clicked){
@@ -1054,6 +1072,9 @@ void MainWindow::on_p2_graph_button_clicked()
     }
 }
 
+/*
+    When player 3's graph button is clicked show the graph
+*/
 void MainWindow::on_p3_graph_button_clicked()
 {
     if(p3_graph_button_clicked){
@@ -1066,30 +1087,35 @@ void MainWindow::on_p3_graph_button_clicked()
     }
 }
 
+/*
+    checks that a valid input is given and then sets the amount of ai var to that input
+*/
 void MainWindow::on_start_button_clicked()
 {
-    if(ui->start_input->text() != "3" && ui->start_input->text() != "2" && ui->start_input->text() != "1" && ui->start_input->text() != "0"){
+    if(ui->start_input->text() != "3" && ui->start_input->text() != "2" && ui->start_input->text() != "1" && ui->start_input->text() != "0"){ // ensure input is within bounds
         ui->status_label->setText(QString("Invalid! Please Enter AI Amount, (0-3)"));
     }
     else{
         ai_amount = ui->start_input->text().toInt();
         //change players ai bools
-        set_ai_players();
         ui->start_button->hide();
-        ui->start_input->hide();
-        ui->diceButton->setEnabled(true);
+        ui->start_input->hide(); // labels no longer needed get hidden
+        ui->diceButton->setEnabled(true); // start game
         ui->status_label->setText(QString("Roll Dice To See Who Goes First!"));
     }
 }
 
+/*
+    takes the amount of ai var and sets player objects ai varable depending
+*/
 void MainWindow::set_ai_players()
 {
-    if(ai_amount == 3){
+    if(ai_amount == 3){ // 3 ai make all ai
         for(unsigned int i = 0; i < new_game->get_player_list().size(); i++){
             new_game->get_player_list()[i]->set_ai();
         }
     }
-    else if (ai_amount == 2){
+    else if (ai_amount == 2){ // 2 ai make player 3 and 2 ai
         for(unsigned int i = 0; i < new_game->get_player_list().size(); i++){
             if(new_game->get_player_list()[i]->get_id() == 3){
                 new_game->get_player_list()[i]->set_ai();
@@ -1099,11 +1125,11 @@ void MainWindow::set_ai_players()
             }
         }
     }
-    else if (ai_amount == 1){
+    else if (ai_amount == 1){ // 1 ai make player 3 an ai
         for(unsigned int i = 0; i < new_game->get_player_list().size(); i++){
             if(new_game->get_player_list()[i]->get_id() == 3){
                 new_game->get_player_list()[i]->set_ai();
             }
         }
-    }
+    } // otherwise no ai's
 }

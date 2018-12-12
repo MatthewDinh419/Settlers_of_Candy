@@ -5,7 +5,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include "game.h"
-
+#include <QTimer>
 
 namespace Ui {
 class MainWindow;
@@ -24,7 +24,8 @@ public:
     bool EnoughResources(Building *building_to_check);
     void DrawGraphs();
     void set_ai_players();
-private slots:
+
+private slots: // slots for buttons and for adding building on a players turn
     void on_houseButton_clicked();
     void on_roadButton_clicked();
     void on_mansionButton_clicked();
@@ -48,11 +49,12 @@ private:
     QGraphicsView *p2_view_graph; //View with the bar graph
     QGraphicsScene *p3_scene_bar; //Scene of the bar graph
     QGraphicsView *p3_view_graph; //View with the bar graph
-    bool p1_graph_button_clicked = false;
+    bool p1_graph_button_clicked = false; // bools to help with point graph pop up
     bool p2_graph_button_clicked = false;
     bool p3_graph_button_clicked = false;
-    bool first_turn = true;
-    int ai_amount = 0;
+    QTimer *timer = new QTimer(this);
+    bool first_turn = true; // bool to aid with knowing if its the first turn of game
+    int ai_amount = 0; // input var that will let us know how many AI players to have (0 to 3)
     float current_width = 0.0; //The current x position of the bar graph
 
 };

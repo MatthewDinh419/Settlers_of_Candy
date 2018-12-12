@@ -218,3 +218,48 @@ void Game::UpdateTurnToPoints(){
     }
     turn_rotations += 1;
 }
+
+/*
+ * function that handles ai turn in placing buildings
+ *
+    @return a map of point and building to add
+*/
+std::pair<std::pair<int,int>,Building *> Game::AITurn(){
+    Player *player = current_player;
+    if(player->get_ai()){ //If player is an AI
+        if(player->get_first_turn()){ //If it is the player's first turn
+            int rand_point_index = rand() % (all_corners.size()-1) + 0; //Get a random index for a corner
+            //TO DO: CHECK IF THERE IS A BUILDING ALREADY AT THAT POINT. IF SO THEN CHANGE THE INDEX
+            std::pair<std::pair<int,int>,Building *> temp_map;
+            temp_map = make_pair(all_corners[rand_point_index],new ChocolateHouse(all_corners[rand_point_index].first-10,all_corners[rand_point_index].second-10));
+            return temp_map;
+        }
+        for(const auto it : player->get_buildings()){ //If there are houses then upgrade them
+            for(Building *buildings : it.second){ //Iterate through AI's buildings
+                if(buildings->get_building_type() == "choco house"){ //If there is a chocolate house then upgrade to mansion
+                    std::pair<std::pair<int,int>,Building *> temp_map;
+                    temp_map = make_pair(it.first,new ChocolateMansion(it.first.first-10,it.first.second-10));
+                    return temp_map;
+                }
+            }
+            for(Building *buildings : it.second){ //If there are no houses and there is a road to build on
+                if(buildings->get_building_type() == "candy road"){ //If there is a road
+                    if(player->get_buildings()[buildings->get_x_y()].size() == 1){ //If there is no building at the end of the road
+                        std::pair<std::pair<int,int>,Building *> temp_map;
+                        temp_map = make_pair(it.first,new ChocolateHouse(it.first.first-10,it.first.second-10));
+                        return temp_map;
+                    }
+                }
+            }
+            for(Building *buildings : it.second){ //If there is no houses and there is no roads to build on
+                if(buildings->get_building_type() == "choco mansion"){
+                    std::pair<std::pair<int,int>,Building *> temp_map;
+                    std::vector<pair<int,int>>::iterator first_point_iter = find(all_corners.begin(), all_corners.end(), it.first);
+                    size_t index = distance(all_corners.begin(),first_point_iter); //Gets the index of the chocolate mansioon
+                    temp_map = make_pair(it.first,new Road(it.first.first,it.first.second,all_corners[index-1].first,all_corners[index-1].second)); //Subtract index by one to get the point the is adj. to it
+                    return temp_map;
+                }
+            }
+        }
+    }
+}

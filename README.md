@@ -19,9 +19,14 @@ Based off the game "Settlers of Catan" that is candy themed along with new featu
     
 ## To-Do:
      * AI players
+     * AI needs to roll die
      * set AI, player AI bool, check if true
     
 ## Known Bugs:
+    * AI: adding a building to a point which already has a building
+    * AI: Sometimes does not add a house to a road when there is nothing at the end of the road
+    * AI: Automating the turns with timer does not go through each AI's turn and does it not bulk
+        - Player 1 and Player 2's turn may happen simultaneously at once
 
 ## Possible Features:
     * Development Cards
