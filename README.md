@@ -1,6 +1,6 @@
 # Settlers of Candy
 
-Based off the game "Settlers of Catan" that is candy themed along with new features. 
+Based off the game "Settlers of Catan" that is candy themed along with new features.
 
 
 ## How to Run:
@@ -10,13 +10,18 @@ Based off the game "Settlers of Catan" that is candy themed along with new featu
     4. BUILD
     5. RUN 
     
+## Design:
+    * Hexagon Object Factory Implementation
+    * Building subclasses: Candy Road, Chocolate House, Chocolate Mansion
+    * Randomly generated hexagon generation
+    * Records mechanics awarding players with points for achieving certain records
+    * Analytics Display
+    
 ## To-Do:
      * Points graph 
-     * Resources information 
      * Thief(?) 
      * Game while loop stuff (when does the game end?)
      * AI players
-     * Factory Implementation
      * indicate whos buildings are whos
      * restart
      
@@ -25,8 +30,6 @@ Based off the game "Settlers of Catan" that is candy themed along with new featu
      * can overlap road
      * Road sometimes says invalid placement but does work (have to restart tbhe button)
         have to clear Hexagon::prev in error message
-     * Can get to -1 resources through a certain combination of house and mansion
 
 ## Possible Features:
-    * Put a number representing which player id owns that building
     * Development Cards
