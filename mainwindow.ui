@@ -31,13 +31,25 @@
     </property>
    </widget>
    <widget class="QGraphicsView" name="p1Graph">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>110</y>
+      <y>120</y>
       <width>391</width>
-      <height>61</height>
+      <height>201</height>
      </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>false</bool>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
    </widget>
    <widget class="QTextBrowser" name="p1TextBrowser">
@@ -46,7 +58,7 @@
       <x>600</x>
       <y>0</y>
       <width>201</width>
-      <height>111</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="html">
@@ -54,7 +66,7 @@
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline;&quot;&gt;Player 1:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600; text-decoration: underline;&quot;&gt;Player 1:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -100,7 +112,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>90</y>
+      <y>80</y>
       <width>47</width>
       <height>14</height>
      </rect>
@@ -113,7 +125,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>650</x>
-      <y>90</y>
+      <y>80</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -165,9 +177,9 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>800</x>
-      <y>180</y>
+      <y>160</y>
       <width>191</width>
-      <height>111</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="html">
@@ -182,17 +194,23 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>290</y>
+      <y>280</y>
       <width>391</width>
-      <height>61</height>
+      <height>201</height>
      </rect>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
    </widget>
    <widget class="QTextBrowser" name="p3Breakdown">
     <property name="geometry">
      <rect>
       <x>800</x>
-      <y>360</y>
+      <y>320</y>
       <width>191</width>
       <height>111</height>
      </rect>
@@ -209,17 +227,23 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>470</y>
+      <y>450</y>
       <width>391</width>
-      <height>61</height>
+      <height>201</height>
      </rect>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>200</y>
+      <y>180</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -232,7 +256,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>650</x>
-      <y>220</y>
+      <y>200</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -245,7 +269,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>650</x>
-      <y>200</y>
+      <y>180</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -258,9 +282,9 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>270</y>
+      <y>240</y>
       <width>47</width>
-      <height>14</height>
+      <height>16</height>
      </rect>
     </property>
     <property name="text">
@@ -271,7 +295,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>220</y>
+      <y>200</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -284,7 +308,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>650</x>
-      <y>270</y>
+      <y>240</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -297,7 +321,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>240</y>
+      <y>220</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -310,7 +334,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>650</x>
-      <y>240</y>
+      <y>220</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -323,9 +347,9 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>180</y>
+      <y>160</y>
       <width>201</width>
-      <height>111</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="html">
@@ -333,14 +357,14 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline;&quot;&gt;Player 2:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600; text-decoration: underline;&quot;&gt;Player 2:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_13">
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>380</y>
+      <y>340</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -353,7 +377,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>420</y>
+      <y>380</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -366,7 +390,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>650</x>
-      <y>400</y>
+      <y>360</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -379,7 +403,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>650</x>
-      <y>380</y>
+      <y>340</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -392,7 +416,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>450</y>
+      <y>400</y>
       <width>47</width>
       <height>14</height>
      </rect>
@@ -405,7 +429,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>650</x>
-      <y>450</y>
+      <y>400</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -418,7 +442,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>360</y>
+      <y>320</y>
       <width>201</width>
       <height>111</height>
      </rect>
@@ -428,14 +452,14 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline;&quot;&gt;Player 3:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600; text-decoration: underline;&quot;&gt;Player 3:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_16">
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>400</y>
+      <y>360</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -448,7 +472,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>650</x>
-      <y>420</y>
+      <y>380</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -1375,7 +1399,7 @@ p, li { white-space: pre-wrap; }
       <x>800</x>
       <y>0</y>
       <width>191</width>
-      <height>111</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="html">
@@ -1386,10 +1410,48 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Point Breakdown:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="p1_graph_button">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>100</y>
+      <width>391</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show Player 1 Graph</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="p2_graph_button">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>260</y>
+      <width>391</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show Player 2 Graph</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="p3_graph_button">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>430</y>
+      <width>391</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Shower Player 3 Graph</string>
+    </property>
+   </widget>
    <zorder>p3TextBrowser</zorder>
    <zorder>p2TextBrowser</zorder>
    <zorder>gameBoard</zorder>
-   <zorder>p1Graph</zorder>
    <zorder>p1TextBrowser</zorder>
    <zorder>label</zorder>
    <zorder>label_2</zorder>
@@ -1400,9 +1462,7 @@ p, li { white-space: pre-wrap; }
    <zorder>p1Sugar</zorder>
    <zorder>p1Money</zorder>
    <zorder>p2Breakdown</zorder>
-   <zorder>p2Graph</zorder>
    <zorder>p3Breakdown</zorder>
-   <zorder>p3Graph</zorder>
    <zorder>label_5</zorder>
    <zorder>p2Water</zorder>
    <zorder>p2Money</zorder>
@@ -1433,6 +1493,12 @@ p, li { white-space: pre-wrap; }
    <zorder>statusbar</zorder>
    <zorder>status_label</zorder>
    <zorder>p1Breakdown</zorder>
+   <zorder>p1_graph_button</zorder>
+   <zorder>p2_graph_button</zorder>
+   <zorder>p3_graph_button</zorder>
+   <zorder>p2Graph</zorder>
+   <zorder>p1Graph</zorder>
+   <zorder>p3Graph</zorder>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>

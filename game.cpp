@@ -146,3 +146,23 @@ std::map<std::string,Player *> Game::Records(){
     records["Most Resources"]->AddToTotalPoints(2);
     return records;
 }
+
+bool Game::GameOver(){
+    for(Player *player : player_list){
+        if(player->get_total_points() >= 13){
+            return true;
+        }
+    }
+    return false;
+}
+
+void Game::UpdateTurnToPoints(){
+    for(Player *player : player_list){
+        if(turn_rotations == 3){
+            turn_rotations = -1;
+            Player::IncrementTurnCount();
+        }
+        player->SetTurnToPoints(Player::get_turn_count(), player->get_total_points());
+    }
+    turn_rotations += 1;
+}

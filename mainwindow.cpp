@@ -12,6 +12,12 @@
 #include <QFile>
 #include <QTextStream>
 #include <QMessageBox>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QChart>
+#include <QtCharts/QBarCategoryAxis>
+#include <QtCharts/QChartView>
+using namespace QtCharts;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -32,6 +38,18 @@ MainWindow::MainWindow(QWidget *parent) :
     QGraphicsView * view = ui->gameBoard;
     view->setScene(scene);
     view->setSceneRect(0,0,view->frameSize().width(),view->frameSize().height());
+    p1_scene_bar = new QGraphicsScene;
+    QGraphicsView *p1_view_graph = ui->p1Graph;
+    p1_view_graph->setScene(p1_scene_bar);
+    p1_view_graph->setSceneRect(0,0,p1_view_graph->frameSize().width(),p1_view_graph->frameSize().height());
+    p2_scene_bar = new QGraphicsScene;
+    QGraphicsView *p2_view_graph = ui->p2Graph;
+    p2_view_graph->setScene(p2_scene_bar);
+    p2_view_graph->setSceneRect(0,0,p2_view_graph->frameSize().width(),p2_view_graph->frameSize().height());
+    p3_scene_bar = new QGraphicsScene;
+    QGraphicsView *p3_view_graph = ui->p3Graph;
+    p3_view_graph->setScene(p3_scene_bar);
+    p3_view_graph->setSceneRect(0,0,p3_view_graph->frameSize().width(),p3_view_graph->frameSize().height());
     pair <int, int> p1;
     pair <int, int> p2;
     pair <int, int> p3;
@@ -126,6 +144,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mansionButton->setEnabled(false);
     ui->roadButton->setEnabled(false);
     ui->endButton->setEnabled(false);
+    ui->p1Graph->setVisible(false);
+    ui->p2Graph->setVisible(false);
+    ui->p3Graph->setVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -273,21 +294,21 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
             }
             else if(building_to_add->get_building_type() == "candy road"){
                 pair<int,int> other_p = building_to_add->get_x_y();
-                //not taken by other player
                 if(taken_map.count(other_p)){
                     if(taken_map.at(other_p) == new_game->get_current_player()){
                         //must connect to road or house or mansion
-                        bool road = true;
+                        bool house = false;
                         //something at point you want to add road -> check if house or mansion or road
                         if(new_game->get_current_player()->get_buildings().count(p)){
-                            for(unsigned int i = 0; i < new_game->get_current_player()->get_buildings().at(p).size(); i++){
-                                //if not already a road
-                                if(new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() != "candy road"){
-                                    road = false;
-                                    break;
-                                }
-                            }
-                            if(!road){
+
+//                            for(unsigned int i = 0; i < new_game->get_current_player()->get_buildings().at(p).size(); i++){// ugly but works
+//                                if(new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco house"
+//                                        || new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco mansion"){
+//                                    house = true;
+//                                    break;
+//                                }
+//                            }
+//                            if(house){
                                 Game::set_place_mode(false);
                                 ui->centralWidget->setCursor(Qt::ArrowCursor);
                                 for(const auto it : building_to_add->get_needed_resources()){
@@ -305,16 +326,17 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                                 UpdateResources();
                                 UpdatePoints();
                                 ui->infoBrowser->setText(QString(""));
-                            }
-                            else{
-                                ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
-                            }
+//                            }
+//                            else{
+//                                //otherwise don't do road addition
+//                                ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
+//                            }
                         }
                         else{
                             //nothing at point you want to add road
                             ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
                         }
-                        road = true;
+                        house = false;
                     }
                     else{
                         ui->infoBrowser->setText(QString("Point Already Taken"));
@@ -325,6 +347,15 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                     bool house = false;
                     //something at point you want to add road -> check if house or mansion or road
                     if(new_game->get_current_player()->get_buildings().count(p)){
+
+//                        for(unsigned int i = 0; i < new_game->get_current_player()->get_buildings().at(p).size(); i++){// ugly but works
+//                            if(new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco house"
+//                                    || new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco mansion"){
+//                                house = true;
+//                                break;
+//                            }
+//                        }
+//                        if(house){
                             Game::set_place_mode(false);
                             ui->centralWidget->setCursor(Qt::ArrowCursor);
                             for(const auto it : building_to_add->get_needed_resources()){
@@ -342,6 +373,11 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                             UpdateResources();
                             UpdatePoints();
                             ui->infoBrowser->setText(QString(""));
+//                        }
+//                        else{
+//                            //otherwise don't do road addition
+//                            ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
+//                        }
                     }
                     else{
                         //nothing at point you want to add road
@@ -441,17 +477,18 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
             if(taken_map.count(other_p)){
                 if(taken_map.at(other_p) == new_game->get_current_player()){
                     //must connect to road or house or mansion
-                    bool road = true;
+                    bool house = false;
                      //something at point you want to add road -> check if house or mansion or road
                     if(new_game->get_current_player()->get_buildings().count(p)){
-                        for(unsigned int i = 0; i < new_game->get_current_player()->get_buildings().at(p).size(); i++){
-                            //if not already a road
-                            if(new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() != "candy road"){
-                                road = false;
-                                break;
-                            }
-                        }
-                        if(!road){
+
+//                        for(unsigned int i = 0; i < new_game->get_current_player()->get_buildings().at(p).size(); i++){// ugly but works
+//                            if(new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco house"
+//                                    || new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco mansion"){
+//                                house = true;
+//                                break;
+//                            }
+//                        }
+//                        if(house){
                             Game::set_place_mode(false);
                             ui->centralWidget->setCursor(Qt::ArrowCursor);
                             for(const auto it : building_to_add->get_needed_resources()){
@@ -469,16 +506,17 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                             UpdateResources();
                             UpdatePoints();
                             ui->infoBrowser->setText(QString(""));
-                        }
-                        else{
-                            ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
-                        }
+//                        }
+//                        else{
+//                            //otherwise don't do road addition
+//                            ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
+//                        }
                     }
                     else{
                         //nothing at point you want to add road
                         ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
                     }
-                    road = true;
+                    house = false;
                 }
                 else{
                     ui->infoBrowser->setText(QString("Point Already Taken"));
@@ -489,6 +527,15 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                 bool house = false;
                 //something at point you want to add road -> check if house or mansion or road
                 if(new_game->get_current_player()->get_buildings().count(p)){
+
+//                    for(unsigned int i = 0; i < new_game->get_current_player()->get_buildings().at(p).size(); i++){// ugly but works
+//                        if(new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco house"
+//                                || new_game->get_current_player()->get_buildings().at(p)[i]->get_building_type() == "choco mansion"){
+//                            house = true;
+//                            break;
+//                        }
+//                    }
+//                    if(house){
                         Game::set_place_mode(false);
                         ui->centralWidget->setCursor(Qt::ArrowCursor);
                         for(const auto it : building_to_add->get_needed_resources()){
@@ -506,6 +553,11 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                         UpdateResources();
                         UpdatePoints();
                         ui->infoBrowser->setText(QString(""));
+//                    }
+//                    else{
+//                        //otherwise don't do road addition
+//                        ui->infoBrowser->setText(QString("Invalid Placement; First Select Point With Chocolate House/Mansion Then Point Across Desired Edge."));
+//                    }
                 }
                 else{
                     //nothing at point you want to add road
@@ -884,19 +936,16 @@ void MainWindow::UpdatePoints(){
             }
         }
     }
+    new_game->UpdateTurnToPoints();
 }
 
 void MainWindow::on_endButton_clicked()
 {
-    if(Game::get_place_mode()){ //If in place mode and want to reset
-        ui->infoBrowser->setText(QString(""));
-        Game::set_place_mode(!Game::get_place_mode()); //Set to false
-        ui->centralWidget->setCursor(Qt::ArrowCursor); //Reset to arrow cursor
-    }
     new_game->set_next_player(new_game->get_current_player());
     ui->status_label->setText(QString("Player " +QString::number(new_game->get_current_player()->get_id()) +QString("'s turn")));
     ui->endButton->setEnabled(false);
     ui->diceButton->setEnabled(true);
+    DrawGraphs();
 }
 
 std::map<std::string, Player*> MainWindow::UpdateRecords(){
@@ -907,4 +956,135 @@ std::map<std::string, Player*> MainWindow::UpdateRecords(){
                             + QString("Largest Dice Sum (+1): ") + QString("Player ") +QString::number(record_holders["Largest Dice Sum"]->get_id()) + QString("\n")
                             + QString("Most Resources (+2): ") +QString("Player ") + QString::number(record_holders["Most Resources"]->get_id()));
     return record_holders;
+}
+
+
+
+void MainWindow::DrawGraphs(){
+    //Initialization of variables for the graphs
+    QBarSeries *series_p1 = new QBarSeries();
+    QBarSeries *series_p2 = new QBarSeries();
+    QBarSeries *series_p3 = new QBarSeries();
+    QBarSet *set1 = new QBarSet("Player 1");
+    QBarSet *set2 = new QBarSet("Player 2");
+    QBarSet *set3 = new QBarSet("Player 3");
+    QStringList p1_categories;
+    QStringList p2_categories;
+    QStringList p3_categories;
+    for(Player *player : new_game->get_player_list()){ //For each player
+        for(const auto turn_to_points : player->get_turn_to_points()){ //turn -> points of the player object
+            if(player->get_id() == 1){
+                *set1 << turn_to_points.second; //Append amount of points to the set
+                p1_categories << QString("Turn: ") + QString::number(turn_to_points.first); //Used for the x-axis which displays turn count
+            }
+            else if(player->get_id() == 2){
+                *set2 << turn_to_points.second; //Append amount of points to the set
+                p2_categories <<  QString("Turn: ") + QString::number(turn_to_points.first); //Used for the x-axis which displays turn count
+            }
+            else if(player->get_id() == 3){
+                *set3 << turn_to_points.second; //Append amount of points to the set
+                p3_categories <<  QString("Turn: ") + QString::number(turn_to_points.first); //Used for the x-axis which displays turn count
+            }
+        }
+    }
+    series_p1->append(set1);
+    series_p2->append(set2);
+    series_p3->append(set3);
+
+    QBarCategoryAxis *p1_axis = new QBarCategoryAxis();
+    p1_axis->append(p1_categories);
+    QBarCategoryAxis *p2_axis = new QBarCategoryAxis();
+    p2_axis->append(p2_categories);
+    QBarCategoryAxis *p3_axis = new QBarCategoryAxis();
+    p3_axis->append(p3_categories);
+
+    //Player 1 Chart
+    QChart *chart_p1 = new QChart();
+    chart_p1->addSeries(series_p1);
+    chart_p1->setTitle("Points Over Turns");
+    chart_p1->setAnimationOptions(QChart::AllAnimations);
+    chart_p1->legend()->setVisible(true);
+    chart_p1->legend()->setAlignment(Qt::AlignBottom);
+    chart_p1->createDefaultAxes();
+    chart_p1->setAxisX(p1_axis,series_p1);
+
+
+    //Player 2 Chart
+    QChart *chart_p2 = new QChart();
+    chart_p2->addSeries(series_p2);
+    chart_p2->setTitle("Points Over Turns");
+    chart_p2->setAnimationOptions(QChart::AllAnimations);
+    chart_p2->legend()->setVisible(true);
+    chart_p2->legend()->setAlignment(Qt::AlignBottom);
+    chart_p2->createDefaultAxes();
+    chart_p2->setAxisX(p2_axis,series_p2);
+
+    //Player 3 Chart
+    QChart *chart_p3 = new QChart();
+    chart_p3->addSeries(series_p3);
+    chart_p3->setTitle("Points Over Turns");
+    chart_p3->setAnimationOptions(QChart::AllAnimations);
+    chart_p3->legend()->setVisible(true);
+    chart_p3->legend()->setAlignment(Qt::AlignBottom);
+    chart_p3->createDefaultAxes();
+    chart_p3->setAxisX(p3_axis,series_p3);
+
+    QChartView *chartview_p1 = new QChartView(chart_p1);
+    chartview_p1->setContentsMargins(QMargins(0,0,0,0));
+    chartview_p1->setRenderHint(QPainter::Antialiasing);
+    chartview_p1->setFixedSize(ui->p1Graph->width(),ui->p1Graph->height());
+    p1_scene_bar->addWidget(chartview_p1);
+
+    QChartView *chartview_p2 = new QChartView(chart_p2);
+    chartview_p2->setContentsMargins(QMargins(0,0,0,0));
+    chartview_p2->setRenderHint(QPainter::Antialiasing);
+    chartview_p2->setFixedSize(ui->p2Graph->width(),ui->p2Graph->height());
+    p2_scene_bar->addWidget(chartview_p2);
+
+    QChartView *chartview_p3 = new QChartView(chart_p3);
+    chartview_p3->setContentsMargins(QMargins(0,0,0,0));
+    chartview_p3->setRenderHint(QPainter::Antialiasing);
+    chartview_p3->setFixedSize(ui->p3Graph->width(),ui->p3Graph->height());
+    p3_scene_bar->addWidget(chartview_p3);
+
+    p1_scene_bar->update();
+    p2_scene_bar->update();
+    p3_scene_bar->update();
+}
+
+
+void MainWindow::on_p1_graph_button_clicked()
+{
+    if(p1_graph_button_clicked){
+        p1_graph_button_clicked = false;
+        ui->p1Graph->setVisible(false);
+    }
+    else{
+        p1_graph_button_clicked = true;
+        ui->p1Graph->setVisible(true);
+    }
+}
+
+void MainWindow::on_p2_graph_button_clicked()
+{
+    if(p2_graph_button_clicked){
+        p2_graph_button_clicked = false;
+        ui->p2Graph->setVisible(false);
+    }
+    else{
+        p2_graph_button_clicked = true;
+        ui->p2Graph->setVisible(true);
+    }
+}
+
+void MainWindow::on_p3_graph_button_clicked()
+{
+    if(p3_graph_button_clicked){
+        p3_graph_button_clicked = false;
+        ui->p3Graph->setVisible(false);
+    }
+    else{
+        p3_graph_button_clicked = true;
+        ui->p3Graph->setVisible(true);
+    }
 }
