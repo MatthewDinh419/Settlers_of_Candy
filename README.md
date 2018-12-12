@@ -18,13 +18,12 @@ Based off the game "Settlers of Catan" that is candy themed along with new featu
     * Analytics Display
     
 ## To-Do:
-     * Thief(?) 
      * AI players
-     * restart
      * set AI, player AI bool, check if true
     
 ## Known Bugs:
-     * When placing roads, sometimes it crashes. Mainly happens in longer game turns. Perhaps at a misclick?
 
 ## Possible Features:
     * Development Cards
+    * Theif
+    * Restart
