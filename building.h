@@ -15,11 +15,11 @@ public:
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
-    std::map<resource,int> get_needed_resources(){return needed_resources_;}
-    virtual std::string get_building_type(){return "";}
-    virtual std::pair<int,int> get_x_y(){return std::make_pair(x_,y_);}
-    int get_points(){return points_;}
-    void set_color(QColor player_color){color_ = player_color;}
+    std::map<resource,int> get_needed_resources(){return needed_resources_;} // gets the needed resources of a particular buidling based on type string
+    virtual std::string get_building_type(){return "";} // returns string of what building subclass a building is
+    virtual std::pair<int,int> get_x_y(){return std::make_pair(x_,y_);} // returns the xy cord of a building
+    int get_points(){return points_;} // gets the points a specific building awards
+    void set_color(QColor player_color){color_ = player_color;} // sets each building to a single color depending on player's color
 protected:
     std::map<resource,int> needed_resources_;//Vector that contains the amount of resources needed to build this building
     int points_; //Points awarded for having this building
@@ -38,7 +38,7 @@ public:
 class ChocolateMansion : public Building{
 public:
     ChocolateMansion(int x, int y);
-    QPainterPath shape() const override;
+    QPainterPath shape() const override; // change shape to square for mansion
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
     std::string get_building_type(){return "choco mansion";}
 };
@@ -47,13 +47,13 @@ class Road : public Building{
 public:
     Road(int x1, int y1, int x2, int y2);
     QRectF boundingRect() const override;
-    QPainterPath shape() const override;
+    QPainterPath shape() const override; // change shape to line to go over hexagon edge for road
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
     std::string get_building_type(){return "candy road";}
-    virtual std::pair<int,int> get_x_y(){return std::make_pair(x2_,y2_);}
+    virtual std::pair<int,int> get_x_y(){return std::make_pair(x2_,y2_);} // changed to return the second point of road (end point)
 
 private:
-    int x1_;
+    int x1_; // for the two ends of the road which extends between two lines
     int y1_;
     int x2_;
     int y2_;
