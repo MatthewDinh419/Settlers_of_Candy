@@ -27,17 +27,20 @@ MainWindow::MainWindow(QWidget *parent) :
     new_game->set_place_mode(false);
     srand (time(NULL));
     ui->setupUi(this);
+    //Setup the font for status label
     QFont font = ui->status_label->font();
     font.setBold(true);
     ui->status_label->setFont(font);
     ui->endButton->setEnabled(false);
     ui->gameBoard->setBackgroundBrush(QBrush(QColor(85,85,85), Qt::SolidPattern)); //Sets the background color to gameboard
     this->setWindowTitle(QString("Settlers of Candy"));
+    //Scene and view of the gameboard and dice
     scene = new QGraphicsScene;
     scene_dice = new QGraphicsScene;
     QGraphicsView * view = ui->gameBoard;
     view->setScene(scene);
     view->setSceneRect(0,0,view->frameSize().width(),view->frameSize().height());
+    //Scene and view of the player graphs
     p1_scene_bar = new QGraphicsScene;
     QGraphicsView *p1_view_graph = ui->p1Graph;
     p1_view_graph->setScene(p1_scene_bar);
@@ -912,7 +915,7 @@ void MainWindow::on_endButton_clicked()
         }
         QApplication::quit(); //Exit application
     }
-   // new_game->CollectResources(new_game->get_current_player());
+    new_game->CollectResources(new_game->get_current_player());
     ui->endButton->setEnabled(false);
     ui->diceButton->setEnabled(true);
     ui->houseButton->setEnabled(false);

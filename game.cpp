@@ -40,27 +40,39 @@ void Game::CollectResources(Player *player){
                 //If point of the building matches that of a hexagon then update the variables above
                 if(hexagon->get_p1() == it.first){
                     building_to_hex[value] = hexagon;
-                    hexagon_contains.push_back(building_to_hex);
+                    if(std::find(hexagon_contains.begin(), hexagon_contains.end(), building_to_hex) == hexagon_contains.end()) {
+                        hexagon_contains.push_back(building_to_hex);
+                    }
                 }
                 else if(hexagon->get_p2() == it.first){
                     building_to_hex[value] = hexagon;
-                    hexagon_contains.push_back(building_to_hex);
+                    if(std::find(hexagon_contains.begin(), hexagon_contains.end(), building_to_hex) == hexagon_contains.end()) {
+                        hexagon_contains.push_back(building_to_hex);
+                    }
                 }
                 else if(hexagon->get_p3() == it.first){
                     building_to_hex[value] = hexagon;
-                    hexagon_contains.push_back(building_to_hex);
+                    if(std::find(hexagon_contains.begin(), hexagon_contains.end(), building_to_hex) == hexagon_contains.end()) {
+                        hexagon_contains.push_back(building_to_hex);
+                    }
                 }
                 else if(hexagon->get_p4() == it.first){
                     building_to_hex[value] = hexagon;
-                    hexagon_contains.push_back(building_to_hex);
+                    if(std::find(hexagon_contains.begin(), hexagon_contains.end(), building_to_hex) == hexagon_contains.end()) {
+                        hexagon_contains.push_back(building_to_hex);
+                    }
                 }
                 else if(hexagon->get_p5() == it.first){
                     building_to_hex[value] = hexagon;
-                    hexagon_contains.push_back(building_to_hex);
+                    if(std::find(hexagon_contains.begin(), hexagon_contains.end(), building_to_hex) == hexagon_contains.end()) {
+                        hexagon_contains.push_back(building_to_hex);
+                    }
                 }
                 else if(hexagon->get_p6() == it.first){
                     building_to_hex[value] = hexagon;
-                    hexagon_contains.push_back(building_to_hex);
+                    if(std::find(hexagon_contains.begin(), hexagon_contains.end(), building_to_hex) == hexagon_contains.end()) {
+                        hexagon_contains.push_back(building_to_hex);
+                    }
                 }
                building_to_hex.clear(); //Reset the map for another hexagon
             }
@@ -68,6 +80,7 @@ void Game::CollectResources(Player *player){
     }
     for(std::map<Building *, Hexagon *> build_hex : hexagon_contains){
         if(build_hex.begin()->first->get_building_type() == "choco house"){
+            qDebug() << "yeehaw";
             player->AddResource(build_hex.begin()->second->get_resource_tile(),1);
             player->AddToTotalResources(build_hex.begin()->second->get_resource_tile(),1);
             AddToTotalResourcesDist(build_hex.begin()->second->get_resource_tile(),1);

@@ -24,8 +24,7 @@ Based off the game "Settlers of Catan" that is candy themed along with new featu
      * set AI, player AI bool, check if true
     
 ## Known Bugs:
-     * Collect Resource does all players
-     * Beginning of player turn (endbutton clicked)
+     * When placing roads, sometimes it crashes. Mainly happens in longer game turns. Perhaps at a misclick?
 
 ## Possible Features:
     * Development Cards
