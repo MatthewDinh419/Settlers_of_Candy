@@ -1,5 +1,7 @@
 #include "game.h"
 #include "player.h"
+
+//init statics
 bool Game::place_mode = false;
 std::vector<pair<int,int>> Game::all_corners;
 std::string Game::place_building_string = "";
