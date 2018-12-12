@@ -23,9 +23,15 @@ public:
     int CountResources();
     int get_dice_roll_sum(){return dice_roll_sum;}
     QColor get_player_color() {return player_color_;}
+    std::map<resource,int> get_total_resources(){return total_resources;}
+    std::map<resource,int> get_resources_used(){return resources_used;}
+    void AddToTotalResources(resource resource_to_add, int quantity){total_resources[resource_to_add] += quantity;}
+    void AddToResourcesUsed(resource resource_to_add, int quantity){resources_used[resource_to_add] += quantity;}
 
 private:
     bool first = true;
+    std::map<resource,int> total_resources;
+    std::map<resource,int> resources_used;
     int player_id_;
     int total_points;
     std::map<resource,int> current_resources; //Player's current resources

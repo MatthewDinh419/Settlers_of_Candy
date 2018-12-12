@@ -69,10 +69,14 @@ void Game::CollectResources(){
         }
         for(std::map<Building *, Hexagon *> build_hex : hexagon_contains){
             if(build_hex.begin()->first->get_building_type() == "choco house"){
-                player->AddResource(build_hex.begin()->second->get_resource_tile(),2);
+                player->AddResource(build_hex.begin()->second->get_resource_tile(),1);
+                player->AddToTotalResources(build_hex.begin()->second->get_resource_tile(),1);
+                AddToTotalResourcesDist(build_hex.begin()->second->get_resource_tile(),1);
             }
             else if(build_hex.begin()->first->get_building_type() == "choco mansion"){
-                player->AddResource(build_hex.begin()->second->get_resource_tile(),3);
+                player->AddResource(build_hex.begin()->second->get_resource_tile(),2);
+                player->AddToTotalResources(build_hex.begin()->second->get_resource_tile(),2);
+                AddToTotalResourcesDist(build_hex.begin()->second->get_resource_tile(),2);
             }
         }
         hexagon_contains.clear(); //Reset the vector for a new player

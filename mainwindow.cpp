@@ -249,6 +249,7 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                         ui->centralWidget->setCursor(Qt::ArrowCursor);
                         for(const auto it : building_to_add->get_needed_resources()){
                             new_game->get_current_player()->RemoveResource(it.first,it.second);
+                            new_game->get_current_player()->AddToResourcesUsed(it.first,it.second);
                         }
                         new_game->get_current_player()->RemoveBuilding(p, building_to_remove);
                         new_game->get_current_player()->AddBuilding(p, building_to_add);
@@ -291,6 +292,7 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                                 ui->centralWidget->setCursor(Qt::ArrowCursor);
                                 for(const auto it : building_to_add->get_needed_resources()){
                                     new_game->get_current_player()->RemoveResource(it.first,it.second);
+                                    new_game->get_current_player()->AddToResourcesUsed(it.first,it.second);
                                 }
                                 //add to vector at key p
                                 new_game->get_current_player()->AddBuilding(p, building_to_add);
@@ -337,6 +339,7 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                             ui->centralWidget->setCursor(Qt::ArrowCursor);
                             for(const auto it : building_to_add->get_needed_resources()){
                                 new_game->get_current_player()->RemoveResource(it.first,it.second);
+                                new_game->get_current_player()->AddToResourcesUsed(it.first,it.second);
                             }
                             //add to vector at key p
                             new_game->get_current_player()->AddBuilding(p, building_to_add);
@@ -381,6 +384,7 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                         ui->centralWidget->setCursor(Qt::ArrowCursor);
                         for(const auto it : building_to_add->get_needed_resources()){
                             new_game->get_current_player()->RemoveResource(it.first,it.second);
+                            new_game->get_current_player()->AddToResourcesUsed(it.first,it.second);
                         }
                         new_game->get_current_player()->AddBuilding(p, building_to_add);
                         taken_map[p] = new_game->get_current_player();
@@ -425,6 +429,7 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                     ui->centralWidget->setCursor(Qt::ArrowCursor);
                     for(const auto it : building_to_add->get_needed_resources()){
                         new_game->get_current_player()->RemoveResource(it.first,it.second);
+                        new_game->get_current_player()->AddToResourcesUsed(it.first,it.second);
                     }
                     new_game->get_current_player()->RemoveBuilding(p, building_to_remove);
                     new_game->get_current_player()->AddBuilding(p, building_to_add);
@@ -467,6 +472,7 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                             ui->centralWidget->setCursor(Qt::ArrowCursor);
                             for(const auto it : building_to_add->get_needed_resources()){
                                 new_game->get_current_player()->RemoveResource(it.first,it.second);
+                                new_game->get_current_player()->AddToResourcesUsed(it.first,it.second);
                             }
                             //add to vector at key p
                             new_game->get_current_player()->AddBuilding(p, building_to_add);
@@ -513,6 +519,7 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                         ui->centralWidget->setCursor(Qt::ArrowCursor);
                         for(const auto it : building_to_add->get_needed_resources()){
                             new_game->get_current_player()->RemoveResource(it.first,it.second);
+                            new_game->get_current_player()->AddToResourcesUsed(it.first,it.second);
                         }
                         //add to vector at key p
                         new_game->get_current_player()->AddBuilding(p, building_to_add);
@@ -557,6 +564,7 @@ void MainWindow::AddBuildingSlot(Building *building_to_add, std::pair<int,int> p
                     ui->centralWidget->setCursor(Qt::ArrowCursor);
                     for(const auto it : building_to_add->get_needed_resources()){
                         new_game->get_current_player()->RemoveResource(it.first,it.second);
+                        new_game->get_current_player()->AddToResourcesUsed(it.first,it.second);
                     }
                     new_game->get_current_player()->AddBuilding(p, building_to_add);
                     taken_map[p] = new_game->get_current_player();
@@ -608,18 +616,45 @@ void MainWindow::UpdateResources()
             ui->p1Money->setText(QString::number(player->get_current_resources()[resource::money]));
             ui->p1Sugar->setText(QString::number(player->get_current_resources()[resource::sugar]));
             ui->p1Water->setText(QString::number(player->get_current_resources()[resource::water]));
+            std::map<resource,int> total_resources = player->get_total_resources();
+            ui->p1TotMoney->setText(QString::number(total_resources[resource::money]));
+            ui->p1TotSugar->setText(QString::number(total_resources[resource::sugar]));
+            ui->p1TotWater->setText(QString::number(total_resources[resource::water]));
+            std::map<resource,int> used_resources = player->get_resources_used();
+            ui->p1UsedMoney->setText(QString::number(used_resources[resource::money]));
+            ui->p1UsedSugar->setText(QString::number(used_resources[resource::sugar]));
+            ui->p1UsedWater->setText(QString::number(used_resources[resource::water]));
         }
         else if(player->get_id() == 2){
             ui->p2Money->setText(QString::number(player->get_current_resources()[resource::money]));
             ui->p2Sugar->setText(QString::number(player->get_current_resources()[resource::sugar]));
             ui->p2Water->setText(QString::number(player->get_current_resources()[resource::water]));
+            std::map<resource,int> total_resources = player->get_total_resources();
+            ui->p2TotMoney->setText(QString::number(total_resources[resource::money]));
+            ui->p2TotSugar->setText(QString::number(total_resources[resource::sugar]));
+            ui->p2TotWater->setText(QString::number(total_resources[resource::water]));
+            std::map<resource,int> used_resources = player->get_resources_used();
+            ui->p2UsedMoney->setText(QString::number(used_resources[resource::money]));
+            ui->p2UsedSugar->setText(QString::number(used_resources[resource::sugar]));
+            ui->p2UsedWater->setText(QString::number(used_resources[resource::water]));
         }
         else if(player->get_id() == 3){
             ui->p3Money->setText(QString::number(player->get_current_resources()[resource::money]));
             ui->p3Sugar->setText(QString::number(player->get_current_resources()[resource::sugar]));
             ui->p3Water->setText(QString::number(player->get_current_resources()[resource::water]));
+            std::map<resource,int> total_resources = player->get_total_resources();
+            ui->p3TotMoney->setText(QString::number(total_resources[resource::money]));
+            ui->p3TotSugar->setText(QString::number(total_resources[resource::sugar]));
+            ui->p3TotWater->setText(QString::number(total_resources[resource::water]));
+            std::map<resource,int> used_resources = player->get_resources_used();
+            ui->p3UsedMoney->setText(QString::number(used_resources[resource::money]));
+            ui->p3UsedSugar->setText(QString::number(used_resources[resource::sugar]));
+            ui->p3UsedWater->setText(QString::number(used_resources[resource::water]));
         }
     }
+    ui->totMoneyLabel->setText(QString::number(new_game->get_total_resources_dist()[resource::money]));
+    ui->totSugarLabel->setText(QString::number(new_game->get_total_resources_dist()[resource::sugar]));
+    ui->totWaterLabel->setText(QString::number(new_game->get_total_resources_dist()[resource::water]));
 }
 
 void MainWindow::on_diceButton_clicked()

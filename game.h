@@ -20,8 +20,11 @@ public:
     void AddHexagon(Hexagon *hexagon_to_add){hexagon_list_.push_back(hexagon_to_add);}
     std::map<Player *, int> PlayerPoints();
     std::map<std::string, Player *> Records();
+    std::map<resource,int> get_total_resources_dist(){return total_resources_distributed;}
+    void AddToTotalResourcesDist(resource resource_to_add, int quantity){total_resources_distributed[resource_to_add] += quantity;}
 private:
     Player *current_player; //Current player's turn
+    std::map<resource,int> total_resources_distributed;
     std::vector<Player*> player_list; //Vector containing all the players in the game
     static std::vector<pair<int,int>> all_corners; //Contains all the points of the hexagons
     std::vector<Hexagon*> hexagon_list_;
