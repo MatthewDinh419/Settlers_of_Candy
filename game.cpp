@@ -227,9 +227,13 @@ void Game::UpdateTurnToPoints(){
 std::pair<std::pair<int,int>,Building *> Game::AITurn(){
     Player *player = current_player;
     if(player->get_ai()){ //If player is an AI
-        if(player->get_first_turn()){ //If it is the player's first turn
+        if(player->get_first_turn()){ //If it is the AI's first turn
             int rand_point_index = rand() % (all_corners.size()-1) + 0; //Get a random index for a corner
             //TO DO: CHECK IF THERE IS A BUILDING ALREADY AT THAT POINT. IF SO THEN CHANGE THE INDEX
+            while(std::find(taken_vec.begin(), taken_vec.end(), all_corners[rand_point_index]) != taken_vec.end()){ // until we find a point that isnt taken
+                rand_point_index = rand() % (all_corners.size()-1) + 0;
+            }
+            taken_vec.push_back(all_corners[rand_point_index]);// update taken vec
             std::pair<std::pair<int,int>,Building *> temp_map;
             temp_map = make_pair(all_corners[rand_point_index],new ChocolateHouse(all_corners[rand_point_index].first-10,all_corners[rand_point_index].second-10));
             return temp_map;

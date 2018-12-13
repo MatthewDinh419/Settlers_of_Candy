@@ -818,6 +818,15 @@ void MainWindow::on_diceButton_clicked()
             }
         }
         set_ai_players(); // set the AI players specified before
+        if(new_game->get_current_player()->get_ai()){ //If the current player is an AI
+            std::pair<std::pair<int,int>,Building *> ai_map = new_game->AITurn(); //Get the building to add
+            connect(timer,SIGNAL(timeout()),this,SLOT(on_endButton_clicked())); //Connect the timer to the end game function
+            AddBuildingSlot(ai_map.second,ai_map.first); //Add the building to the UI
+            UpdateResources();
+            DrawGraphs();
+    //        on_diceButton_clicked();
+            timer->start(1500); //End Turn with a delay
+        }
     }
     ui->diceButton->setEnabled(false);
     ui->endButton->setEnabled(true);
@@ -907,15 +916,6 @@ void MainWindow::on_endButton_clicked()
 {
     new_game->set_next_player(new_game->get_current_player()); //Get the next player
     ui->status_label->setText(QString("Player " +QString::number(new_game->get_current_player()->get_id()) +QString("'s turn")));
-    if(new_game->GameOver()){ //Checks if the game is over
-        for(Player *player : new_game->get_player_list()){
-            if(player->get_total_points() >= 13){ //If there is a player who has greater than 13 points
-                qDebug() << "Player " << player->get_id() <<" won!!!"; //Write to console that that player won
-                break;
-            }
-        }
-        QApplication::quit(); //Exit application
-    }
     new_game->CollectResources(new_game->get_current_player());
     if(new_game->get_current_player()->get_ai()){ //If the current player is an AI
         std::pair<std::pair<int,int>,Building *> ai_map = new_game->AITurn(); //Get the building to add
@@ -923,6 +923,7 @@ void MainWindow::on_endButton_clicked()
         AddBuildingSlot(ai_map.second,ai_map.first); //Add the building to the UI
         UpdateResources();
         DrawGraphs();
+//        on_diceButton_clicked();
         timer->start(1500); //End Turn with a delay
     }
     ui->endButton->setEnabled(false); // reset button to ensure next turn is done correctly
@@ -932,6 +933,19 @@ void MainWindow::on_endButton_clicked()
     ui->roadButton->setEnabled(false);
     UpdateResources();
     DrawGraphs();
+    if(new_game->GameOver()){ //Checks if the game is over
+        for(Player *player : new_game->get_player_list()){
+            if(player->get_total_points() >= 13){ //If there is a player who has greater than 13 points
+                ui->status_label->setText(QString("Player ") + QString::number(player->get_id()) + " won!!!");
+                ui->diceButton->setEnabled(false);
+                ui->roadButton->setEnabled(false);
+                ui->houseButton->setEnabled(false);
+                ui->mansionButton->setEnabled(false);
+                ui->endButton->setEnabled(false);
+                break;
+            }
+        }
+    }
 }
 
 /*
@@ -1107,6 +1121,7 @@ void MainWindow::on_start_button_clicked()
 
 /*
     takes the amount of ai var and sets player objects ai varable depending
+    Also update label to tell which players are AI
 */
 void MainWindow::set_ai_players()
 {
@@ -1114,6 +1129,9 @@ void MainWindow::set_ai_players()
         for(unsigned int i = 0; i < new_game->get_player_list().size(); i++){
             new_game->get_player_list()[i]->set_ai();
         }
+        ui->p1_ai->setText(QString("AI"));
+        ui->p2_ai->setText(QString("AI"));
+        ui->p3_ai->setText(QString("AI"));
     }
     else if (ai_amount == 2){ // 2 ai make player 3 and 2 ai
         for(unsigned int i = 0; i < new_game->get_player_list().size(); i++){
@@ -1124,6 +1142,8 @@ void MainWindow::set_ai_players()
                 new_game->get_player_list()[i]->set_ai();
             }
         }
+        ui->p2_ai->setText(QString("AI"));
+        ui->p3_ai->setText(QString("AI"));
     }
     else if (ai_amount == 1){ // 1 ai make player 3 an ai
         for(unsigned int i = 0; i < new_game->get_player_list().size(); i++){
@@ -1131,5 +1151,6 @@ void MainWindow::set_ai_players()
                 new_game->get_player_list()[i]->set_ai();
             }
         }
+        ui->p3_ai->setText(QString("AI"));
     } // otherwise no ai's
 }

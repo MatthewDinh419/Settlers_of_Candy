@@ -35,5 +35,6 @@ private:
     int turn_rotations = 0; //how many turns have happened -> 3 = full round
     static std::string place_building_string; //String of the building to place
     static bool place_mode; //If a place building button is pressed then it will be in place mode or exit out of it
+    std::vector<std::pair<int, int>> taken_vec; // for ai to know if a point is taken
 };
 #endif // GAME_H

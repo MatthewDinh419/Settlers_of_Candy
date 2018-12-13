@@ -1382,7 +1382,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string>idk</string>
+     <string/>
     </property>
    </widget>
    <widget class="QTextBrowser" name="p1Breakdown">
@@ -1532,6 +1532,45 @@ p, li { white-space: pre-wrap; }
      <string/>
     </property>
    </widget>
+   <widget class="QLabel" name="p1_ai">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>0</y>
+      <width>16</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="p2_ai">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>160</y>
+      <width>16</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="p3_ai">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>320</y>
+      <width>16</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
    <zorder>p3TextBrowser</zorder>
    <zorder>p2TextBrowser</zorder>
    <zorder>player3_label</zorder>
@@ -1586,6 +1625,9 @@ p, li { white-space: pre-wrap; }
    <zorder>player1_label</zorder>
    <zorder>start_button</zorder>
    <zorder>start_input</zorder>
+   <zorder>p1_ai</zorder>
+   <zorder>p2_ai</zorder>
+   <zorder>p3_ai</zorder>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
