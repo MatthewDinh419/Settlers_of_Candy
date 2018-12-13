@@ -1571,6 +1571,8 @@ p, li { white-space: pre-wrap; }
      <string/>
     </property>
    </widget>
+   <zorder>p3_ai</zorder>
+   <zorder>p2_ai</zorder>
    <zorder>p3TextBrowser</zorder>
    <zorder>p2TextBrowser</zorder>
    <zorder>player3_label</zorder>
@@ -1626,8 +1628,6 @@ p, li { white-space: pre-wrap; }
    <zorder>start_button</zorder>
    <zorder>start_input</zorder>
    <zorder>p1_ai</zorder>
-   <zorder>p2_ai</zorder>
-   <zorder>p3_ai</zorder>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>

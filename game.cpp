@@ -51,7 +51,7 @@ void Game::CollectResources(Player *player){
     //std::map<std::pair <int,int>, Building *> get_buildings()
     for(const auto it : player->get_buildings()){ //Iterate through all of the player's buildings
         for(Hexagon *hexagon : hexagon_list_){ //Iterate through every single hexagon
-            for(auto const& value: it.second){
+            for(auto const& value: it.second){ //value is a building object
                 //If point of the building matches that of a hexagon then update the variables above
                 if(hexagon->get_p1() == it.first){
                     building_to_hex[value] = hexagon;
@@ -229,11 +229,10 @@ std::pair<std::pair<int,int>,Building *> Game::AITurn(){
     if(player->get_ai()){ //If player is an AI
         if(player->get_first_turn()){ //If it is the AI's first turn
             int rand_point_index = rand() % (all_corners.size()-1) + 0; //Get a random index for a corner
-            //TO DO: CHECK IF THERE IS A BUILDING ALREADY AT THAT POINT. IF SO THEN CHANGE THE INDEX
             while(std::find(taken_vec.begin(), taken_vec.end(), all_corners[rand_point_index]) != taken_vec.end()){ // until we find a point that isnt taken
                 rand_point_index = rand() % (all_corners.size()-1) + 0;
             }
-            taken_vec.push_back(all_corners[rand_point_index]);// update taken vec
+            taken_vec.push_back(all_corners[rand_point_index]); // update taken vec
             std::pair<std::pair<int,int>,Building *> temp_map;
             temp_map = make_pair(all_corners[rand_point_index],new ChocolateHouse(all_corners[rand_point_index].first-10,all_corners[rand_point_index].second-10));
             return temp_map;
@@ -259,9 +258,42 @@ std::pair<std::pair<int,int>,Building *> Game::AITurn(){
                 if(buildings->get_building_type() == "choco mansion"){
                     std::pair<std::pair<int,int>,Building *> temp_map;
                     std::vector<pair<int,int>>::iterator first_point_iter = find(all_corners.begin(), all_corners.end(), it.first);
-                    size_t index = distance(all_corners.begin(),first_point_iter); //Gets the index of the chocolate mansioon
-                    temp_map = make_pair(it.first,new Road(it.first.first,it.first.second,all_corners[index-1].first,all_corners[index-1].second)); //Subtract index by one to get the point the is adj. to it
-                    return temp_map;
+                    size_t index = distance(all_corners.begin(),first_point_iter); //Gets the index of the chocolate mansion
+                    for(std::pair<int,int> point : all_corners){
+                        if(point.first > all_corners[index].first){
+                            if(point.second > all_corners[index].second){
+                                if(point.first <= all_corners[index].first + 60
+                                        && point.second <= all_corners[index].second + 60){ // height and width bounds
+                                    temp_map = make_pair(it.first,new Road(all_corners[index].first,all_corners[index].second, point.first, point.second)); //Subtract index by one to get the point the is adj. to it
+                                    return temp_map;
+                                }
+                            }
+                            else{ // y is init smaller
+                                if(point.first <= all_corners[index].first + 60
+                                        && point.second >= all_corners[index].second - 60){
+                                    temp_map = make_pair(it.first,new Road(all_corners[index].first,all_corners[index].second, point.first, point.second)); //Subtract index by one to get the point the is adj. to it
+                                    return temp_map;
+                                }
+                            }
+                        }
+                        else{ // x is init smaller
+                            if(point.second > all_corners[index].second){
+                                if(point.first >= all_corners[index].first - 60
+                                        && point.second <= all_corners[index].second + 60){
+                                    temp_map = make_pair(it.first,new Road(all_corners[index].first,all_corners[index].second, point.first, point.second)); //Subtract index by one to get the point the is adj. to it
+                                    return temp_map;
+                                }
+                            }
+                            else{
+                                if(point.first >= all_corners[index].first - 60
+                                        && point.second >= all_corners[index].second - 60){
+                                    temp_map = make_pair(it.first,new Road(all_corners[index].first,all_corners[index].second, point.first, point.second)); //Subtract index by one to get the point the is adj. to it
+                                    return temp_map;
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
         }

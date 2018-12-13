@@ -16,16 +16,12 @@ Based off the game "Settlers of Catan" that is candy themed along with new featu
     * Randomly generated hexagon generation
     * Records mechanics awarding players with points for achieving certain records
     * Analytics Display
+    * AI Players
     
-## To-Do:
-     * AI players
-     * AI needs to roll die
-     * Check Player AI logic
     
 ## Known Bugs:
-    * AI: adding a building to a point which already has a building
     * AI: Sometimes does not add a house to a road when there is nothing at the end of the road
-    * AI: Automating the turns with timer does not go through each AI's turn and does it not bulk
+    * AI: Automating the turns with timer does not go through each AI's turn and does it bulk
         - Player 1 and Player 2's turn may happen simultaneously at once
     * AI: resource not correct (too many turns at once?)
 

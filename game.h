@@ -25,7 +25,6 @@ public:
     std::vector<Player*> get_player_list(){return player_list;}
     Player *get_current_player(){return current_player;}
     std::pair<std::pair<int,int>,Building *> AITurn();
-
 private:
     Player *current_player; //Current player's turn
     std::map<resource,int> total_resources_distributed;

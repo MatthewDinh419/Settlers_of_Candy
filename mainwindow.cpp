@@ -819,13 +819,13 @@ void MainWindow::on_diceButton_clicked()
         }
         set_ai_players(); // set the AI players specified before
         if(new_game->get_current_player()->get_ai()){ //If the current player is an AI
+            qDebug() << "test";
             std::pair<std::pair<int,int>,Building *> ai_map = new_game->AITurn(); //Get the building to add
             connect(timer,SIGNAL(timeout()),this,SLOT(on_endButton_clicked())); //Connect the timer to the end game function
             AddBuildingSlot(ai_map.second,ai_map.first); //Add the building to the UI
             UpdateResources();
             DrawGraphs();
-    //        on_diceButton_clicked();
-            timer->start(1500); //End Turn with a delay
+            timer->start(500); //End Turn with a delay
         }
     }
     ui->diceButton->setEnabled(false);
@@ -923,8 +923,7 @@ void MainWindow::on_endButton_clicked()
         AddBuildingSlot(ai_map.second,ai_map.first); //Add the building to the UI
         UpdateResources();
         DrawGraphs();
-//        on_diceButton_clicked();
-        timer->start(1500); //End Turn with a delay
+        timer->start(500); //End Turn with a delay
     }
     ui->endButton->setEnabled(false); // reset button to ensure next turn is done correctly
     ui->diceButton->setEnabled(true);
@@ -936,6 +935,7 @@ void MainWindow::on_endButton_clicked()
     if(new_game->GameOver()){ //Checks if the game is over
         for(Player *player : new_game->get_player_list()){
             if(player->get_total_points() >= 13){ //If there is a player who has greater than 13 points
+                timer->stop();
                 ui->status_label->setText(QString("Player ") + QString::number(player->get_id()) + " won!!!");
                 ui->diceButton->setEnabled(false);
                 ui->roadButton->setEnabled(false);
