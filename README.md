@@ -23,7 +23,6 @@ Based off the game "Settlers of Catan" that is candy themed along with new featu
     * AI: Sometimes does not add a house to a road when there is nothing at the end of the road
     * AI: Automating the turns with timer does not go through each AI's turn and does it bulk
         - Player 1 and Player 2's turn may happen simultaneously at once
-    * AI: resource not correct (too many turns at once?)
 
 ## Possible Features:
     * Development Cards
