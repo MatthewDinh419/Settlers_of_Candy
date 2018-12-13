@@ -294,10 +294,10 @@ std::pair<std::pair<int,int>,Building *> Game::AITurn(){
                                 }
                             }
                         }
-
                     }
                 }
             }
         }
+        //return;
     }
 }
